@@ -5,34 +5,57 @@ import { Loader, Segment } from 'semantic-ui-react'
 import { Divider as SSBDivider } from '@statisticsnorway/ssb-component-library'
 
 import { AppHome, AppMenu, AppSettings, ErrorMessage } from './components'
-import { BackendContext } from './utilities'
-import { BACKEND_API, ROUTING } from './configurations'
+import { ApiContext, LanguageContext } from './utilities'
+import { API, ROUTING } from './configurations'
+import { UI } from './enums'
 
 function App () {
-  const { backendUrl } = useContext(BackendContext)
+  const { authApi, catalogApi } = useContext(ApiContext)
+  const { language } = useContext(LanguageContext)
 
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [ready, setReady] = useState(false)
+  const [authReady, setAuthReady] = useState(false)
+  const [catalogReady, setCatalogReady] = useState(false)
 
-  const [{ loading, error, response }] = useAxios(`${backendUrl}${BACKEND_API.GET_HEALTH}`)
+  const [{
+    Loading: authLoading,
+    error: authError,
+    response: authResponse
+  }] = useAxios(`${authApi}${API.GET_HEALTH}`)
+  const [{
+    Loading: catalogLoading,
+    error: catalogError,
+    response: catalogResponse
+  }] = useAxios(`${catalogApi}${API.GET_HEALTH}`)
 
   useEffect(() => {
-    if (!loading && !error) {
-      setReady(true)
-      console.log(response)
+    console.log(authError)
+    if (!authLoading && !authError) {
+      setAuthReady(true)
+      console.log(authResponse)
     } else {
-      setReady(false)
+      setAuthReady(false)
     }
-  }, [error, loading, response])
+  }, [authError, authLoading, authResponse])
+
+  useEffect(() => {
+    console.log(catalogError)
+    if (!catalogLoading && !catalogError) {
+      setCatalogReady(true)
+      console.log(catalogResponse)
+    } else {
+      setCatalogReady(false)
+    }
+  }, [catalogError, catalogLoading, catalogResponse])
 
   return (
     <>
       <AppMenu setSettingsOpen={setSettingsOpen} />
       <SSBDivider light />
       <Segment basic style={{ paddingTop: '2em' }}>
-        {loading ?
-          <Loader active inline='centered' /> : error ?
-            <ErrorMessage error={error} /> : ready &&
+        {authLoading || catalogLoading ?
+          <Loader active inline='centered' /> : authError || catalogError ?
+            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} /> : authReady && catalogReady &&
             <Switch>
               <Route path={ROUTING.BASE}>
                 <AppHome />
@@ -40,7 +63,13 @@ function App () {
             </Switch>
         }
       </Segment>
-      <AppSettings error={error} loading={loading} open={settingsOpen} setSettingsOpen={setSettingsOpen} />
+      <AppSettings
+        authError={authError}
+        catalogError={catalogError}
+        loading={authLoading || catalogLoading}
+        open={settingsOpen}
+        setSettingsOpen={setSettingsOpen}
+      />
     </>
   )
 }

@@ -1,4 +1,4 @@
-export const APP_SETTINGS = {
+export const SETTINGS = {
   APPLY: {
     en: 'Apply',
     nb: 'Angi'
@@ -7,9 +7,13 @@ export const APP_SETTINGS = {
     en: 'App version',
     nb: 'App versjon'
   },
-  BACKEND_URL: {
-    en: 'Backend url',
-    nb: 'Backend url'
+  AUTH_API: {
+    en: 'Auth service',
+    nb: 'Tilgangstjeneste'
+  },
+  CATALOG_API: {
+    en: 'Catalog service',
+    nb: 'Katalogtjeneste'
   },
   EDITED_VALUES: {
     en: 'Edited values are not used until you hit the "Apply" button',
@@ -17,6 +21,10 @@ export const APP_SETTINGS = {
   },
   HEADER: {
     en: 'Settings',
-    nb: 'Instillinger'
+    nb: 'Innstillinger'
+  },
+  RESET_SETTINGS: {
+    en: 'Reset to default values',
+    nb: 'Tilbakestill til standardverdier'
   }
 }
