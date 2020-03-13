@@ -3,45 +3,66 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { AppSettings } from '../components'
-import { BackendContext, LanguageContext } from '../utilities'
-import { APP_SETTINGS, LANGUAGE } from '../enums'
+import { ApiContext, LanguageContext } from '../utilities'
+import { LANGUAGE, SETTINGS } from '../enums'
 
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
-const backend = process.env.REACT_APP_API
-const backendContext = { backendUrl: backend, setBackendUrl: jest.fn() }
+const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
+const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
 
 const setup = () => {
-  const { getByPlaceholderText, getByText } = render(
-    <BackendContext.Provider value={backendContext}>
+  const { getByPlaceholderText, getByTestId, getByText } = render(
+    <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
         <AppSettings
-          error={null}
+          authError={null}
+          catalogError={null}
           loading={false}
           open={true}
           setSettingsOpen={jest.fn()}
         />
       </LanguageContext.Provider>
-    </BackendContext.Provider>
+    </ApiContext.Provider>
   )
 
-  return { getByPlaceholderText, getByText }
+  return { getByPlaceholderText, getByTestId, getByText }
 }
 
 test('Renders correctly', () => {
   const { getByPlaceholderText } = setup()
 
-  expect(getByPlaceholderText(APP_SETTINGS.BACKEND_URL[language])).toHaveValue(backend)
+  expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(apiContext.authApi)
 })
 
-test('Information appears', () => {
-  const newBackend = 'http://localhost:2500'
+test('Editing works correctly', () => {
+  const editedAuthApi = 'http://localhost:2500'
+  const editedCatalogApi = 'http://localhost:3500'
   const { getByPlaceholderText, getByText } = setup()
 
-  userEvent.type(getByPlaceholderText(APP_SETTINGS.BACKEND_URL[language]), newBackend)
+  userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), editedAuthApi)
+  userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), editedCatalogApi)
 
-  expect(getByText(APP_SETTINGS.EDITED_VALUES[language])).toBeInTheDocument()
+  expect(getByText(SETTINGS.EDITED_VALUES[language])).toBeInTheDocument()
 
-  userEvent.click(getByText(APP_SETTINGS.APPLY[language]))
+  userEvent.click(getByText(SETTINGS.APPLY[language]))
 
-  expect(backendContext.setBackendUrl).toHaveBeenCalled()
+  expect(apiContext.setAuthApi).toHaveBeenCalled()
+  expect(apiContext.setCatalogApi).toHaveBeenCalled()
+})
+
+test('Resetting to default values works correctly', () => {
+  const editedAuthApi = 'http://localhost:2500'
+  const editedCatalogApi = 'http://localhost:3500'
+  const { getByPlaceholderText, getByTestId } = setup()
+
+  userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), editedAuthApi)
+  userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), editedCatalogApi)
+
+  userEvent.click(getByTestId('setDefaultSettings'))
+
+  // There is a bug in https://github.com/statisticsnorway/ssb-component-library preventing values from updating when updated from another source then itself
+  //expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(api.authApi)
+  //expect(getByPlaceholderText(SETTINGS.CATALOG_API[language])).toHaveValue(api.catalogApi)
+  expect(apiContext.setAuthApi).toHaveBeenCalledWith(api.authApi)
+  expect(apiContext.setCatalogApi).toHaveBeenCalledWith(api.catalogApi)
 })

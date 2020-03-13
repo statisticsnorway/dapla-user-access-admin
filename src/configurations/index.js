@@ -1,3 +1,3 @@
-export { BACKEND_API } from './BACKEND_API'
+export { API } from './API'
 export { ROUTING } from './ROUTING'
 export { SSB_COLORS, SSB_STYLE } from './STYLING'

@@ -1,3 +1,3 @@
-export { APP_SETTINGS } from './APP_SETTINGS'
 export { LANGUAGE } from './LANGUAGE'
+export { SETTINGS } from './SETTINGS'
 export { UI } from './UI'

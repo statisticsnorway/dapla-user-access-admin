@@ -6,8 +6,8 @@ import useAxios from 'axios-hooks'
 
 import App from '../App'
 import { AppContextProvider } from '../utilities'
-import { BACKEND_API } from '../configurations'
-import { APP_SETTINGS, LANGUAGE, UI } from '../enums'
+import { API } from '../configurations'
+import { LANGUAGE, SETTINGS, UI } from '../enums'
 
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
 
@@ -27,7 +27,8 @@ test('Does not crash', () => {
   useAxios.mockReturnValue([{ loading: true, error: null, response: null }])
   setup()
 
-  expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API}${BACKEND_API.GET_HEALTH}`)
+  expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
+  expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`)
 })
 
 test('Renders basics', () => {
@@ -53,13 +54,12 @@ test('Opens settings', () => {
 
   userEvent.click(getByTestId('settingsCog'))
 
-  expect(getByText(APP_SETTINGS.HEADER[language])).toBeInTheDocument()
+  expect(getByText(SETTINGS.HEADER[language])).toBeInTheDocument()
 })
 
-test('Renders error when backend call returns error', () => {
-  const stringError = 'A problem occured'
-  useAxios.mockReturnValue([{ loading: false, error: stringError, response: null }])
+test('Renders error when api call returns error', () => {
+  useAxios.mockReturnValue([{ loading: false, error: 'Error', response: null }])
   const { getByText } = setup()
 
-  expect(getByText(stringError)).toBeInTheDocument()
+  expect(getByText(UI.API_ERROR_MESSAGE[language])).toBeInTheDocument()
 })

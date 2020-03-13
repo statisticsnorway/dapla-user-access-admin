@@ -1,2 +1,2 @@
-export { AppContextProvider, BackendContext, LanguageContext } from './ContextHandling'
+export { ApiContext, AppContextProvider, LanguageContext } from './ContextHandling'
 export { getNestedObject } from './ObjectHandling'
