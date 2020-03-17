@@ -18,31 +18,31 @@ function App () {
   const [catalogReady, setCatalogReady] = useState(false)
 
   const [{
-    Loading: authLoading,
+    loading: authLoading,
     error: authError,
     response: authResponse
   }] = useAxios(`${authApi}${API.GET_HEALTH}`)
   const [{
-    Loading: catalogLoading,
+    loading: catalogLoading,
     error: catalogError,
     response: catalogResponse
   }] = useAxios(`${catalogApi}${API.GET_HEALTH}`)
 
   useEffect(() => {
-    console.log(authError)
+    //console.log(authError)
     if (!authLoading && !authError) {
       setAuthReady(true)
-      console.log(authResponse)
+      //console.log(authResponse)
     } else {
       setAuthReady(false)
     }
   }, [authError, authLoading, authResponse])
 
   useEffect(() => {
-    console.log(catalogError)
+    //console.log(catalogError)
     if (!catalogLoading && !catalogError) {
       setCatalogReady(true)
-      console.log(catalogResponse)
+      //console.log(catalogResponse)
     } else {
       setCatalogReady(false)
     }
