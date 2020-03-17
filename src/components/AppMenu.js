@@ -6,7 +6,7 @@ import { Title } from '@statisticsnorway/ssb-component-library'
 import SSBLogo from '../media/ssb-logo-rgb.svg'
 import { LanguageContext } from '../utilities'
 import { ROUTING, SSB_COLORS } from '../configurations'
-import { LANGUAGE, UI } from '../enums'
+import { LANGUAGE, TEST_IDS, UI } from '../enums'
 
 function AppMenu ({ setSettingsOpen }) {
   const { language, setLanguage } = useContext(LanguageContext)
@@ -30,7 +30,7 @@ function AppMenu ({ setSettingsOpen }) {
       <Menu.Menu position='right'>
         <Menu.Item
           onClick={() => setSettingsOpen(true)}
-          icon={{ name: 'setting', size: 'large', 'data-testid': 'settingsCog' }}
+          icon={{ name: 'setting', size: 'large', 'data-testid': TEST_IDS.ACCESS_SETTINGS_BUTTON }}
           style={{ color: SSB_COLORS.GREEN }}
         />
         <Dropdown item text={`${LANGUAGE.LANGUAGE[language]} (${LANGUAGE.LANGUAGE_CHOICE[language]})`}>
