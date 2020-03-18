@@ -51,7 +51,7 @@ function App () {
   return (
     <>
       <AppMenu setSettingsOpen={setSettingsOpen} />
-      <SSBDivider light />
+      <SSBDivider dark />
       <Segment basic style={{ paddingTop: '2em' }}>
         {authLoading || catalogLoading ?
           <Loader active inline='centered' /> : authError || catalogError ?

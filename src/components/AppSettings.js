@@ -103,7 +103,7 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
       </Modal.Content>
       <Container fluid textAlign='center'>
         <SSBDivider light />
-        <List horizontal divided link size='small' style={{ marginTop: '3em', marginBottom: '3em' }}>
+        <List horizontal divided link size='medium' style={{ marginTop: '3em', marginBottom: '3em' }}>
           <List.Item as='a' href={`${process.env.REACT_APP_SOURCE_URL}`} icon={{ fitted: true, name: 'github' }} />
           <List.Item content={`${SETTINGS.APP_VERSION[language]}: ${process.env.REACT_APP_VERSION}`} />
         </List>
