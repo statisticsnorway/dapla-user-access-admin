@@ -10,5 +10,9 @@ export const UI = {
   HEADER: {
     en: 'Access admin',
     nb: 'Tilgangsstyring'
+  },
+  USER: {
+    en: 'User',
+    nb: 'Bruker'
   }
 }

@@ -1,60 +1,62 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Icon, List } from 'semantic-ui-react'
-import { Input as SSBInput } from '@statisticsnorway/ssb-component-library'
+import { Grid, Icon, List } from 'semantic-ui-react'
+import { Input as SSBInput, Title } from '@statisticsnorway/ssb-component-library'
 
-import { ApiContext, getNestedObject } from '../utilities'
+import { UserAccess } from './'
+import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS } from '../configurations'
+import { HOME, UI } from '../enums'
 
 function AppHome () {
   const { authApi } = useContext(ApiContext)
+  const { language } = useContext(LanguageContext)
 
   const [user, setUser] = useState('magnus')
   const [userEdited, setUserEdited] = useState(false)
 
-  const [{
-    data: authData,
-    loading: authLoading,
-    error: authError,
-    response: authResponse
-  }, refetch] = useAxios(`${authApi}${API.GET_USER(user)}`, { manual: true })
-
-  useEffect(() => {
-    if (!authLoading && !authError) {
-      //console.log(authResponse)
-    }
-  }, [authLoading, authError, authResponse])
+  const [{ data, loading, error }, refetch] = useAxios(`${authApi}${API.GET_USER(user)}`, { manual: true })
 
   return (
-    <>
-      <SSBInput
-        label='User'
-        placeholder='User'
-        disabled={authLoading}
-        error={authError && !userEdited}
-        value={user}
-        handleChange={(value) => {
-          setUser(value)
-          setUserEdited(true)
-        }}
-        errorMessage={
-          authError && !userEdited && getNestedObject(authError, API.ERROR_PATH) === undefined ?
-            authError.toString() : getNestedObject(authError, API.ERROR_PATH)
+    <Grid columns='equal'>
+      <Grid.Column>
+        <Title size={3}>{UI.USER[language]}</Title>
+        <SSBInput
+          placeholder={UI.USER[language]}
+          error={!!error}
+          value={user}
+          handleChange={(value) => {
+            setUser(value)
+            setUserEdited(true)
+          }}
+          errorMessage={
+            error && getNestedObject(error, API.ERROR_PATH) === undefined ?
+              error.toString() : getNestedObject(error, API.ERROR_PATH)
+          }
+        />
+        <Icon
+          link
+          size='large'
+          name='sync'
+          style={{ color: SSB_COLORS.BLUE, marginTop: '0.5em', marginBottom: '0.5em' }}
+          onClick={() => {
+            refetch()
+            setUserEdited(false)
+          }}
+        />
+        {!error && !loading && !userEdited && data !== undefined &&
+        <>
+          <Title size={3}>{HOME.ROLES[language]}</Title>
+          <List>
+            {data[API.ROLES].map(role => <List.Item key={role}>{role}</List.Item>)}
+          </List>
+        </>
         }
-      />
-      <Icon
-        link
-        size='large'
-        name='sync'
-        style={{ color: SSB_COLORS.BLUE }}
-        onClick={() => {refetch()}}
-      />
-      <List>
-        {!authError && !authLoading && authData !== undefined && authData.roles.map(role =>
-          <List.Item>{role}</List.Item>
-        )}
-      </List>
-    </>
+      </Grid.Column>
+      <Grid.Column>
+        {!error && !loading && !userEdited && data !== undefined && <UserAccess user={user} />}
+      </Grid.Column>
+    </Grid>
   )
 }
 
