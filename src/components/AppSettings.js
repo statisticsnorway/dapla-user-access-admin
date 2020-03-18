@@ -4,7 +4,7 @@ import { Button as SSBButton, Divider as SSBDivider, Input as SSBInput } from '@
 
 import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS, SSB_STYLE } from '../configurations'
-import { SETTINGS } from '../enums'
+import { SETTINGS, TEST_IDS } from '../enums'
 
 function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen }) {
   const { language } = useContext(LanguageContext)
@@ -91,7 +91,7 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
                     setCatalogApi(process.env.REACT_APP_API_CATALOG)
                     setSettingsEdited(false)
                   }}
-                  data-testid='setDefaultSettings'
+                  data-testid={TEST_IDS.DEFAULT_SETTINGS_BUTTON}
                 />
               }>
                 <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />

@@ -7,7 +7,7 @@ import useAxios from 'axios-hooks'
 import App from '../App'
 import { AppContextProvider } from '../utilities'
 import { API } from '../configurations'
-import { LANGUAGE, SETTINGS, UI } from '../enums'
+import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
 
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
 
@@ -52,7 +52,7 @@ test('Opens settings', () => {
   useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
   const { getByTestId, getByText } = setup()
 
-  userEvent.click(getByTestId('settingsCog'))
+  userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
 
   expect(getByText(SETTINGS.HEADER[language])).toBeInTheDocument()
 })

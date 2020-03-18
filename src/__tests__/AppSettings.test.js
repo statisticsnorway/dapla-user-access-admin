@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 
 import { AppSettings } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { LANGUAGE, SETTINGS } from '../enums'
+import { LANGUAGE, SETTINGS, TEST_IDS } from '../enums'
 
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
 const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
@@ -58,7 +58,7 @@ test('Resetting to default values works correctly', () => {
   userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), editedAuthApi)
   userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), editedCatalogApi)
 
-  userEvent.click(getByTestId('setDefaultSettings'))
+  userEvent.click(getByTestId(TEST_IDS.DEFAULT_SETTINGS_BUTTON))
 
   // There is a bug in https://github.com/statisticsnorway/ssb-component-library preventing values from updating when updated from another source then itself
   //expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(api.authApi)
