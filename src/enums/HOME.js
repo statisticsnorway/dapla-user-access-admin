@@ -1,6 +1,6 @@
 export const HOME = {
   ROLES: {
-    en: 'Roles',
-    nb: 'Roller'
+    en: 'Your roles',
+    nb: 'Dine roller'
   }
 }

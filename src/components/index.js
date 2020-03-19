@@ -1,4 +1,7 @@
 export { default as UserAccess } from './access/UserAccess'
+export { default as RoleLookup } from './role/RoleLookup'
+export { default as CreateUser } from './user/CreateUser'
+export { default as UpdateUser } from './user/UpdateUser'
 export { default as AppHome } from './AppHome'
 export { default as AppMenu } from './AppMenu'
 export { default as AppSettings } from './AppSettings'

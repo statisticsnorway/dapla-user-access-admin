@@ -5,9 +5,9 @@ import { Button as SSBButton, Text, Title } from '@statisticsnorway/ssb-componen
 
 import { ApiContext, LanguageContext } from '../../utilities'
 import { API, SSB_COLORS } from '../../configurations'
-import { USER_ACCESS } from '../../enums'
+import { UI, USER_ACCESS } from '../../enums'
 
-function UserAcces ({ user }) {
+function UserAcces ({ userId }) {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
@@ -18,7 +18,7 @@ function UserAcces ({ user }) {
   const [verdict, setVerdict] = useState(USER_ACCESS.VERDICTS.UNKOWN)
 
   const [{ loading, error, response }, refetch] =
-    useAxios(`${authApi}${API.GET_ACCESS(namespace, privilege, state, valuation, user)}`, { manual: true })
+    useAxios(`${authApi}${API.GET_ACCESS(namespace, privilege, state, valuation, userId)}`, { manual: true })
 
   useEffect(() => {
     if (!loading && !error && response) {
@@ -46,6 +46,8 @@ function UserAcces ({ user }) {
       <Text>{` ${USER_ACCESS.GUIDE[1][language]} `}</Text>
       <Dropdown
         inline
+        search
+        noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
         options={API.TEMP_DATASETS.map(dataset => ({ key: dataset, text: dataset, value: dataset }))}
         defaultValue={API.TEMP_DATASETS[0]}
         onChange={(event, data) => {
@@ -95,10 +97,7 @@ function UserAcces ({ user }) {
         </>
       }
       <Divider hidden />
-      <SSBButton primary disabled={loading} onClick={() => refetch()}>
-        <Icon name='user secret' size='large' style={{ paddingRight: '0.5em' }} />
-        {USER_ACCESS.CHECK[language]}
-      </SSBButton>
+      <SSBButton primary disabled={loading} onClick={() => refetch()}>{USER_ACCESS.CHECK[language]}</SSBButton>
     </>
   )
 }

@@ -11,6 +11,10 @@ export const UI = {
     en: 'Access admin',
     nb: 'Tilgangsstyring'
   },
+  SEARCH_NO_RESULTS: {
+    en: 'No results found',
+    nb: 'Fant ingen resultater'
+  },
   USER: {
     en: 'User',
     nb: 'Bruker'

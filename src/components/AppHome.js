@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Grid, Icon, List } from 'semantic-ui-react'
-import { Input as SSBInput, Title } from '@statisticsnorway/ssb-component-library'
+import { Accordion, Divider, Grid, Icon, Popup } from 'semantic-ui-react'
+import { Input as SSBInput, Text, Title } from '@statisticsnorway/ssb-component-library'
 
-import { UserAccess } from './'
+import { CreateUser, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS } from '../configurations'
 import { HOME, UI } from '../enums'
@@ -12,10 +12,10 @@ function AppHome () {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [user, setUser] = useState('magnus')
+  const [userId, setUserId] = useState('magnus')
   const [userEdited, setUserEdited] = useState(false)
 
-  const [{ data, loading, error }, refetch] = useAxios(`${authApi}${API.GET_USER(user)}`, { manual: true })
+  const [{ data, loading, error }, refetch] = useAxios(`${authApi}${API.GET_USER(userId)}`, { manual: true })
 
   return (
     <Grid columns='equal'>
@@ -24,9 +24,9 @@ function AppHome () {
         <SSBInput
           placeholder={UI.USER[language]}
           error={!!error}
-          value={user}
+          value={userId}
           handleChange={(value) => {
-            setUser(value)
+            setUserId(value)
             setUserEdited(true)
           }}
           errorMessage={
@@ -34,27 +34,46 @@ function AppHome () {
               error.toString() : getNestedObject(error, API.ERROR_PATH)
           }
         />
-        <Icon
-          link
-          size='large'
-          name='sync'
-          style={{ color: SSB_COLORS.BLUE, marginTop: '0.5em', marginBottom: '0.5em' }}
-          onClick={() => {
-            refetch()
-            setUserEdited(false)
-          }}
-        />
+        <Popup
+          basic
+          flowing
+          trigger={
+            <Icon
+              link
+              size='big'
+              name='sync'
+              style={{ color: SSB_COLORS.BLUE, marginTop: '0.5em', marginBottom: '0.5em' }}
+              onClick={() => {
+                refetch()
+                setUserEdited(false)
+              }}
+            />
+          }
+        >
+          <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
+          Description
+        </Popup>
         {!error && !loading && !userEdited && data !== undefined &&
         <>
+          <UpdateUser userId={userId} roles={data[API.ROLES]} refetch={refetch} />
           <Title size={3}>{HOME.ROLES[language]}</Title>
-          <List>
-            {data[API.ROLES].map(role => <List.Item key={role}>{role}</List.Item>)}
-          </List>
+          <Accordion
+            styled
+            fluid
+            defaultActiveIndex={-1}
+            panels={data[API.ROLES].map(roleId => ({
+              key: roleId,
+              title: { content: (<Text>{roleId}</Text>) },
+              content: { content: (<RoleLookup roleId={roleId} />) }
+            }))}
+          />
         </>
         }
+        <Divider hidden />
+        <CreateUser />
       </Grid.Column>
       <Grid.Column>
-        {!error && !loading && !userEdited && data !== undefined && <UserAccess user={user} />}
+        {!error && !loading && !userEdited && data !== undefined && <UserAccess userId={userId} />}
       </Grid.Column>
     </Grid>
   )
