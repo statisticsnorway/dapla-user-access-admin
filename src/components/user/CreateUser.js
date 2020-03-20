@@ -11,9 +11,9 @@ function CreateUser () {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [modalOpen, setModalOpen] = useState(false)
-  const [userId, setUserId] = useState('')
   const [roles, setRoles] = useState([])
+  const [userId, setUserId] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
 
   const [{ loading, error, response }, executePut] = useAxios(
     {
@@ -36,10 +36,12 @@ function CreateUser () {
   return (
     <Modal
       closeIcon
-      closeOnDimmerClick={false}
-      closeOnEscape={false}
-      style={SSB_STYLE}
       size='large'
+      open={modalOpen}
+      style={SSB_STYLE}
+      closeOnEscape={false}
+      closeOnDimmerClick={false}
+      onClose={() => setModalOpen(false)}
       trigger={
         <Popup
           basic
@@ -47,10 +49,10 @@ function CreateUser () {
           trigger={
             <Icon
               link
-              onClick={() => setModalOpen(true)}
-              size='big'
+              size='huge'
               name='user plus'
               style={{ color: SSB_COLORS.GREEN }}
+              onClick={() => setModalOpen(true)}
             />
           }
         >
@@ -58,8 +60,6 @@ function CreateUser () {
           Description
         </Popup>
       }
-      open={modalOpen}
-      onClose={() => setModalOpen(false)}
     >
       <Header as='h2' style={SSB_STYLE}>
         <Icon name='user plus' style={{ color: SSB_COLORS.GREEN }} />
@@ -69,6 +69,9 @@ function CreateUser () {
         <Form size='large'>
           <Form.Input
             required
+            value={userId}
+            placeholder={USER.USER_ID[language]}
+            onChange={(event, {value }) => setUserId(value)}
             label={
               <label>
                 <Popup basic flowing trigger={<span>{USER.USER_ID[language]}</span>}>
@@ -77,11 +80,15 @@ function CreateUser () {
                 </Popup>
               </label>
             }
-            placeholder={USER.USER_ID[language]}
-            onChange={(event, data) => setUserId(data.value)}
           />
           <Form.Dropdown
+            multiple
             required
+            selection
+            value={roles}
+            placeholder={USER.ROLES[language]}
+            options={API.TEMP_ROLES.map(roleId => ({ key: roleId, text: roleId, value: roleId }))}
+            onChange={(event, {value}) => setRoles(value)}
             label={
               <label>
                 <Popup basic flowing trigger={<span>{USER.ROLES[language]}</span>}>
@@ -90,12 +97,6 @@ function CreateUser () {
                 </Popup>
               </label>
             }
-            placeholder={USER.ROLES[language]}
-            multiple
-            selection
-            options={API.TEMP_ROLES.map(roleId => ({ key: roleId, text: roleId, value: roleId }))}
-            onChange={(event, data) => setRoles(data.value)}
-            value={roles}
           />
         </Form>
         <Divider hidden />

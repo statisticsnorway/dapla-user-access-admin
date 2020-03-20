@@ -1,5 +1,6 @@
 export { HOME } from './HOME'
 export { LANGUAGE } from './LANGUAGE'
+export { ROLE } from './ROLE'
 export { SETTINGS } from './SETTINGS'
 export { TEST_IDS } from './TEST'
 export { UI } from './UI'

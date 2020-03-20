@@ -22,11 +22,11 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
       </Header>
       <Modal.Content as={Segment} basic loading={loading} style={SSB_STYLE}>
         <SSBInput
-          label={SETTINGS.AUTH_API[language]}
-          placeholder={SETTINGS.AUTH_API[language]}
-          disabled={loading}
-          error={authError && !settingsEdited}
           value={authUrl}
+          disabled={loading}
+          label={SETTINGS.AUTH_API[language]}
+          error={authError && !settingsEdited}
+          placeholder={SETTINGS.AUTH_API[language]}
           handleChange={(value) => {
             setAuthUrl(value)
             setSettingsEdited(true)
@@ -38,11 +38,11 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
         />
         <Divider hidden />
         <SSBInput
-          label={SETTINGS.CATALOG_API[language]}
-          placeholder={SETTINGS.CATALOG_API[language]}
           disabled={loading}
-          error={catalogError && !settingsEdited}
           value={catalogUrl}
+          label={SETTINGS.CATALOG_API[language]}
+          error={catalogError && !settingsEdited}
+          placeholder={SETTINGS.CATALOG_API[language]}
           handleChange={(value) => {
             setCatalogUrl(value)
             setSettingsEdited(true)
@@ -78,20 +78,20 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
             <Grid.Column textAlign='right'>
               <Popup basic flowing position='left center' trigger={
                 <Icon
-                  fitted
                   link
-                  size='large'
+                  fitted
                   name='undo'
+                  size='large'
                   style={{ color: SSB_COLORS.BLUE }}
+                  data-testid={TEST_IDS.DEFAULT_SETTINGS_BUTTON}
                   // There is a bug in https://github.com/statisticsnorway/ssb-component-library preventing values from updating when updated from another source then itself
                   onClick={() => {
                     setAuthUrl(process.env.REACT_APP_API_AUTH)
-                    setCatalogUrl(process.env.REACT_APP_API_CATALOG)
                     setAuthApi(process.env.REACT_APP_API_AUTH)
+                    setCatalogUrl(process.env.REACT_APP_API_CATALOG)
                     setCatalogApi(process.env.REACT_APP_API_CATALOG)
                     setSettingsEdited(false)
                   }}
-                  data-testid={TEST_IDS.DEFAULT_SETTINGS_BUTTON}
                 />
               }>
                 <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />

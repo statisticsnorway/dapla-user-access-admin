@@ -3,14 +3,16 @@ import useAxios from 'axios-hooks'
 import { Divider, Form, Header, Icon, Modal, Popup } from 'semantic-ui-react'
 import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
 
-import { ApiContext } from '../../utilities'
+import { ApiContext, LanguageContext } from '../../utilities'
 import { API, SSB_COLORS, SSB_STYLE } from '../../configurations'
+import { USER } from '../../enums'
 
 function UpdateUser ({ userId, roles, refetch }) {
   const { authApi } = useContext(ApiContext)
+  const { language } = useContext(LanguageContext)
 
-  const [modalOpen, setModalOpen] = useState(false)
   const [updatedRoles, setUpdatedRoles] = useState(roles)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const [{ loading, error, response }, executePut] = useAxios(
     {
@@ -33,18 +35,23 @@ function UpdateUser ({ userId, roles, refetch }) {
   return (
     <Modal
       closeIcon
-      closeOnDimmerClick={false}
-      closeOnEscape={false}
-      style={SSB_STYLE}
       size='large'
+      open={modalOpen}
+      style={SSB_STYLE}
+      closeOnEscape={false}
+      closeOnDimmerClick={false}
+      onClose={() => {
+        refetch()
+        setModalOpen(false)
+      }}
       trigger={
         <Popup
           basic
           flowing
           trigger={
-            <Icon.Group size='big'>
-              <Icon link onClick={() => setModalOpen(true)} name='user' style={{ color: SSB_COLORS.BLUE }} />
-              <Icon corner link name='edit' onClick={() => setModalOpen(true)} style={{ color: SSB_COLORS.BLUE }} />
+            <Icon.Group size='big' style={{ color: SSB_COLORS.BLUE }}>
+              <Icon link name='user' onClick={() => setModalOpen(true)} />
+              <Icon corner link name='edit' onClick={() => setModalOpen(true)} />
             </Icon.Group>
           }
         >
@@ -52,51 +59,46 @@ function UpdateUser ({ userId, roles, refetch }) {
           Description
         </Popup>
       }
-      open={modalOpen}
-      onClose={() => {
-        refetch()
-        setModalOpen(false)
-      }}
     >
       <Header as='h2' style={SSB_STYLE}>
         <Icon.Group size='large' style={{ marginRight: '0.2em' }}>
           <Icon name='user' style={{ color: SSB_COLORS.BLUE }} />
           <Icon corner name='edit' style={{ color: SSB_COLORS.BLUE }} />
         </Icon.Group>
-        Update user
+        {USER.UPDATE_USER[language]}
       </Header>
       <Modal.Content style={SSB_STYLE}>
         <Form size='large'>
           <Form.Input
             disabled
             required
+            value={userId}
+            placeholder={USER.USER_ID[language]}
             label={
               <label>
-                <Popup basic flowing trigger={<span>UserId</span>}>
+                <Popup basic flowing trigger={<span>{USER.USER_ID[language]}</span>}>
                   <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
                   Description
                 </Popup>
               </label>
             }
-            placeholder='UserId'
-            value={userId}
           />
           <Form.Dropdown
+            multiple
             required
+            selection
+            value={updatedRoles}
+            placeholder={USER.ROLES[language]}
+            options={API.TEMP_ROLES.map(roleId => ({ key: roleId, text: roleId, value: roleId }))}
+            onChange={(event, { value }) => setUpdatedRoles(value)}
             label={
               <label>
-                <Popup basic flowing trigger={<span>Roles</span>}>
+                <Popup basic flowing trigger={<span>{USER.ROLES[language]}</span>}>
                   <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
                   Description
                 </Popup>
               </label>
             }
-            placeholder='Roles'
-            multiple
-            selection
-            options={API.TEMP_ROLES.map(roleId => ({ key: roleId, text: roleId, value: roleId }))}
-            onChange={(event, data) => setUpdatedRoles(data.value)}
-            value={updatedRoles}
           />
         </Form>
         <Divider hidden />
@@ -105,7 +107,7 @@ function UpdateUser ({ userId, roles, refetch }) {
           disabled={loading}
           onClick={() => executePut({ data: { userId: userId, roles: roles } })}
         >
-          Update user
+          {USER.UPDATE_USER[language]}
         </SSBButton>
       </Modal.Content>
     </Modal>

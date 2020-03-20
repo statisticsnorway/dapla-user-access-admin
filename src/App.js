@@ -13,9 +13,9 @@ function App () {
   const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [settingsOpen, setSettingsOpen] = useState(false)
   const [authReady, setAuthReady] = useState(false)
   const [catalogReady, setCatalogReady] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   const [{
     loading: authLoading,
@@ -29,20 +29,16 @@ function App () {
   }] = useAxios(`${catalogApi}${API.GET_HEALTH}`)
 
   useEffect(() => {
-    //console.log(authError)
     if (!authLoading && !authError) {
       setAuthReady(true)
-      //console.log(authResponse)
     } else {
       setAuthReady(false)
     }
   }, [authError, authLoading, authResponse])
 
   useEffect(() => {
-    //console.log(catalogError)
     if (!catalogLoading && !catalogError) {
       setCatalogReady(true)
-      //console.log(catalogResponse)
     } else {
       setCatalogReady(false)
     }
@@ -64,11 +60,11 @@ function App () {
         }
       </Segment>
       <AppSettings
+        open={settingsOpen}
         authError={authError}
         catalogError={catalogError}
-        loading={authLoading || catalogLoading}
-        open={settingsOpen}
         setSettingsOpen={setSettingsOpen}
+        loading={authLoading || catalogLoading}
       />
     </>
   )

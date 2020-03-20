@@ -1,11 +1,12 @@
 export const API = {
   ERROR_PATH: ['response', 'data'],
-  GET_ACCESS: (namespace, privilege, state, valuation, userId) =>
-    `/access/${userId}?privilege=${privilege}&namespace=${namespace}&valuation=${valuation}&state=${state}`,
+  GET_ACCESS: (namespace, privilege, state, maxValuation, userId) =>
+    `/access/${userId}?privilege=${privilege}&namespace=${namespace}&valuation=${maxValuation}&state=${state}`,
   GET_HEALTH: '/health',
   GET_ROLE: (roleId) => `/role/${roleId}`,
   GET_USER: (userId) => `/user/${userId}`,
   PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
+  PUT_ROLE: (roleId) => `/role/${roleId}`,
   PUT_USER: (userId) => `/user/${userId}`,
   ROLES: 'roles',
   STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER'],

@@ -3,7 +3,8 @@ export const SSB_COLORS = {
   BLUE: '#3396D2',
   GREEN: '#00824D',
   PURPLE: '#9272FC',
-  RED: '#ED5935'
+  RED: '#ED5935',
+  YELLOW: '#C78800'
 }
 
 export const SSB_STYLE = {

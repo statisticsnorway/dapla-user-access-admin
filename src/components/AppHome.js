@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Accordion, Divider, Grid, Icon, Popup } from 'semantic-ui-react'
+import { Accordion, Divider, Grid, Icon, Popup, Segment } from 'semantic-ui-react'
 import { Input as SSBInput, Text, Title } from '@statisticsnorway/ssb-component-library'
 
-import { CreateUser, RoleLookup, UpdateUser, UserAccess } from './'
+import { CreateRole, CreateUser, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS } from '../configurations'
-import { HOME, UI } from '../enums'
+import { HOME, ROLE, UI, USER } from '../enums'
 
 function AppHome () {
   const { authApi } = useContext(ApiContext)
@@ -17,14 +17,19 @@ function AppHome () {
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${API.GET_USER(userId)}`, { manual: true })
 
+  useEffect(() => {
+    refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <Grid columns='equal'>
+    <Grid columns='equal' divided>
       <Grid.Column>
         <Title size={3}>{UI.USER[language]}</Title>
         <SSBInput
-          placeholder={UI.USER[language]}
-          error={!!error}
           value={userId}
+          error={!!error}
+          placeholder={UI.USER[language]}
           handleChange={(value) => {
             setUserId(value)
             setUserEdited(true)
@@ -41,7 +46,8 @@ function AppHome () {
             <Icon
               link
               size='big'
-              name='sync'
+              loading={loading}
+              name='sync alternate'
               style={{ color: SSB_COLORS.BLUE, marginTop: '0.5em', marginBottom: '0.5em' }}
               onClick={() => {
                 refetch()
@@ -58,8 +64,8 @@ function AppHome () {
           <UpdateUser userId={userId} roles={data[API.ROLES]} refetch={refetch} />
           <Title size={3}>{HOME.ROLES[language]}</Title>
           <Accordion
-            styled
             fluid
+            styled
             defaultActiveIndex={-1}
             panels={data[API.ROLES].map(roleId => ({
               key: roleId,
@@ -69,8 +75,22 @@ function AppHome () {
           />
         </>
         }
-        <Divider hidden />
-        <CreateUser />
+        <Divider />
+        <Segment placeholder>
+          <Grid columns={2} textAlign='center'>
+            <Divider vertical>{UI.BOOLEAN_CHOICE[language]}</Divider>
+            <Grid.Row verticalAlign='middle'>
+              <Grid.Column>
+                <CreateUser />
+                <Title size={3}>{USER.CREATE_USER[language]}</Title>
+              </Grid.Column>
+              <Grid.Column>
+                <CreateRole />
+                <Title size={3}>{ROLE.CREATE_ROLE[language]}</Title>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
       </Grid.Column>
       <Grid.Column>
         {!error && !loading && !userEdited && data !== undefined && <UserAccess userId={userId} />}

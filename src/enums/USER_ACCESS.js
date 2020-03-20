@@ -30,6 +30,7 @@ export const USER_ACCESS = {
     nb: 'Dine tilganger på datasett'
   },
   VERDICTS: {
+    FORBIDDEN: 'Forbidden',
     OK: 'OK',
     UNKOWN: 'Unkown'
   }

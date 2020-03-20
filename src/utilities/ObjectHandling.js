@@ -1,6 +1,4 @@
-export const getNestedObject = (nestedObject, pathArray) => {
-  return pathArray.reduce((object, key) =>
-      (object && object[key] !== 'undefined') ? object[key] : undefined,
-    nestedObject
+export const getNestedObject = (nestedObject, pathArray) =>
+  pathArray.reduce((object, key) =>
+    (object && object[key] !== 'undefined') ? object[key] : undefined, nestedObject
   )
-}

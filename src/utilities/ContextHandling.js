@@ -15,16 +15,8 @@ export const AppContextProvider = (props) => {
   const [language, setLanguage] = useState(LANGUAGE.LANGUAGES.ENGLISH.languageCode)
 
   return (
-    <ApiContext.Provider value={{
-      authApi,
-      setAuthApi,
-      catalogApi,
-      setCatalogApi
-    }}>
-      <LanguageContext.Provider value={{
-        language,
-        setLanguage
-      }}>
+    <ApiContext.Provider value={{ authApi, setAuthApi, catalogApi, setCatalogApi }}>
+      <LanguageContext.Provider value={{ language, setLanguage }}>
         {props.children}
       </LanguageContext.Provider>
     </ApiContext.Provider>

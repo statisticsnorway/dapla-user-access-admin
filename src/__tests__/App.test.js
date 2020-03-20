@@ -9,6 +9,7 @@ import { AppContextProvider } from '../utilities'
 import { API } from '../configurations'
 import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
 
+const refetch = jest.fn()
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
 
 const setup = () => {
@@ -24,7 +25,7 @@ const setup = () => {
 }
 
 test('Does not crash', () => {
-  useAxios.mockReturnValue([{ loading: true, error: null, response: null }])
+  useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
   setup()
 
   expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
@@ -32,15 +33,15 @@ test('Does not crash', () => {
 })
 
 test('Renders basics', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
+  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
   const { getByText } = setup()
 
   expect(getByText(UI.HEADER[language])).toBeInTheDocument()
 })
 
 test('Change language works correctly', () => {
+  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
   const otherLanguage = LANGUAGE.LANGUAGES.NORWEGIAN.languageCode
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
   const { getByText } = setup()
 
   userEvent.click(getByText(LANGUAGE.NORWEGIAN[language]))
@@ -49,7 +50,7 @@ test('Change language works correctly', () => {
 })
 
 test('Opens settings', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
+  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
   const { getByTestId, getByText } = setup()
 
   userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
@@ -58,7 +59,7 @@ test('Opens settings', () => {
 })
 
 test('Renders error when api call returns error', () => {
-  useAxios.mockReturnValue([{ loading: false, error: 'Error', response: null }])
+  useAxios.mockReturnValue([{ loading: false, error: 'Error', response: null }], refetch)
   const { getByText } = setup()
 
   expect(getByText(UI.API_ERROR_MESSAGE[language])).toBeInTheDocument()
