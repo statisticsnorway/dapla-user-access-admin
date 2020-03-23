@@ -5,13 +5,14 @@ import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
 
 import { ApiContext, LanguageContext } from '../../utilities'
 import { API, SSB_COLORS, SSB_STYLE } from '../../configurations'
-import { USER } from '../../enums'
+import { TEST_IDS, USER } from '../../enums'
 
-function UpdateUser ({ userId, roles, refetch }) {
+function UpdateUser ({ isNew, refetch, roles, userId }) {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   const [updatedRoles, setUpdatedRoles] = useState(roles)
+  const [updatedUserId, setUpdatedUserId] = useState(userId)
   const [modalOpen, setModalOpen] = useState(false)
 
   const [{ loading, error, response }, executePut] = useAxios(
@@ -41,18 +42,30 @@ function UpdateUser ({ userId, roles, refetch }) {
       closeOnEscape={false}
       closeOnDimmerClick={false}
       onClose={() => {
-        refetch()
         setModalOpen(false)
+        if (!isNew) {
+          refetch()
+        }
       }}
       trigger={
         <Popup
           basic
           flowing
           trigger={
-            <Icon.Group size='big' style={{ color: SSB_COLORS.BLUE }}>
-              <Icon link name='user' onClick={() => setModalOpen(true)} />
-              <Icon corner link name='edit' onClick={() => setModalOpen(true)} />
-            </Icon.Group>
+            isNew ?
+              <Icon
+                link
+                size='huge'
+                name='user plus'
+                data-testid={TEST_IDS.NEW_USER}
+                style={{ color: SSB_COLORS.GREEN }}
+                onClick={() => setModalOpen(true)}
+              />
+              :
+              <Icon.Group size='big' style={{ color: SSB_COLORS.BLUE }}>
+                <Icon link name='user' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_USER} />
+                <Icon corner link name='edit' onClick={() => setModalOpen(true)} />
+              </Icon.Group>
           }
         >
           <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
@@ -61,19 +74,29 @@ function UpdateUser ({ userId, roles, refetch }) {
       }
     >
       <Header as='h2' style={SSB_STYLE}>
-        <Icon.Group size='large' style={{ marginRight: '0.2em' }}>
-          <Icon name='user' style={{ color: SSB_COLORS.BLUE }} />
-          <Icon corner name='edit' style={{ color: SSB_COLORS.BLUE }} />
-        </Icon.Group>
-        {USER.UPDATE_USER[language]}
+        {isNew ?
+          <>
+            <Icon name='user plus' style={{ color: SSB_COLORS.GREEN }} />
+            {USER.CREATE_USER[language]}
+          </>
+          :
+          <>
+            <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS.BLUE }}>
+              <Icon name='user' />
+              <Icon corner name='edit' />
+            </Icon.Group>
+            {USER.UPDATE_USER[language]}
+          </>
+        }
       </Header>
       <Modal.Content style={SSB_STYLE}>
         <Form size='large'>
           <Form.Input
-            disabled
             required
-            value={userId}
+            disabled={!isNew}
+            value={updatedUserId}
             placeholder={USER.USER_ID[language]}
+            onChange={(event, { value }) => setUpdatedUserId(value)}
             label={
               <label>
                 <Popup basic flowing trigger={<span>{USER.USER_ID[language]}</span>}>
@@ -105,9 +128,9 @@ function UpdateUser ({ userId, roles, refetch }) {
         <SSBButton
           primary
           disabled={loading}
-          onClick={() => executePut({ data: { userId: userId, roles: roles } })}
+          onClick={() => executePut({ data: { userId: updatedUserId, roles: roles } })}
         >
-          {USER.UPDATE_USER[language]}
+          {isNew ? USER.CREATE_USER[language] : USER.UPDATE_USER[language]}
         </SSBButton>
       </Modal.Content>
     </Modal>

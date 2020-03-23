@@ -3,22 +3,24 @@ import useAxios from 'axios-hooks'
 import { Accordion, Divider, Grid, Icon, Popup, Segment } from 'semantic-ui-react'
 import { Input as SSBInput, Text, Title } from '@statisticsnorway/ssb-component-library'
 
-import { CreateRole, CreateUser, RoleLookup, UpdateUser, UserAccess } from './'
+import { RoleLookup, UpdateRole, UpdateUser, UserAccess } from './'
 import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS } from '../configurations'
-import { HOME, ROLE, UI, USER } from '../enums'
+import { HOME, ROLE, TEST_IDS, UI, USER } from '../enums'
 
 function AppHome () {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [userId, setUserId] = useState('magnus')
+  const [userId, setUserId] = useState('user1')
   const [userEdited, setUserEdited] = useState(false)
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${API.GET_USER(userId)}`, { manual: true })
 
   useEffect(() => {
-    refetch()
+    if (userId !== '') {
+      refetch()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -48,6 +50,7 @@ function AppHome () {
               size='big'
               loading={loading}
               name='sync alternate'
+              data-testid={TEST_IDS.REFRESH_USER}
               style={{ color: SSB_COLORS.BLUE, marginTop: '0.5em', marginBottom: '0.5em' }}
               onClick={() => {
                 refetch()
@@ -61,7 +64,7 @@ function AppHome () {
         </Popup>
         {!error && !loading && !userEdited && data !== undefined &&
         <>
-          <UpdateUser userId={userId} roles={data[API.ROLES]} refetch={refetch} />
+          <UpdateUser isNew={false} refetch={refetch} roles={data[API.ROLES]} userId={userId} />
           <Title size={3}>{HOME.ROLES[language]}</Title>
           <Accordion
             fluid
@@ -81,11 +84,11 @@ function AppHome () {
             <Divider vertical>{UI.BOOLEAN_CHOICE[language]}</Divider>
             <Grid.Row verticalAlign='middle'>
               <Grid.Column>
-                <CreateUser />
+                <UpdateUser isNew={true} roles={[]} userId={''} />
                 <Title size={3}>{USER.CREATE_USER[language]}</Title>
               </Grid.Column>
               <Grid.Column>
-                <CreateRole />
+                <UpdateRole isNew={true} />
                 <Title size={3}>{ROLE.CREATE_ROLE[language]}</Title>
               </Grid.Column>
             </Grid.Row>

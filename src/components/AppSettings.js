@@ -10,9 +10,9 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
   const { language } = useContext(LanguageContext)
   const { authApi, catalogApi, setAuthApi, setCatalogApi } = useContext(ApiContext)
 
-  const [settingsEdited, setSettingsEdited] = useState(false)
   const [authUrl, setAuthUrl] = useState(authApi)
   const [catalogUrl, setCatalogUrl] = useState(catalogApi)
+  const [settingsEdited, setSettingsEdited] = useState(false)
 
   return (
     <Modal open={open} onClose={() => setSettingsOpen(false)} style={SSB_STYLE}>

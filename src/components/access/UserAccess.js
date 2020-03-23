@@ -11,11 +11,11 @@ function UserAcces ({ userId }) {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [state, setState] = useState(API.STATES[0])
-  const [privilege, setPrivilege] = useState(API.PRIVILEGES[0])
+  const [state, setState] = useState(API.ENUMS.STATES[0])
   const [namespace, setNamespace] = useState(API.TEMP_DATASETS[0])
-  const [maxValuation, setMaxValuation] = useState(API.VALUATIONS[0])
+  const [privilege, setPrivilege] = useState(API.ENUMS.PRIVILEGES[0])
   const [verdict, setVerdict] = useState(USER_ACCESS.VERDICTS.UNKOWN)
+  const [maxValuation, setMaxValuation] = useState(API.ENUMS.VALUATIONS[0])
 
   const [{ loading, error, response }, refetch] =
     useAxios(`${authApi}${API.GET_ACCESS(namespace, privilege, state, maxValuation, userId)}`, { manual: true })
@@ -37,7 +37,7 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={privilege}
-        options={API.PRIVILEGES.map(privilege => ({ key: privilege, text: privilege, value: privilege }))}
+        options={API.ENUMS.PRIVILEGES.map(privilege => ({ key: privilege, text: privilege, value: privilege }))}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setPrivilege(value)
@@ -59,7 +59,7 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={state}
-        options={API.STATES.map(state => ({ key: state, text: state, value: state }))}
+        options={API.ENUMS.STATES.map(state => ({ key: state, text: state, value: state }))}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setState(value)
@@ -69,7 +69,7 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={maxValuation}
-        options={API.VALUATIONS.map(valuation => ({ key: valuation, text: valuation, value: valuation }))}
+        options={API.ENUMS.VALUATIONS.map(valuation => ({ key: valuation, text: valuation, value: valuation }))}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setMaxValuation(value)

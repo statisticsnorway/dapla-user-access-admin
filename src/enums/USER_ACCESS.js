@@ -7,6 +7,10 @@ export const USER_ACCESS = {
     en: 'Check',
     nb: 'Sjekk'
   },
+  DATASETS: {
+    en: 'Datasets',
+    nb: 'Datasett'
+  },
   GUIDE: [
     {
       en: 'Check my',

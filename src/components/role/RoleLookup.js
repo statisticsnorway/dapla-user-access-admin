@@ -18,25 +18,29 @@ function RoleLookup ({ roleId }) {
     }
   }, [error, loading, data])
 
-  return (
-    <Grid>
-      {!loading && !error && data !== undefined && Object.entries(data).map(([key, value]) =>
-        <Grid.Row key={key} verticalAlign='middle' style={{paddingTop: '0.5em', paddingBottom: '0.5em'}}>
-          <Grid.Column width={4}>
-            <Title size={4}>{key}</Title>
-          </Grid.Column>
-          <Grid.Column width={12}>
-            <Text>{value.toString()}</Text>
+  if (!loading && !error && data !== undefined) {
+    return (
+      <Grid>
+        {Object.entries(data).map(([key, value]) =>
+          <Grid.Row key={key} verticalAlign='middle' style={{ paddingTop: '0.5em', paddingBottom: '0.5em' }}>
+            <Grid.Column width={4}>
+              <Title size={4}>{key}</Title>
+            </Grid.Column>
+            <Grid.Column width={12}>
+              <Text>{value.toString()}</Text>
+            </Grid.Column>
+          </Grid.Row>
+        )}
+        <Grid.Row>
+          <Grid.Column textAlign='right'>
+            <UpdateRole isNew={false} refetch={refetch} role={data} />
           </Grid.Column>
         </Grid.Row>
-      )}
-      <Grid.Row>
-        <Grid.Column textAlign='right'>
-          {!loading && !error && data !== undefined && <UpdateRole role={data} refetch={refetch} />}
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  )
+      </Grid>
+    )
+  } else {
+    return null
+  }
 }
 
 export default RoleLookup

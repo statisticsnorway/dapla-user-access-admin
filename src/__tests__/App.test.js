@@ -26,21 +26,15 @@ const setup = () => {
 
 test('Does not crash', () => {
   useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
-  setup()
+  const { getByText } = setup()
 
+  expect(getByText(UI.HEADER[language])).toBeInTheDocument()
   expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
   expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`)
 })
 
-test('Renders basics', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
-  const { getByText } = setup()
-
-  expect(getByText(UI.HEADER[language])).toBeInTheDocument()
-})
-
 test('Change language works correctly', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
+  useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
   const otherLanguage = LANGUAGE.LANGUAGES.NORWEGIAN.languageCode
   const { getByText } = setup()
 
@@ -50,7 +44,7 @@ test('Change language works correctly', () => {
 })
 
 test('Opens settings', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
+  useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
   const { getByTestId, getByText } = setup()
 
   userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
