@@ -7,7 +7,6 @@ import { ApiContext, LanguageContext } from '../utilities'
 import { API } from '../configurations'
 import { LANGUAGE } from '../enums'
 
-const refetch = jest.fn()
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
 const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
 const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
@@ -25,6 +24,7 @@ const setup = () => {
 }
 
 test('Renders correctly', () => {
+  const refetch = jest.fn()
   const role = {
     roleId: 'test',
     states: [API.ENUMS.STATES[1]],

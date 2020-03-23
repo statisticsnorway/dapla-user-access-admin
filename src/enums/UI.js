@@ -16,8 +16,8 @@ export const UI = {
     nb: 'Problem'
   },
   HEADER: {
-    en: 'Access admin',
-    nb: 'Tilgangsstyring'
+    en: 'User access admin',
+    nb: 'Tilgangsstyring for brukere'
   },
   SEARCH_NO_RESULTS: {
     en: 'No results found',

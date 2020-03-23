@@ -1,10 +1,10 @@
 {
-  "name": "data-access-admin",
+  "name": "user-access-admin",
   "version": "0.1.0",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/statisticsnorway/data-access-admin"
+    "url": "https://github.com/statisticsnorway/user-access-admin"
   },
   "dependencies": {
     "@statisticsnorway/ssb-component-library": "^2.0.7",

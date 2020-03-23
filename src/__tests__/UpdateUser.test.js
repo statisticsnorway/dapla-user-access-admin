@@ -7,8 +7,6 @@ import { UpdateUser } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { LANGUAGE, TEST_IDS, USER } from '../enums'
 
-const refetch = jest.fn()
-const executePut = jest.fn()
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
 const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
 const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
@@ -17,7 +15,7 @@ const setup = (isNew, roles, userId) => {
   const { getAllByText, getByPlaceholderText, getByTestId } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <UpdateUser isNew={isNew} refetch={refetch} roles={roles} userId={userId} />
+        <UpdateUser isNew={isNew} refetch={jest.fn()} roles={roles} userId={userId} />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
@@ -25,32 +23,37 @@ const setup = (isNew, roles, userId) => {
   return { getAllByText, getByPlaceholderText, getByTestId }
 }
 
-test('Renders correctly on new user', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
-  const { getByPlaceholderText, getByTestId } = setup(true, [], '')
+describe('Common mock', () => {
+  const execute = jest.fn()
+  useAxios.mockReturnValue([
+    { data: { roles: [{ roleId: 'role1' }, { roleId: 'role2' }] }, loading: false, error: null, response: null },
+    execute
+  ])
 
-  userEvent.click(getByTestId(TEST_IDS.NEW_USER))
+  test('Renders correctly on new user', () => {
+    const { getByPlaceholderText, getByTestId } = setup(true, [], '')
 
-  expect(getByPlaceholderText(USER.USER_ID[language])).toBeInTheDocument()
-})
+    userEvent.click(getByTestId(TEST_IDS.NEW_USER))
 
-test('Renders correctly on update user', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
-  const { getAllByText, getByPlaceholderText, getByTestId } = setup(false, ['role1', 'role2'], 'test')
+    expect(getByPlaceholderText(USER.USER_ID[language])).toBeInTheDocument()
+  })
 
-  userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
+  test('Renders correctly on update user', () => {
+    const { getAllByText, getByPlaceholderText, getByTestId } = setup(false, ['role1', 'role2'], 'test')
 
-  expect(getAllByText(USER.UPDATE_USER[language])).toHaveLength(2)
-  expect(getByPlaceholderText(USER.USER_ID[language])).toBeDisabled()
-})
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
 
-test('Functions correctly on PUT request', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
-  const { getAllByText, getByPlaceholderText, getByTestId } = setup(true, [], '')
+    expect(getAllByText(USER.UPDATE_USER[language])).toHaveLength(2)
+    expect(getByPlaceholderText(USER.USER_ID[language])).toBeDisabled()
+  })
 
-  userEvent.click(getByTestId(TEST_IDS.NEW_USER))
-  userEvent.type(getByPlaceholderText(USER.USER_ID[language]), 'test')
-  userEvent.click(getAllByText(USER.CREATE_USER[language])[1])
+  test('Functions correctly on PUT request', () => {
+    const { getAllByText, getByPlaceholderText, getByTestId } = setup(true, [], '')
 
-  expect(executePut).toHaveBeenCalledWith({ data: { userId: 'test', roles: [] } })
+    userEvent.click(getByTestId(TEST_IDS.NEW_USER))
+    userEvent.type(getByPlaceholderText(USER.USER_ID[language]), 'test')
+    userEvent.click(getAllByText(USER.CREATE_USER[language])[1])
+
+    expect(execute).toHaveBeenCalledWith({ data: { userId: 'test', roles: [] } })
+  })
 })

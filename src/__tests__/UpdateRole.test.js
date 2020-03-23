@@ -8,8 +8,6 @@ import { ApiContext, LanguageContext } from '../utilities'
 import { API } from '../configurations'
 import { LANGUAGE, ROLE, TEST_IDS } from '../enums'
 
-const refetch = jest.fn()
-const executePut = jest.fn()
 const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
 const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
 const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
@@ -18,7 +16,7 @@ const setup = (isNew, role) => {
   const { getAllByText, getByPlaceholderText, getByTestId } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <UpdateRole isNew={isNew} refetch={refetch} role={role} />
+        <UpdateRole isNew={isNew} refetch={jest.fn()} role={role} />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
@@ -26,47 +24,50 @@ const setup = (isNew, role) => {
   return { getAllByText, getByPlaceholderText, getByTestId }
 }
 
-test('Renders correctly on new role', () => {
+describe('Common mock', () => {
+  const executePut = jest.fn()
   useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
-  const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
 
-  userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
+  test('Renders correctly on new role', () => {
 
-  expect(getAllByText(ROLE.CREATE_ROLE[language])).toHaveLength(2)
-  expect(getByPlaceholderText(ROLE.ROLE_ID[language])).toBeInTheDocument()
-})
+    const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
 
-test('Renders correctly on update role', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
-  const role = {
-    roleId: 'test',
-    states: [API.ENUMS.STATES[1]],
-    privileges: [API.ENUMS.PRIVILEGES[1]],
-    maxValuation: API.ENUMS.VALUATIONS[1],
-    namespacePrefixes: ['/test/1', '/test/2']
-  }
-  const { getByPlaceholderText, getByTestId } = setup(false, role)
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
 
-  userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
+    expect(getAllByText(ROLE.CREATE_ROLE[language])).toHaveLength(2)
+    expect(getByPlaceholderText(ROLE.ROLE_ID[language])).toBeInTheDocument()
+  })
 
-  expect(getByPlaceholderText(ROLE.ROLE_ID[language])).toBeDisabled()
-})
-
-test('Functions correctly on PUT request', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
-  const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
-
-  userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
-  userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), 'test')
-  userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
-
-  expect(executePut).toHaveBeenCalledWith({
-    data: {
+  test('Renders correctly on update role', () => {
+    const role = {
       roleId: 'test',
-      states: [],
-      privileges: [],
-      maxValuation: '',
-      namespacePrefixes: []
+      states: [API.ENUMS.STATES[1]],
+      privileges: [API.ENUMS.PRIVILEGES[1]],
+      maxValuation: API.ENUMS.VALUATIONS[1],
+      namespacePrefixes: ['/test/1', '/test/2']
     }
+    const { getByPlaceholderText, getByTestId } = setup(false, role)
+
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
+
+    expect(getByPlaceholderText(ROLE.ROLE_ID[language])).toBeDisabled()
+  })
+
+  test('Functions correctly on PUT request', () => {
+    const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
+
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
+    userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), 'test')
+    userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
+
+    expect(executePut).toHaveBeenCalledWith({
+      data: {
+        roleId: 'test',
+        states: [],
+        privileges: [],
+        maxValuation: '',
+        namespacePrefixes: []
+      }
+    })
   })
 })

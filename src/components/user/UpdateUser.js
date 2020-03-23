@@ -5,7 +5,7 @@ import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
 
 import { ApiContext, LanguageContext } from '../../utilities'
 import { API, SSB_COLORS, SSB_STYLE } from '../../configurations'
-import { TEST_IDS, USER } from '../../enums'
+import { TEST_IDS, UI, USER } from '../../enums'
 
 function UpdateUser ({ isNew, refetch, roles, userId }) {
   const { authApi } = useContext(ApiContext)
@@ -15,7 +15,8 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
   const [updatedUserId, setUpdatedUserId] = useState(userId)
   const [modalOpen, setModalOpen] = useState(false)
 
-  const [{ loading, error, response }, executePut] = useAxios(
+  const [{ data: getData, loading: getLoading, error: getError }, refetchGet] = useAxios(`${authApi}${API.GET_ROLES}`)
+  const [{ loading: putLoading, error: putError, response: putResponse }, executePut] = useAxios(
     {
       url: `${authApi}${API.PUT_USER(userId)}`,
       method: 'PUT'
@@ -25,13 +26,13 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
   )
 
   useEffect(() => {
-    if (!loading && response) {
-      console.log(response)
+    if (!putLoading && putResponse) {
+      console.log(putResponse)
     }
-    if (!loading && error) {
-      console.log(error.response)
+    if (!putLoading && putError) {
+      console.log(putError.response)
     }
-  }, [error, loading, response])
+  }, [putError, putLoading, putResponse])
 
   return (
     <Modal
@@ -107,16 +108,34 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
             }
           />
           <Form.Dropdown
+            search
             multiple
             required
             selection
             value={updatedRoles}
             placeholder={USER.ROLES[language]}
-            options={API.TEMP_ROLES.map(roleId => ({ key: roleId, text: roleId, value: roleId }))}
+            noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
             onChange={(event, { value }) => setUpdatedRoles(value)}
+            options={!getLoading && !getError && getData !== undefined ? getData[API.ROLES].map(role => ({
+              key: role.roleId,
+              text: role.roleId,
+              value: role.roleId
+            })) : []}
             label={
               <label>
-                <Popup basic flowing trigger={<span>{USER.ROLES[language]}</span>}>
+                <Popup basic flowing trigger={<span>{USER.ROLES[language]} </span>}>
+                  <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
+                  Description
+                </Popup>
+                <Popup basic flowing trigger={
+                  <Icon
+                    link
+                    loading={getLoading}
+                    name='sync alternate'
+                    onClick={() => refetchGet()}
+                    style={{ color: SSB_COLORS.BLUE }}
+                  />
+                }>
                   <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
                   Description
                 </Popup>
@@ -127,7 +146,7 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
         <Divider hidden />
         <SSBButton
           primary
-          disabled={loading}
+          disabled={putLoading}
           onClick={() => executePut({ data: { userId: updatedUserId, roles: roles } })}
         >
           {isNew ? USER.CREATE_USER[language] : USER.UPDATE_USER[language]}

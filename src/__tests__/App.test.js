@@ -24,32 +24,33 @@ const setup = () => {
   return { getByTestId, getByText }
 }
 
-test('Does not crash', () => {
+describe('Common mock', () => {
   useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
-  const { getByText } = setup()
 
-  expect(getByText(UI.HEADER[language])).toBeInTheDocument()
-  expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
-  expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`)
-})
+  test('Does not crash', () => {
+    const { getByText } = setup()
 
-test('Change language works correctly', () => {
-  useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
-  const otherLanguage = LANGUAGE.LANGUAGES.NORWEGIAN.languageCode
-  const { getByText } = setup()
+    expect(getByText(UI.HEADER[language])).toBeInTheDocument()
+    expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
+    expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`)
+  })
 
-  userEvent.click(getByText(LANGUAGE.NORWEGIAN[language]))
+  test('Change language works correctly', () => {
+    const otherLanguage = LANGUAGE.LANGUAGES.NORWEGIAN.languageCode
+    const { getByText } = setup()
 
-  expect(getByText(UI.HEADER[otherLanguage])).toBeInTheDocument()
-})
+    userEvent.click(getByText(LANGUAGE.NORWEGIAN[language]))
 
-test('Opens settings', () => {
-  useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
-  const { getByTestId, getByText } = setup()
+    expect(getByText(UI.HEADER[otherLanguage])).toBeInTheDocument()
+  })
 
-  userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
+  test('Opens settings', () => {
+    const { getByTestId, getByText } = setup()
 
-  expect(getByText(SETTINGS.HEADER[language])).toBeInTheDocument()
+    userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
+
+    expect(getByText(SETTINGS.HEADER[language])).toBeInTheDocument()
+  })
 })
 
 test('Renders error when api call returns error', () => {
