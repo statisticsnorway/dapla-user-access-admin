@@ -6,15 +6,16 @@ import useAxios from 'axios-hooks'
 
 import App from '../App'
 import { AppContextProvider } from '../utilities'
-import { API, TEST_CONFIGURATIONS } from '../configurations'
+import { API } from '../configurations'
 import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
+import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const { errorString, language, otherLanguage, refetch } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByTestId, getByText } = render(
     <AppContextProvider>
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>
     </AppContextProvider>

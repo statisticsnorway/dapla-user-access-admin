@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event'
 
 import { AppHome } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
+import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const { alternativeTestUserId, apiContext, language, refetch } = TEST_CONFIGURATIONS
 

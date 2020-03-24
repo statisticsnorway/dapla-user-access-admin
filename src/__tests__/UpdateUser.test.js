@@ -5,8 +5,8 @@ import useAxios from 'axios-hooks'
 
 import { UpdateUser } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, USER } from '../enums'
+import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const { alternativeTestRoleId, apiContext, execute, language, returnRoles, testRoles, testRoleId } = TEST_CONFIGURATIONS
 

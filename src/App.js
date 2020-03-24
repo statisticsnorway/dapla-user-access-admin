@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import { Loader, Segment } from 'semantic-ui-react'
 import { Divider as SSBDivider } from '@statisticsnorway/ssb-component-library'
 
-import { AppHome, AppMenu, AppSettings, ErrorMessage } from './components'
+import { AppHome, AppMenu, AppSettings, ErrorMessage, RolesTable } from './components'
 import { ApiContext, LanguageContext } from './utilities'
 import { API, ROUTING } from './configurations'
 import { UI } from './enums'
@@ -39,6 +39,9 @@ function App () {
           <Loader active inline='centered' /> : authError ?
             <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} /> : authReady &&
             <Switch>
+              <Route path={ROUTING.ROLES}>
+                <RolesTable />
+              </Route>
               <Route path={ROUTING.BASE}>
                 <AppHome />
               </Route>

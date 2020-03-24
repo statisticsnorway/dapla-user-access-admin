@@ -62,7 +62,7 @@ function UpdateRole ({ isNew, refetch, role }) {
           basic
           flowing
           trigger={
-            <Icon.Group size={isNew ? 'huge' : 'big'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+            <Icon.Group size='big' style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
               <Icon link name='users' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_ROLE} />
               <Icon corner link name={isNew ? 'plus' : 'edit'} onClick={() => setModalOpen(true)} />
             </Icon.Group>

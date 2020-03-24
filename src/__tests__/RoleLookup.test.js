@@ -4,7 +4,7 @@ import useAxios from 'axios-hooks'
 
 import { RoleLookup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { TEST_CONFIGURATIONS } from '../configurations'
+import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const { apiContext, language, refetch, testRole, testRoleId } = TEST_CONFIGURATIONS
 

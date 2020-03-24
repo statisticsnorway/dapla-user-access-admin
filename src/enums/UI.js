@@ -7,13 +7,13 @@ export const UI = {
     en: 'Something went wrong, check settings',
     nb: 'Noe gikk galt, sjekk innstillingene'
   },
-  BOOLEAN_CHOICE: {
-    en: 'Or',
-    nb: 'Eller'
-  },
   ERROR: {
     en: 'Error',
     nb: 'Problem'
+  },
+  FILTER_TABLE: {
+    en: 'Filter table',
+    nb: 'Filtrere tabellen'
   },
   HEADER: {
     en: 'User access admin',

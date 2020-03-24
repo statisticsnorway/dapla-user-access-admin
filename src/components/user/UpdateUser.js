@@ -56,7 +56,7 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
             isNew ?
               <Icon
                 link
-                size='huge'
+                size='big'
                 name='user plus'
                 data-testid={TEST_IDS.NEW_USER}
                 style={{ color: SSB_COLORS.GREEN }}

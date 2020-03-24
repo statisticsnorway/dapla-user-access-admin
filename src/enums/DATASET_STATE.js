@@ -1,4 +1,4 @@
-export const DATASETSTATE = {
+export const DATASET_STATE = {
   RAW: {
     en: 'Rawdata',
     nb: 'Rådata'
@@ -11,12 +11,16 @@ export const DATASETSTATE = {
     en: 'Processed',
     nb: 'Klargjort'
   },
+  OUTPUT: {
+    en: 'Output',
+    nb: 'Utdata'
+  },
   PRODUCT: {
     en: 'Product',
     nb: 'Produksjon'
   },
   OTHER: {
     en: 'Other',
-    nb: 'Annen type data'
+    nb: 'Annet'
   }
 }

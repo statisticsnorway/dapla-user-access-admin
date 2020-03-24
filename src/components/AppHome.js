@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Accordion, Divider, Grid, Icon, Popup, Segment } from 'semantic-ui-react'
+import { Accordion, Divider, Grid, Icon, Popup } from 'semantic-ui-react'
 import { Input as SSBInput, Text, Title } from '@statisticsnorway/ssb-component-library'
 
-import { RoleLookup, UpdateRole, UpdateUser, UserAccess } from './'
+import { RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS } from '../configurations'
-import { HOME, ROLE, TEST_IDS, UI, USER } from '../enums'
+import { HOME, TEST_IDS, UI } from '../enums'
 
 function AppHome () {
   const { authApi } = useContext(ApiContext)
@@ -50,6 +50,7 @@ function AppHome () {
               size='big'
               loading={loading}
               name='sync alternate'
+              disabled={userId === ''}
               data-testid={TEST_IDS.REFRESH_USER}
               style={{ color: SSB_COLORS.BLUE, marginTop: '0.5em', marginBottom: '0.5em' }}
               onClick={() => {
@@ -79,21 +80,7 @@ function AppHome () {
         </>
         }
         <Divider />
-        <Segment placeholder>
-          <Grid columns={2} textAlign='center'>
-            <Divider vertical>{UI.BOOLEAN_CHOICE[language]}</Divider>
-            <Grid.Row verticalAlign='middle'>
-              <Grid.Column>
-                <UpdateUser isNew={true} roles={[]} userId={''} />
-                <Title size={3}>{USER.CREATE_USER[language]}</Title>
-              </Grid.Column>
-              <Grid.Column>
-                <UpdateRole isNew={true} />
-                <Title size={3}>{ROLE.CREATE_ROLE[language]}</Title>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+        <UpdateUser isNew={true} roles={[]} userId={''} />
       </Grid.Column>
       <Grid.Column>
         {!error && !loading && !userEdited && data !== undefined && <UserAccess userId={userId} />}

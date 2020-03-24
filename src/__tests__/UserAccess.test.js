@@ -5,8 +5,9 @@ import useAxios from 'axios-hooks'
 
 import { UserAccess } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { API, TEST_CONFIGURATIONS } from '../configurations'
+import { API } from '../configurations'
 import { USER_ACCESS } from '../enums'
+import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const { apiContext, language, refetch } = TEST_CONFIGURATIONS
 

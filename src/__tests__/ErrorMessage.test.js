@@ -2,8 +2,8 @@ import React from 'react'
 import { render } from '@testing-library/react'
 
 import ErrorMessage from '../components/ErrorMessage'
-import { TEST_CONFIGURATIONS } from '../configurations'
 import { AppContextProvider } from '../utilities'
+import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const { errorString, objectString } = TEST_CONFIGURATIONS
 
