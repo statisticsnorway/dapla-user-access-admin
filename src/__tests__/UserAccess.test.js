@@ -5,13 +5,10 @@ import useAxios from 'axios-hooks'
 
 import { UserAccess } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { API } from '../configurations'
-import { LANGUAGE, USER_ACCESS } from '../enums'
+import { API, TEST_CONFIGURATIONS } from '../configurations'
+import { USER_ACCESS } from '../enums'
 
-const refetch = jest.fn()
-const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
-const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
-const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
+const { apiContext, language, refetch } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByText } = render(

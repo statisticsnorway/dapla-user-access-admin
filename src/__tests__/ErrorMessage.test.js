@@ -2,9 +2,11 @@ import React from 'react'
 import { render } from '@testing-library/react'
 
 import ErrorMessage from '../components/ErrorMessage'
+import { TEST_CONFIGURATIONS } from '../configurations'
 import { AppContextProvider } from '../utilities'
 
-const stringError = 'A problem occured'
+const { errorString, objectString } = TEST_CONFIGURATIONS
+
 const setup = error => {
   const { getByText } = render(
     <AppContextProvider>
@@ -16,21 +18,21 @@ const setup = error => {
 }
 
 test('Renders string errors', () => {
-  const { getByText } = setup(stringError)
+  const { getByText } = setup(errorString)
 
-  expect(getByText(stringError)).toBeInTheDocument()
+  expect(getByText(errorString)).toBeInTheDocument()
 })
 
 test('Renders object errors when object traverse is possible', () => {
-  const objectError = { response: { data: stringError } }
-  const { getByText } = setup(objectError)
+  const errorObject = { response: { data: errorString } }
+  const { getByText } = setup(errorObject)
 
-  expect(getByText(stringError)).toBeInTheDocument()
+  expect(getByText(errorString)).toBeInTheDocument()
 })
 
 test('Renders fallback error when object traverse is impossible', () => {
-  const objectError = { not: { correct: stringError } }
-  const { getByText } = setup(objectError)
+  const errorObject = { not: { correct: errorString } }
+  const { getByText } = setup(errorObject)
 
-  expect(getByText('[object Object]')).toBeInTheDocument()
+  expect(getByText(objectString)).toBeInTheDocument()
 })

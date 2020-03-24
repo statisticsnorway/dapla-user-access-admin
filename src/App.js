@@ -10,11 +10,10 @@ import { API, ROUTING } from './configurations'
 import { UI } from './enums'
 
 function App () {
-  const { authApi, catalogApi } = useContext(ApiContext)
+  const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   const [authReady, setAuthReady] = useState(false)
-  const [catalogReady, setCatalogReady] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   const [{
@@ -22,11 +21,6 @@ function App () {
     error: authError,
     response: authResponse
   }] = useAxios(`${authApi}${API.GET_HEALTH}`)
-  const [{
-    loading: catalogLoading,
-    error: catalogError,
-    response: catalogResponse
-  }] = useAxios(`${catalogApi}${API.GET_HEALTH}`)
 
   useEffect(() => {
     if (!authLoading && !authError) {
@@ -36,22 +30,14 @@ function App () {
     }
   }, [authError, authLoading, authResponse])
 
-  useEffect(() => {
-    if (!catalogLoading && !catalogError) {
-      setCatalogReady(true)
-    } else {
-      setCatalogReady(false)
-    }
-  }, [catalogError, catalogLoading, catalogResponse])
-
   return (
     <>
       <AppMenu setSettingsOpen={setSettingsOpen} />
       <SSBDivider light />
       <Segment basic style={{ paddingTop: '2em' }}>
-        {authLoading || catalogLoading ?
-          <Loader active inline='centered' /> : authError || catalogError ?
-            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} /> : authReady && catalogReady &&
+        {authLoading ?
+          <Loader active inline='centered' /> : authError ?
+            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} /> : authReady &&
             <Switch>
               <Route path={ROUTING.BASE}>
                 <AppHome />
@@ -61,10 +47,9 @@ function App () {
       </Segment>
       <AppSettings
         open={settingsOpen}
+        loading={authLoading}
         authError={authError}
-        catalogError={catalogError}
         setSettingsOpen={setSettingsOpen}
-        loading={authLoading || catalogLoading}
       />
     </>
   )

@@ -5,12 +5,10 @@ import useAxios from 'axios-hooks'
 
 import { UpdateRole } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { API } from '../configurations'
-import { LANGUAGE, ROLE, TEST_IDS } from '../enums'
+import { TEST_CONFIGURATIONS } from '../configurations'
+import { ROLE, TEST_IDS } from '../enums'
 
-const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
-const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
-const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
+const { alternativeTestUserId, apiContext, emptyRole, executePut, language, testRole } = TEST_CONFIGURATIONS
 
 const setup = (isNew, role) => {
   const { getAllByText, getByPlaceholderText, getByTestId } = render(
@@ -25,11 +23,9 @@ const setup = (isNew, role) => {
 }
 
 describe('Common mock', () => {
-  const executePut = jest.fn()
   useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
 
   test('Renders correctly on new role', () => {
-
     const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
@@ -39,14 +35,7 @@ describe('Common mock', () => {
   })
 
   test('Renders correctly on update role', () => {
-    const role = {
-      roleId: 'test',
-      states: [API.ENUMS.STATES[1]],
-      privileges: [API.ENUMS.PRIVILEGES[1]],
-      maxValuation: API.ENUMS.VALUATIONS[1],
-      namespacePrefixes: ['/test/1', '/test/2']
-    }
-    const { getByPlaceholderText, getByTestId } = setup(false, role)
+    const { getByPlaceholderText, getByTestId } = setup(false, testRole)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
 
@@ -57,17 +46,9 @@ describe('Common mock', () => {
     const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
-    userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), 'test')
+    userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), alternativeTestUserId)
     userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
 
-    expect(executePut).toHaveBeenCalledWith({
-      data: {
-        roleId: 'test',
-        states: [],
-        privileges: [],
-        maxValuation: '',
-        namespacePrefixes: []
-      }
-    })
+    expect(executePut).toHaveBeenCalledWith(emptyRole)
   })
 })

@@ -4,18 +4,15 @@ import useAxios from 'axios-hooks'
 
 import { RoleLookup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { API } from '../configurations'
-import { LANGUAGE } from '../enums'
+import { TEST_CONFIGURATIONS } from '../configurations'
 
-const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
-const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
-const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
+const { apiContext, language, refetch, testRole, testRoleId } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <RoleLookup roleId='test' />
+        <RoleLookup roleId={testRoleId} />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
@@ -24,19 +21,11 @@ const setup = () => {
 }
 
 test('Renders correctly', () => {
-  const refetch = jest.fn()
-  const role = {
-    roleId: 'test',
-    states: [API.ENUMS.STATES[1]],
-    privileges: [API.ENUMS.PRIVILEGES[1]],
-    maxValuation: API.ENUMS.VALUATIONS[1],
-    namespacePrefixes: ['/test/1', '/test/2']
-  }
-  useAxios.mockReturnValue([{ data: role, loading: false, error: null }, refetch])
+  useAxios.mockReturnValue([{ data: testRole, loading: false, error: null }, refetch])
   const { getByText } = setup()
 
-  Object.keys(role).forEach(key => {
+  Object.keys(testRole).forEach(key => {
     expect(getByText(key)).toBeInTheDocument()
-    expect(getByText(role[key].toString())).toBeInTheDocument()
+    expect(getByText(testRole[key].toString())).toBeInTheDocument()
   })
 })

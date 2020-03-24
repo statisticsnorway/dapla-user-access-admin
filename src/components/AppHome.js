@@ -12,7 +12,7 @@ function AppHome () {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [userId, setUserId] = useState('user1')
+  const [userId, setUserId] = useState('')
   const [userEdited, setUserEdited] = useState(false)
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${API.GET_USER(userId)}`, { manual: true })

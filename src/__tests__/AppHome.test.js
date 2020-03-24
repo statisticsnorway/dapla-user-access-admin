@@ -5,11 +5,10 @@ import userEvent from '@testing-library/user-event'
 
 import { AppHome } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { LANGUAGE, TEST_IDS, UI } from '../enums'
+import { TEST_CONFIGURATIONS } from '../configurations'
+import { TEST_IDS, UI } from '../enums'
 
-const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
-const api = { authApi: process.env.REACT_APP_API_AUTH, catalogApi: process.env.REACT_APP_API_CATALOG }
-const apiContext = { ...api, setAuthApi: jest.fn(), setCatalogApi: jest.fn() }
+const { alternativeTestUserId, apiContext, language, refetch } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByPlaceholderText, getByTestId, getByText } = render(
@@ -24,20 +23,18 @@ const setup = () => {
 }
 
 describe('Common mock', () => {
-  const refetch = jest.fn()
   useAxios.mockReturnValue([{ data: undefined, loading: false, error: null }, refetch])
 
   test('Renders correctly', () => {
-    const { getByPlaceholderText, getByText } = setup()
+    const { getByText } = setup()
 
     expect(getByText(UI.USER[language])).toBeInTheDocument()
-    expect(getByPlaceholderText(UI.USER[language])).toHaveValue('user1')
   })
 
   test('Changing user works correctly', () => {
     const { getByPlaceholderText, getByTestId } = setup()
 
-    userEvent.type(getByPlaceholderText(UI.USER[language]), 'test')
+    userEvent.type(getByPlaceholderText(UI.USER[language]), alternativeTestUserId)
     userEvent.click(getByTestId(TEST_IDS.REFRESH_USER))
 
     expect(refetch).toHaveBeenCalled()

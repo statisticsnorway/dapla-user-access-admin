@@ -6,11 +6,10 @@ import useAxios from 'axios-hooks'
 
 import App from '../App'
 import { AppContextProvider } from '../utilities'
-import { API } from '../configurations'
+import { API, TEST_CONFIGURATIONS } from '../configurations'
 import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
 
-const refetch = jest.fn()
-const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
+const { errorString, language, otherLanguage, refetch } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByTestId, getByText } = render(
@@ -32,11 +31,9 @@ describe('Common mock', () => {
 
     expect(getByText(UI.HEADER[language])).toBeInTheDocument()
     expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
-    expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`)
   })
 
   test('Change language works correctly', () => {
-    const otherLanguage = LANGUAGE.LANGUAGES.NORWEGIAN.languageCode
     const { getByText } = setup()
 
     userEvent.click(getByText(LANGUAGE.NORWEGIAN[language]))
@@ -54,7 +51,7 @@ describe('Common mock', () => {
 })
 
 test('Renders error when api call returns error', () => {
-  useAxios.mockReturnValue([{ loading: false, error: 'Error', response: null }], refetch)
+  useAxios.mockReturnValue([{ loading: false, error: errorString, response: null }], refetch)
   const { getByText } = setup()
 
   expect(getByText(UI.API_ERROR_MESSAGE[language])).toBeInTheDocument()
