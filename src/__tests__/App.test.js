@@ -8,13 +8,14 @@ import App from '../App'
 import { AppContextProvider } from '../utilities'
 import { API } from '../configurations'
 import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
+import { TEST_CONFIGURATIONS } from '../setupTests'
 
-const language = LANGUAGE.LANGUAGES.ENGLISH.languageCode
+const { errorString, language, otherLanguage, refetch } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByTestId, getByText } = render(
     <AppContextProvider>
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>
     </AppContextProvider>
@@ -23,42 +24,35 @@ const setup = () => {
   return { getByTestId, getByText }
 }
 
-test('Does not crash', () => {
-  useAxios.mockReturnValue([{ loading: true, error: null, response: null }])
-  setup()
+describe('Common mock', () => {
+  useAxios.mockReturnValue([{ loading: true, error: null, response: null }, refetch])
 
-  expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
-  expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`)
-})
+  test('Does not crash', () => {
+    const { getByText } = setup()
 
-test('Renders basics', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
-  const { getByText } = setup()
+    expect(getByText(UI.HEADER[language])).toBeInTheDocument()
+    expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
+  })
 
-  expect(getByText(UI.HEADER[language])).toBeInTheDocument()
-})
+  test('Change language works correctly', () => {
+    const { getByText } = setup()
 
-test('Change language works correctly', () => {
-  const otherLanguage = LANGUAGE.LANGUAGES.NORWEGIAN.languageCode
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
-  const { getByText } = setup()
+    userEvent.click(getByText(LANGUAGE.NORWEGIAN[language]))
 
-  userEvent.click(getByText(LANGUAGE.NORWEGIAN[language]))
+    expect(getByText(UI.HEADER[otherLanguage])).toBeInTheDocument()
+  })
 
-  expect(getByText(UI.HEADER[otherLanguage])).toBeInTheDocument()
-})
+  test('Opens settings', () => {
+    const { getByTestId, getByText } = setup()
 
-test('Opens settings', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
-  const { getByTestId, getByText } = setup()
+    userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
 
-  userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
-
-  expect(getByText(SETTINGS.HEADER[language])).toBeInTheDocument()
+    expect(getByText(SETTINGS.HEADER[language])).toBeInTheDocument()
+  })
 })
 
 test('Renders error when api call returns error', () => {
-  useAxios.mockReturnValue([{ loading: false, error: 'Error', response: null }])
+  useAxios.mockReturnValue([{ loading: false, error: errorString, response: null }], refetch)
   const { getByText } = setup()
 
   expect(getByText(UI.API_ERROR_MESSAGE[language])).toBeInTheDocument()

@@ -1,5 +1,5 @@
 kind: pipeline
-name: data-access-admin
+name: user-access-admin
 
 steps:
   - name: restore-cache
@@ -7,7 +7,7 @@ steps:
     settings:
       pull: true
       bucket: bip-drone-dependency-cache
-      path: bip-drone-dependency-cache/statisticsnorway/data-access-admin
+      path: bip-drone-dependency-cache/statisticsnorway/user-access-admin
       json_key:
         from_secret: gcr_credentials
       restore: true
@@ -32,7 +32,7 @@ steps:
     settings:
       pull: true
       bucket: bip-drone-dependency-cache
-      path: bip-drone-dependency-cache/statisticsnorway/data-access-admin
+      path: bip-drone-dependency-cache/statisticsnorway/user-access-admin
       json_key:
         from_secret: gcr_credentials
       rebuild: true
@@ -86,7 +86,7 @@ steps:
     settings:
       pull: true
       bucket: bip-drone-dependency-cache
-      path: bip-drone-dependency-cache/statisticsnorway/data-access-admin
+      path: bip-drone-dependency-cache/statisticsnorway/user-access-admin
       json_key:
         from_secret: gcr_credentials
       flush: true
@@ -101,7 +101,7 @@ steps:
   - name: publish-docker
     image: plugins/gcr
     settings:
-      repo: prod-bip/data-access-admin
+      repo: prod-bip/user-access-admin
       registry: eu.gcr.io
       tags: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
       json_key:

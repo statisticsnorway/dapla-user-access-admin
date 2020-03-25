@@ -1,3 +1,4 @@
 export const ROUTING = {
-  BASE: '/'
+  BASE: '/',
+  ROLES: '/roles'
 }

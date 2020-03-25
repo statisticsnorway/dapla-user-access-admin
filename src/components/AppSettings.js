@@ -6,13 +6,12 @@ import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS, SSB_STYLE } from '../configurations'
 import { SETTINGS, TEST_IDS } from '../enums'
 
-function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen }) {
+function AppSettings ({ authError, loading, open, setSettingsOpen }) {
   const { language } = useContext(LanguageContext)
-  const { authApi, catalogApi, setAuthApi, setCatalogApi } = useContext(ApiContext)
+  const { authApi, setAuthApi } = useContext(ApiContext)
 
-  const [settingsEdited, setSettingsEdited] = useState(false)
   const [authUrl, setAuthUrl] = useState(authApi)
-  const [catalogUrl, setCatalogUrl] = useState(catalogApi)
+  const [settingsEdited, setSettingsEdited] = useState(false)
 
   return (
     <Modal open={open} onClose={() => setSettingsOpen(false)} style={SSB_STYLE}>
@@ -22,11 +21,11 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
       </Header>
       <Modal.Content as={Segment} basic loading={loading} style={SSB_STYLE}>
         <SSBInput
-          label={SETTINGS.AUTH_API[language]}
-          placeholder={SETTINGS.AUTH_API[language]}
-          disabled={loading}
-          error={authError && !settingsEdited}
           value={authUrl}
+          disabled={loading}
+          label={SETTINGS.AUTH_API[language]}
+          error={authError && !settingsEdited}
+          placeholder={SETTINGS.AUTH_API[language]}
           handleChange={(value) => {
             setAuthUrl(value)
             setSettingsEdited(true)
@@ -34,22 +33,6 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
           errorMessage={
             authError && !settingsEdited && getNestedObject(authError, API.ERROR_PATH) === undefined ?
               authError.toString() : getNestedObject(authError, API.ERROR_PATH)
-          }
-        />
-        <Divider hidden />
-        <SSBInput
-          label={SETTINGS.CATALOG_API[language]}
-          placeholder={SETTINGS.CATALOG_API[language]}
-          disabled={loading}
-          error={catalogError && !settingsEdited}
-          value={catalogUrl}
-          handleChange={(value) => {
-            setCatalogUrl(value)
-            setSettingsEdited(true)
-          }}
-          errorMessage={
-            catalogError && !settingsEdited && getNestedObject(catalogError, API.ERROR_PATH) === undefined ?
-              catalogError.toString() : getNestedObject(catalogError, API.ERROR_PATH)
           }
         />
         <Container style={{ marginTop: '1em' }}>
@@ -67,7 +50,6 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
                 disabled={loading}
                 onClick={() => {
                   setAuthApi(authUrl)
-                  setCatalogApi(catalogUrl)
                   setSettingsEdited(false)
                 }}
               >
@@ -78,20 +60,18 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
             <Grid.Column textAlign='right'>
               <Popup basic flowing position='left center' trigger={
                 <Icon
-                  fitted
                   link
-                  size='large'
+                  fitted
                   name='undo'
+                  size='large'
                   style={{ color: SSB_COLORS.BLUE }}
+                  data-testid={TEST_IDS.DEFAULT_SETTINGS_BUTTON}
                   // There is a bug in https://github.com/statisticsnorway/ssb-component-library preventing values from updating when updated from another source then itself
                   onClick={() => {
                     setAuthUrl(process.env.REACT_APP_API_AUTH)
-                    setCatalogUrl(process.env.REACT_APP_API_CATALOG)
                     setAuthApi(process.env.REACT_APP_API_AUTH)
-                    setCatalogApi(process.env.REACT_APP_API_CATALOG)
                     setSettingsEdited(false)
                   }}
-                  data-testid={TEST_IDS.DEFAULT_SETTINGS_BUTTON}
                 />
               }>
                 <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />

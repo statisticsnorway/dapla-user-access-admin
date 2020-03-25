@@ -1,4 +1,8 @@
 export const TEST_IDS = {
   ACCESS_SETTINGS_BUTTON: 'settingsCog',
-  DEFAULT_SETTINGS_BUTTON: 'setDefaultSettings'
+  DEFAULT_SETTINGS_BUTTON: 'setDefaultSettings',
+  NEW_USER: 'newUserIcon',
+  REFRESH_USER: 'refreshUserIcon',
+  UPDATE_ROLE: 'updateRoleIcon',
+  UPDATE_USER: 'updateUserIcon'
 }

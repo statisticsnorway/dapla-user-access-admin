@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Image, Menu } from 'semantic-ui-react'
+import { Dropdown, Icon, Image, Menu } from 'semantic-ui-react'
 import { Title } from '@statisticsnorway/ssb-component-library'
 
 import SSBLogo from '../media/ssb-logo-rgb.svg'
@@ -28,6 +28,9 @@ function AppMenu ({ setSettingsOpen }) {
         <Title size={1}>{UI.HEADER[language]}</Title>
       </Menu.Item>
       <Menu.Menu position='right'>
+        <Menu.Item as={Link} to={ROUTING.ROLES}>
+          <Icon link fitted name='users' size='large' style={{ color: SSB_COLORS.BLUE }} />
+        </Menu.Item>
         <Menu.Item
           onClick={() => setSettingsOpen(true)}
           icon={{ name: 'setting', size: 'large', 'data-testid': TEST_IDS.ACCESS_SETTINGS_BUTTON }}

@@ -1,6 +1,6 @@
 {
-  "short_name": "Data Access Admin",
-  "name": "Data Access Admin",
+  "short_name": "User Access Admin",
+  "name": "User Access Admin",
   "icons": [
     {
       "src": "favicon.ico",
