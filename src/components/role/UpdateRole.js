@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Header, Icon, Modal, Popup } from 'semantic-ui-react'
+import { Divider, Form, Header, Icon, Modal, Popup, TextArea } from 'semantic-ui-react'
 import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
 
 import { ApiContext, LanguageContext } from '../../utilities'
@@ -17,6 +17,9 @@ function UpdateRole ({ isNew, refetch, role }) {
   const [privileges, setPrivileges] = useState(isNew ? [] : role.privileges)
   const [maxValuation, setMaxValuation] = useState(isNew ? '' : role.maxValuation)
   const [namespacePrefixes, setNamespacePrefixes] = useState(isNew ? [] : role.namespacePrefixes)
+
+  const [{ data: getData, loading: getLoading, error: getError }, refetchGet] = useAxios(`${authApi}${API.GET_CATALOGS}`)
+
   const [namespacePrefixesOptions, setNamespacePrefixesOptions] = useState(isNew ? [] : role.namespacePrefixes
     .map(namespacePrefix => ({
       key: namespacePrefix,
@@ -128,11 +131,16 @@ function UpdateRole ({ isNew, refetch, role }) {
             onAddItem={(event, { value }) => setNamespacePrefixesOptions(
               [{ key: value, text: value, value: value }, ...namespacePrefixesOptions]
             )}
-            options={namespacePrefixes.map(namespacePrefix => ({
-              key: namespacePrefix,
-              text: namespacePrefix,
-              value: namespacePrefix
-            }))}
+            options={!getLoading && !getError && getData !== undefined ? getData[API.CATALOGS].map(catalog => ({
+              key: catalog.id.path,
+              text: catalog.id.path,
+              value: catalog.id.path
+            })) : []}
+            // options={namespacePrefixes.map(namespacePrefix => ({
+            //   key: namespacePrefix,
+            //   text: namespacePrefix,
+            //   value: namespacePrefix
+            // }))}
             label={
               <label>
                 <Popup basic flowing trigger={<span>{ROLE.NAMESPACE_PREFIXES[language]}</span>}>
