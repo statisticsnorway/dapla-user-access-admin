@@ -9,7 +9,12 @@ export const TEST_CONFIGURATIONS = {
   alternativeTestRoleId: 'testRoleId2',
   alternativeTestUserId: 'testUserId2',
   alternativeUrl: 'http://localhost:9999',
-  apiContext: { authApi: process.env.REACT_APP_API_AUTH, setAuthApi: jest.fn() },
+  apiContext: {
+    authApi: process.env.REACT_APP_API_AUTH,
+    catalogApi: process.env.REACT_APP_API_CATALOG,
+    setAuthApi: jest.fn(),
+    setCatalogApi: jest.fn()
+  },
   emptyRole: {
     data: {
       roleId: 'testUserId2',

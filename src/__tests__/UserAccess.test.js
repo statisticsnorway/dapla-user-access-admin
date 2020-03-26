@@ -24,7 +24,7 @@ const setup = () => {
 }
 
 test('Renders correctly', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
+  useAxios.mockReturnValue([{ data: { [API.CATALOGS]: [] }, loading: false, error: null, response: null }, refetch])
   const { getByText } = setup()
 
   expect(getByText(USER_ACCESS.HEADER[language])).toBeInTheDocument()
@@ -33,6 +33,7 @@ test('Renders correctly', () => {
 
 test('Functions correctly on good response', () => {
   useAxios.mockReturnValue([{
+    data: { [API.CATALOGS]: [] },
     loading: false,
     error: null,
     response: { response: { statusText: USER_ACCESS.VERDICTS.OK } }
@@ -47,6 +48,7 @@ test('Functions correctly on good response', () => {
 
 test('Functions correctly on bad response', () => {
   useAxios.mockReturnValue([{
+    data: { [API.CATALOGS]: [] },
     loading: false,
     error: { response: { statusText: USER_ACCESS.VERDICTS.FORBIDDEN } },
     response: null

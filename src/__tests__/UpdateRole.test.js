@@ -5,6 +5,7 @@ import useAxios from 'axios-hooks'
 
 import { UpdateRole } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
+import { API } from '../configurations'
 import { ROLE, TEST_IDS } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
@@ -23,7 +24,7 @@ const setup = (isNew, role) => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, executePut])
+  useAxios.mockReturnValue([{ data: { [API.CATALOGS]: [] }, loading: false, error: null, response: null }, executePut])
 
   test('Renders correctly on new role', () => {
     const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)

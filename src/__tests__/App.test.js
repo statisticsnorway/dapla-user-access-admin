@@ -32,6 +32,7 @@ describe('Common mock', () => {
 
     expect(getByText(UI.HEADER[language])).toBeInTheDocument()
     expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`)
+    expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`)
   })
 
   test('Change language works correctly', () => {

@@ -6,7 +6,7 @@ This application aims to create a user interface for interacting with the [dapla
 Functionality includes:
 * Creating and editing users
 * Creating, editing and listing roles
-* Check different access rights for any given user with any given role
+* Check different access rights on datasets for any given user with any given role
 
 The project makes limited use of the [Component library for SSB](https://github.com/statisticsnorway/ssb-component-library)
 and is built the same way as our [react-reference-app](https://github.com/statisticsnorway/fe-react-reference-app)

@@ -10,17 +10,21 @@ import { API, ROUTING } from './configurations'
 import { UI } from './enums'
 
 function App () {
-  const { authApi } = useContext(ApiContext)
+  const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   const [authReady, setAuthReady] = useState(false)
+  const [catalogReady, setCatalogReady] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   const [{
     loading: authLoading,
-    error: authError,
-    response: authResponse
+    error: authError
   }] = useAxios(`${authApi}${API.GET_HEALTH}`)
+  const [{
+    loading: catalogLoading,
+    error: catalogError
+  }] = useAxios(`${catalogApi}${API.GET_HEALTH}`)
 
   useEffect(() => {
     if (!authLoading && !authError) {
@@ -28,16 +32,24 @@ function App () {
     } else {
       setAuthReady(false)
     }
-  }, [authError, authLoading, authResponse])
+  }, [authError, authLoading])
+
+  useEffect(() => {
+    if (!catalogLoading && !catalogError) {
+      setCatalogReady(true)
+    } else {
+      setCatalogReady(false)
+    }
+  }, [catalogError, catalogLoading])
 
   return (
     <>
       <AppMenu setSettingsOpen={setSettingsOpen} />
       <SSBDivider dark />
       <Segment basic style={{ paddingTop: '2em' }}>
-        {authLoading ?
-          <Loader active inline='centered' /> : authError ?
-            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} /> : authReady &&
+        {authLoading || catalogLoading ?
+          <Loader active inline='centered' /> : authError || catalogError ?
+            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} /> : authReady && catalogReady &&
             <Switch>
               <Route path={ROUTING.ROLES}>
                 <RolesTable />
@@ -50,9 +62,10 @@ function App () {
       </Segment>
       <AppSettings
         open={settingsOpen}
-        loading={authLoading}
         authError={authError}
+        catalogError={catalogError}
         setSettingsOpen={setSettingsOpen}
+        loading={authLoading || catalogLoading}
       />
     </>
   )
