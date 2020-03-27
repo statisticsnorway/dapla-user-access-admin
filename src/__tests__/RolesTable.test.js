@@ -45,5 +45,11 @@ describe('Common mock', () => {
     const { getByTestId } = setup()
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
+    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
   })
+})
+
+test('Loads', () => {
+  useAxios.mockReturnValue([{ data: undefined, loading: true, error: null }, refetch])
+  setup()
 })

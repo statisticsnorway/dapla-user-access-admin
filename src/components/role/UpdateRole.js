@@ -127,6 +127,7 @@ function UpdateRole ({ isNew, refetch, role }) {
             allowAdditions
             value={namespacePrefixes}
             options={namespacePrefixesOptions}
+            data-testid={TEST_IDS.SEARCH_DROPDOWN}
             additionLabel={`${UI.ADD[language]} `}
             placeholder={ROLE.NAMESPACE_PREFIXES[language]}
             noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}

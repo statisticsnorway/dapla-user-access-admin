@@ -5,7 +5,7 @@ import { Button as SSBButton, Text, Title } from '@statisticsnorway/ssb-componen
 
 import { ApiContext, LanguageContext } from '../../utilities'
 import { API, SSB_COLORS } from '../../configurations'
-import { ROLE, UI, USER_ACCESS } from '../../enums'
+import { ROLE, TEST_IDS, UI, USER_ACCESS } from '../../enums'
 
 function UserAcces ({ userId }) {
   const { authApi, catalogApi } = useContext(ApiContext)
@@ -64,6 +64,7 @@ function UserAcces ({ userId }) {
         allowAdditions
         value={namespace}
         options={namespacePrefixesOptions}
+        data-testid={TEST_IDS.SEARCH_DROPDOWN}
         additionLabel={`${UI.ADD[language]} `}
         placeholder={ROLE.NAMESPACE_PREFIXES[language]}
         noResultsMessage={UI.SEARCH_NO_RESULTS[language]}

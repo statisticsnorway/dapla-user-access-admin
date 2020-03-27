@@ -5,6 +5,7 @@ import { LANGUAGE } from '../src/enums'
 
 jest.mock('axios-hooks')
 
+// TODO: Clean this up (put same values in consts outside and maybe remove stuff from here that only has 1 usage)
 export const TEST_CONFIGURATIONS = {
   alternativeTestRoleId: 'testRoleId2',
   alternativeTestUserId: 'testUserId2',
@@ -17,13 +18,14 @@ export const TEST_CONFIGURATIONS = {
   },
   emptyRole: {
     data: {
-      roleId: 'testUserId2',
+      roleId: 'testRoleId2',
       states: [],
       privileges: [],
       maxValuation: '',
       namespacePrefixes: []
     }
   },
+  emptyCatalogs: { [API.CATALOGS]: [] },
   errorString: 'A problem occured',
   execute: jest.fn(),
   executePut: jest.fn(),
@@ -31,8 +33,17 @@ export const TEST_CONFIGURATIONS = {
   objectString: '[object Object]',
   otherLanguage: LANGUAGE.LANGUAGES.NORWEGIAN.languageCode,
   refetch: jest.fn(),
+  returnCatalogs: {
+    [API.CATALOGS]: [
+      {
+        id: {
+          path: '/test/1'
+        }
+      }
+    ]
+  },
   returnRoles: {
-    roles: [
+    [API.ROLES]: [
       {
         roleId: 'role1',
         states: ['RAW'],
@@ -48,6 +59,10 @@ export const TEST_CONFIGURATIONS = {
       }
     ]
   },
+  returnUser: {
+    roles: ['role1', 'role2'],
+    userId: 'user1'
+  },
   testRole: {
     roleId: 'testRoleId',
     states: [API.ENUMS.STATES[1]],
@@ -56,5 +71,21 @@ export const TEST_CONFIGURATIONS = {
     namespacePrefixes: ['/test/1', '/test/2']
   },
   testRoles: ['role1', 'role2'],
-  testRoleId: 'testRoleId'
+  testRoleId: 'testRoleId',
+  testUserId: 'testUserId',
+  updatedTestRole: {
+    data: {
+      roleId: 'testRoleId',
+      states: [API.ENUMS.STATES[1], API.ENUMS.STATES[2]],
+      privileges: [API.ENUMS.PRIVILEGES[1], API.ENUMS.PRIVILEGES[2]],
+      maxValuation: API.ENUMS.VALUATIONS[2],
+      namespacePrefixes: ['/test/1', '/test/2', '/test/3']
+    }
+  },
+  updatedTestUser: {
+    data: {
+      userId: 'testUserId2',
+      roles: ['role1']
+    }
+  }
 }

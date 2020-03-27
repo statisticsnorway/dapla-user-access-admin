@@ -5,13 +5,14 @@ import useAxios from 'axios-hooks'
 
 import { UpdateUser } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
+import { API } from '../configurations'
 import { TEST_IDS, USER } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
-const { alternativeTestRoleId, apiContext, execute, language, returnRoles, testRoles, testRoleId } = TEST_CONFIGURATIONS
+const { alternativeTestUserId, apiContext, execute, language, returnRoles, testRoles, testUserId, updatedTestUser } = TEST_CONFIGURATIONS
 
 const setup = (isNew, roles, userId) => {
-  const { getAllByText, getByPlaceholderText, getByTestId } = render(
+  const { getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
         <UpdateUser isNew={isNew} refetch={jest.fn()} roles={roles} userId={userId} />
@@ -19,7 +20,7 @@ const setup = (isNew, roles, userId) => {
     </ApiContext.Provider>
   )
 
-  return { getAllByText, getByPlaceholderText, getByTestId }
+  return { getAllByText, getByPlaceholderText, getByTestId, getByText }
 }
 
 describe('Common mock', () => {
@@ -34,7 +35,7 @@ describe('Common mock', () => {
   })
 
   test('Renders correctly on update user', () => {
-    const { getAllByText, getByPlaceholderText, getByTestId } = setup(false, testRoles, testRoleId)
+    const { getAllByText, getByPlaceholderText, getByTestId } = setup(false, testRoles, testUserId)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
 
@@ -43,12 +44,14 @@ describe('Common mock', () => {
   })
 
   test('Functions correctly on PUT request', () => {
-    const { getAllByText, getByPlaceholderText, getByTestId } = setup(true, [], '')
+    const { getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true, [], '')
 
     userEvent.click(getByTestId(TEST_IDS.NEW_USER))
-    userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestRoleId)
+    userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)
+    userEvent.click(getByText(returnRoles[API.ROLES][0].roleId))
     userEvent.click(getAllByText(USER.CREATE_USER[language])[1])
 
-    expect(execute).toHaveBeenCalledWith({ data: { userId: alternativeTestRoleId, roles: [] } })
+    expect(execute).toHaveBeenCalledTimes(1)
+    expect(execute).toHaveBeenCalledWith(updatedTestUser)
   })
 })
