@@ -11,9 +11,9 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
+  const [modalOpen, setModalOpen] = useState(false)
   const [updatedRoles, setUpdatedRoles] = useState(roles)
   const [updatedUserId, setUpdatedUserId] = useState(userId)
-  const [modalOpen, setModalOpen] = useState(false)
 
   const [{ data: getData, loading: getLoading, error: getError }, refetchGet] = useAxios(`${authApi}${API.GET_ROLES}`)
   const [{ loading: putLoading, error: putError, response: putResponse }, executePut] = useAxios(
@@ -147,7 +147,7 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
         <SSBButton
           primary
           disabled={putLoading}
-          onClick={() => executePut({ data: { userId: updatedUserId, roles: roles } })}
+          onClick={() => executePut({ data: { userId: updatedUserId, roles: updatedRoles } })}
         >
           {isNew ? USER.CREATE_USER[language] : USER.UPDATE_USER[language]}
         </SSBButton>

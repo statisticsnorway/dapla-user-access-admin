@@ -6,11 +6,12 @@ import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
 import { API, SSB_COLORS, SSB_STYLE } from '../configurations'
 import { SETTINGS, TEST_IDS } from '../enums'
 
-function AppSettings ({ authError, loading, open, setSettingsOpen }) {
+function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen }) {
   const { language } = useContext(LanguageContext)
-  const { authApi, setAuthApi } = useContext(ApiContext)
+  const { authApi, catalogApi, setAuthApi, setCatalogApi } = useContext(ApiContext)
 
   const [authUrl, setAuthUrl] = useState(authApi)
+  const [catalogUrl, setCatalogUrl] = useState(catalogApi)
   const [settingsEdited, setSettingsEdited] = useState(false)
 
   return (
@@ -35,6 +36,22 @@ function AppSettings ({ authError, loading, open, setSettingsOpen }) {
               authError.toString() : getNestedObject(authError, API.ERROR_PATH)
           }
         />
+        <Divider hidden />
+        <SSBInput
+          disabled={loading}
+          value={catalogUrl}
+          label={SETTINGS.CATALOG_API[language]}
+          error={catalogError && !settingsEdited}
+          placeholder={SETTINGS.CATALOG_API[language]}
+          handleChange={(value) => {
+            setCatalogUrl(value)
+            setSettingsEdited(true)
+          }}
+          errorMessage={
+            catalogError && !settingsEdited && getNestedObject(catalogError, API.ERROR_PATH) === undefined ?
+              catalogError.toString() : getNestedObject(catalogError, API.ERROR_PATH)
+          }
+        />
         <Container style={{ marginTop: '1em' }}>
           {settingsEdited &&
           <>
@@ -50,6 +67,7 @@ function AppSettings ({ authError, loading, open, setSettingsOpen }) {
                 disabled={loading}
                 onClick={() => {
                   setAuthApi(authUrl)
+                  setCatalogApi(catalogUrl)
                   setSettingsEdited(false)
                 }}
               >
@@ -70,6 +88,8 @@ function AppSettings ({ authError, loading, open, setSettingsOpen }) {
                   onClick={() => {
                     setAuthUrl(process.env.REACT_APP_API_AUTH)
                     setAuthApi(process.env.REACT_APP_API_AUTH)
+                    setCatalogUrl(process.env.REACT_APP_API_CATALOG)
+                    setCatalogApi(process.env.REACT_APP_API_CATALOG)
                     setSettingsEdited(false)
                   }}
                 />

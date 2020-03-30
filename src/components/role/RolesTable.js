@@ -5,7 +5,7 @@ import { Grid, Icon, Input, List, Loader, Popup, Table } from 'semantic-ui-react
 import { UpdateRole } from '../'
 import { ApiContext, LanguageContext } from '../../utilities'
 import { API, SSB_COLORS } from '../../configurations'
-import { DATASET_STATE, PRIVILEGE, ROLE, UI, VALUATION } from '../../enums'
+import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI, VALUATION } from '../../enums'
 
 function RolesTable () {
   const { authApi } = useContext(ApiContext)
@@ -79,7 +79,7 @@ function RolesTable () {
               </Popup>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell sorted={direction} onClick={() => handleSort()}>
+              <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
                 {ROLE.ROLE_ID[language]}
               </Table.HeaderCell>
               {API.ENUMS.PRIVILEGES.map(privilege =>

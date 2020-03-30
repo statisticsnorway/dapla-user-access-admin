@@ -11,6 +11,10 @@ export const SETTINGS = {
     en: 'Auth service',
     nb: 'Tilgangstjeneste'
   },
+  CATALOG_API: {
+    en: 'Catalog service',
+    nb: 'Katalogtjeneste'
+  },
   EDITED_VALUES: {
     en: 'Edited values are not used until you hit the "Apply" button',
     nb: 'Endrede verdier benyttes når du trykker på "Angi"-knappen'

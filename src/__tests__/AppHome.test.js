@@ -8,7 +8,11 @@ import { ApiContext, LanguageContext } from '../utilities'
 import { TEST_IDS, UI } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
-const { alternativeTestUserId, apiContext, language, refetch } = TEST_CONFIGURATIONS
+jest.mock('../components/role/RoleLookup', () => () => null)
+jest.mock('../components/user/UpdateUser', () => () => null)
+jest.mock('../components/access/UserAccess', () => () => null)
+
+const { alternativeTestUserId, apiContext, language, refetch, returnUser } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByPlaceholderText, getByTestId, getByText } = render(
@@ -22,21 +26,19 @@ const setup = () => {
   return { getByPlaceholderText, getByTestId, getByText }
 }
 
-describe('Common mock', () => {
+test('Renders correctly', () => {
   useAxios.mockReturnValue([{ data: undefined, loading: false, error: null }, refetch])
+  const { getByText } = setup()
 
-  test('Renders correctly', () => {
-    const { getByText } = setup()
+  expect(getByText(UI.USER[language])).toBeInTheDocument()
+})
 
-    expect(getByText(UI.USER[language])).toBeInTheDocument()
-  })
+test('Changing user works correctly', () => {
+  useAxios.mockReturnValue([{ data: returnUser, loading: false, error: null }, refetch])
+  const { getByPlaceholderText, getByTestId } = setup()
 
-  test('Changing user works correctly', () => {
-    const { getByPlaceholderText, getByTestId } = setup()
+  userEvent.type(getByPlaceholderText(UI.USER[language]), alternativeTestUserId)
+  userEvent.click(getByTestId(TEST_IDS.REFRESH_USER))
 
-    userEvent.type(getByPlaceholderText(UI.USER[language]), alternativeTestUserId)
-    userEvent.click(getByTestId(TEST_IDS.REFRESH_USER))
-
-    expect(refetch).toHaveBeenCalled()
-  })
+  expect(refetch).toHaveBeenCalled()
 })

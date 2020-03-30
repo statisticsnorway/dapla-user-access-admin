@@ -6,25 +6,25 @@ import useAxios from 'axios-hooks'
 import { UserAccess } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { API } from '../configurations'
-import { USER_ACCESS } from '../enums'
+import { TEST_IDS, UI, USER_ACCESS } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
-const { apiContext, language, refetch } = TEST_CONFIGURATIONS
+const { apiContext, emptyCatalogs, language, refetch, returnCatalogs, testUserId } = TEST_CONFIGURATIONS
 
 const setup = () => {
-  const { getByText } = render(
+  const { getAllByText, getByTestId, getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <UserAccess userId='test' />
+        <UserAccess userId={testUserId} />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
 
-  return { getByText }
+  return { getAllByText, getByTestId, getByText }
 }
 
 test('Renders correctly', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }, refetch])
+  useAxios.mockReturnValue([{ data: emptyCatalogs, loading: false, error: null, response: null }, refetch])
   const { getByText } = setup()
 
   expect(getByText(USER_ACCESS.HEADER[language])).toBeInTheDocument()
@@ -33,6 +33,7 @@ test('Renders correctly', () => {
 
 test('Functions correctly on good response', () => {
   useAxios.mockReturnValue([{
+    data: emptyCatalogs,
     loading: false,
     error: null,
     response: { response: { statusText: USER_ACCESS.VERDICTS.OK } }
@@ -47,6 +48,7 @@ test('Functions correctly on good response', () => {
 
 test('Functions correctly on bad response', () => {
   useAxios.mockReturnValue([{
+    data: emptyCatalogs,
     loading: false,
     error: { response: { statusText: USER_ACCESS.VERDICTS.FORBIDDEN } },
     response: null
@@ -58,4 +60,19 @@ test('Functions correctly on bad response', () => {
   userEvent.click(getByText(USER_ACCESS.CHECK[language]))
 
   expect(refetch).toHaveBeenCalled()
+})
+
+test('Adding namespacePrefix works correctly', () => {
+  useAxios.mockReturnValue([{ data: returnCatalogs, loading: false, error: null, response: null }, refetch])
+  const { getAllByText, getByTestId } = setup()
+
+  userEvent.type(getByTestId(TEST_IDS.SEARCH_DROPDOWN).children[0], '/test/2') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
+  userEvent.click(getAllByText(UI.ADD[language])[1])
+
+  expect(refetch).toHaveBeenCalled()
+})
+
+test('Loads', () => {
+  useAxios.mockReturnValue([{ data: undefined, loading: true, error: null, response: null }, refetch])
+  setup()
 })

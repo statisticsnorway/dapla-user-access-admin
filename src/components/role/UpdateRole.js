@@ -8,23 +8,18 @@ import { API, SSB_COLORS, SSB_STYLE } from '../../configurations'
 import { ROLE, TEST_IDS, UI } from '../../enums'
 
 function UpdateRole ({ isNew, refetch, role }) {
-  const { authApi } = useContext(ApiContext)
+  const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   const [modalOpen, setModalOpen] = useState(false)
   const [roleId, setRoleId] = useState(isNew ? '' : role.roleId)
   const [states, setStates] = useState(isNew ? [] : role.states)
   const [privileges, setPrivileges] = useState(isNew ? [] : role.privileges)
+  const [namespacePrefixesOptions, setNamespacePrefixesOptions] = useState([])
   const [maxValuation, setMaxValuation] = useState(isNew ? '' : role.maxValuation)
   const [namespacePrefixes, setNamespacePrefixes] = useState(isNew ? [] : role.namespacePrefixes)
-  const [namespacePrefixesOptions, setNamespacePrefixesOptions] = useState(isNew ? [] : role.namespacePrefixes
-    .map(namespacePrefix => ({
-      key: namespacePrefix,
-      text: namespacePrefix,
-      value: namespacePrefix
-    }))
-  )
 
+  const [{ data: getData, loading: getLoading, error: getError }] = useAxios(`${catalogApi}${API.GET_CATALOGS}`)
   const [{ loading, error, response }, executePut] = useAxios(
     {
       url: `${authApi}${API.PUT_ROLE(roleId)}`,
@@ -33,6 +28,16 @@ function UpdateRole ({ isNew, refetch, role }) {
       manual: true
     }
   )
+
+  useEffect(() => {
+    if (!getLoading && !getError && getData !== undefined) {
+      setNamespacePrefixesOptions(getData[API.CATALOGS].map(catalog => ({
+        key: catalog.id.path,
+        text: catalog.id.path,
+        value: catalog.id.path
+      })))
+    }
+  }, [getLoading, getError, getData])
 
   useEffect(() => {
     if (!loading && response) {
@@ -121,6 +126,8 @@ function UpdateRole ({ isNew, refetch, role }) {
             selection
             allowAdditions
             value={namespacePrefixes}
+            options={namespacePrefixesOptions}
+            data-testid={TEST_IDS.SEARCH_DROPDOWN}
             additionLabel={`${UI.ADD[language]} `}
             placeholder={ROLE.NAMESPACE_PREFIXES[language]}
             noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
@@ -128,11 +135,6 @@ function UpdateRole ({ isNew, refetch, role }) {
             onAddItem={(event, { value }) => setNamespacePrefixesOptions(
               [{ key: value, text: value, value: value }, ...namespacePrefixesOptions]
             )}
-            options={namespacePrefixes.map(namespacePrefix => ({
-              key: namespacePrefix,
-              text: namespacePrefix,
-              value: namespacePrefix
-            }))}
             label={
               <label>
                 <Popup basic flowing trigger={<span>{ROLE.NAMESPACE_PREFIXES[language]}</span>}>

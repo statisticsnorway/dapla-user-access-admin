@@ -1,4 +1,5 @@
 export const API = {
+  CATALOGS: 'catalogs',
   ERROR_PATH: ['response', 'data'],
   ENUMS: {
     PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
@@ -7,12 +8,12 @@ export const API = {
   },
   GET_ACCESS: (namespace, privilege, state, maxValuation, userId) =>
     `/access/${userId}?privilege=${privilege}&namespace=${namespace}&valuation=${maxValuation}&state=${state}`,
+  GET_CATALOGS: '/catalog',
   GET_HEALTH: '/health',
   GET_ROLE: (roleId) => `/role/${roleId}`,
   GET_ROLES: '/role',
   GET_USER: (userId) => `/user/${userId}`,
   PUT_ROLE: (roleId) => `/role/${roleId}`,
   PUT_USER: (userId) => `/user/${userId}`,
-  ROLES: 'roles',
-  TEMP_DATASETS: ['/skatt/person/rawdata-2019', '/ske/sirius-person-utkast/2018v19']
+  ROLES: 'roles'
 }

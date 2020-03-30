@@ -6,6 +6,8 @@ import { RoleLookup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
+jest.mock('../components/role/UpdateRole', () => () => null)
+
 const { apiContext, language, refetch, testRole, testRoleId } = TEST_CONFIGURATIONS
 
 const setup = () => {

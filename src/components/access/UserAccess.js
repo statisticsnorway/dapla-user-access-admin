@@ -5,20 +5,34 @@ import { Button as SSBButton, Text, Title } from '@statisticsnorway/ssb-componen
 
 import { ApiContext, LanguageContext } from '../../utilities'
 import { API, SSB_COLORS } from '../../configurations'
-import { UI, USER_ACCESS } from '../../enums'
+import { ROLE, TEST_IDS, UI, USER_ACCESS } from '../../enums'
 
 function UserAcces ({ userId }) {
-  const { authApi } = useContext(ApiContext)
+  const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   const [state, setState] = useState(API.ENUMS.STATES[0])
-  const [namespace, setNamespace] = useState(API.TEMP_DATASETS[0])
+  const [namespace, setNamespace] = useState('')
   const [privilege, setPrivilege] = useState(API.ENUMS.PRIVILEGES[0])
   const [verdict, setVerdict] = useState(USER_ACCESS.VERDICTS.UNKOWN)
   const [maxValuation, setMaxValuation] = useState(API.ENUMS.VALUATIONS[0])
+  const [namespacePrefixesOptions, setNamespacePrefixesOptions] = useState([])
 
-  const [{ loading, error, response }, refetch] =
-    useAxios(`${authApi}${API.GET_ACCESS(namespace, privilege, state, maxValuation, userId)}`, { manual: true })
+  const [{ data: getData, loading: getLoading, error: getError }] = useAxios(`${catalogApi}${API.GET_CATALOGS}`)
+  const [{ loading, error, response }, refetch] = useAxios(
+    `${authApi}${API.GET_ACCESS(namespace, privilege, state, maxValuation, userId)}`,
+    { manual: true }
+  )
+
+  useEffect(() => {
+    if (!getLoading && !getError && getData !== undefined) {
+      setNamespacePrefixesOptions(getData[API.CATALOGS].map(catalog => ({
+        key: catalog.id.path,
+        text: catalog.id.path,
+        value: catalog.id.path
+      })))
+    }
+  }, [getLoading, getError, getData])
 
   useEffect(() => {
     if (!loading && !error && response) {
@@ -45,15 +59,22 @@ function UserAcces ({ userId }) {
       />
       <Text>{` ${USER_ACCESS.GUIDE[1][language]} `}</Text>
       <Dropdown
-        inline
         search
+        selection
+        allowAdditions
         value={namespace}
+        options={namespacePrefixesOptions}
+        data-testid={TEST_IDS.SEARCH_DROPDOWN}
+        additionLabel={`${UI.ADD[language]} `}
+        placeholder={ROLE.NAMESPACE_PREFIXES[language]}
         noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
-        options={API.TEMP_DATASETS.map(dataset => ({ key: dataset, text: dataset, value: dataset }))}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setNamespace(value)
         }}
+        onAddItem={(event, { value }) => setNamespacePrefixesOptions(
+          [{ key: value, text: value, value: value }, ...namespacePrefixesOptions]
+        )}
       />
       <Text>{` ${USER_ACCESS.GUIDE[2][language]} `}</Text>
       <Dropdown
