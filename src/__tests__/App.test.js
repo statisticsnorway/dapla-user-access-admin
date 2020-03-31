@@ -10,10 +10,11 @@ import { API } from '../configurations'
 import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
-jest.mock('../components/role/RolesTable', () => () => null)
 jest.mock('../components/AppHome', () => () => null)
+jest.mock('../components/role/RolesTable', () => () => null)
+jest.mock('../components/group/GroupsTable', () => () => null)
 
-const { errorString, language, otherLanguage } = TEST_CONFIGURATIONS
+const { errorObject, language, otherLanguage } = TEST_CONFIGURATIONS
 
 const setup = () => {
   const { getByTestId, getByText } = render(
@@ -61,7 +62,7 @@ test('Loads', () => {
 })
 
 test('Renders error when api call returns error', () => {
-  useAxios.mockReturnValue([{ loading: false, error: errorString, response: null }])
+  useAxios.mockReturnValue([{ loading: false, error: errorObject, response: null }])
   const { getByText } = setup()
 
   expect(getByText(UI.API_ERROR_MESSAGE[language])).toBeInTheDocument()

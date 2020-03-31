@@ -5,7 +5,7 @@ import useAxios from 'axios-hooks'
 
 import { UserAccess } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { API } from '../configurations'
+import { AUTH_API } from '../configurations'
 import { TEST_IDS, UI, USER_ACCESS } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
@@ -28,7 +28,6 @@ test('Renders correctly', () => {
   const { getByText } = setup()
 
   expect(getByText(USER_ACCESS.HEADER[language])).toBeInTheDocument()
-  expect(getByText(USER_ACCESS.CHECK[language])).toBeInTheDocument()
 })
 
 test('Functions correctly on good response', () => {
@@ -40,7 +39,7 @@ test('Functions correctly on good response', () => {
   }, refetch])
   const { getByText } = setup()
 
-  userEvent.click(getByText(API.ENUMS.PRIVILEGES[2]))
+  userEvent.click(getByText(AUTH_API.ENUMS.PRIVILEGES[2]))
   userEvent.click(getByText(USER_ACCESS.CHECK[language]))
 
   expect(refetch).toHaveBeenCalled()
@@ -55,14 +54,14 @@ test('Functions correctly on bad response', () => {
   }, refetch])
   const { getByText } = setup()
 
-  userEvent.click(getByText(API.ENUMS.STATES[2]))
-  userEvent.click(getByText(API.ENUMS.VALUATIONS[2]))
+  userEvent.click(getByText(AUTH_API.ENUMS.STATES[2]))
+  userEvent.click(getByText(AUTH_API.ENUMS.VALUATIONS[2]))
   userEvent.click(getByText(USER_ACCESS.CHECK[language]))
 
   expect(refetch).toHaveBeenCalled()
 })
 
-test('Adding namespacePrefix works correctly', () => {
+test('Adding paths works correctly', () => {
   useAxios.mockReturnValue([{ data: returnCatalogs, loading: false, error: null, response: null }, refetch])
   const { getAllByText, getByTestId } = setup()
 

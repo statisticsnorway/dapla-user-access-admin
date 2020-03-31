@@ -3,14 +3,14 @@ import useAxios from 'axios-hooks'
 import { Grid } from 'semantic-ui-react'
 import { Title } from '@statisticsnorway/ssb-component-library'
 
-import { UpdateRole } from '../'
-import { ApiContext, RolesView } from '../../utilities'
+import { UpdateGroup } from '../'
+import { ApiContext, GroupsView } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 
-function RoleLookup ({ roleId }) {
+function GroupLookup ({ groupId }) {
   const { authApi } = useContext(ApiContext)
 
-  const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_ROLE(roleId)}`)
+  const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_GROUP(groupId)}`)
 
   useEffect(() => {
     if (!loading && error) {
@@ -27,13 +27,13 @@ function RoleLookup ({ roleId }) {
               <Title size={4}>{key}</Title>
             </Grid.Column>
             <Grid.Column width={12}>
-              {RolesView(key, value)}
+              {GroupsView(key, value)}
             </Grid.Column>
           </Grid.Row>
         )}
         <Grid.Row>
           <Grid.Column textAlign='right'>
-            <UpdateRole isNew={false} refetch={refetch} role={data} />
+            <UpdateGroup group={data} isNew={false} refetch={refetch} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -43,4 +43,4 @@ function RoleLookup ({ roleId }) {
   }
 }
 
-export default RoleLookup
+export default GroupLookup

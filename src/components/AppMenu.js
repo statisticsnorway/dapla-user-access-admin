@@ -8,6 +8,8 @@ import { LanguageContext } from '../utilities'
 import { ROUTING, SSB_COLORS } from '../configurations'
 import { LANGUAGE, TEST_IDS, UI } from '../enums'
 
+const routeIcons = ['user', 'users', 'address card']
+
 function AppMenu ({ setSettingsOpen }) {
   const { language, setLanguage } = useContext(LanguageContext)
 
@@ -28,9 +30,11 @@ function AppMenu ({ setSettingsOpen }) {
         <Title size={1}>{UI.HEADER[language]}</Title>
       </Menu.Item>
       <Menu.Menu position='right'>
-        <Menu.Item as={Link} to={ROUTING.ROLES}>
-          <Icon link fitted name='users' size='large' style={{ color: SSB_COLORS.BLUE }} />
-        </Menu.Item>
+        {Object.entries(ROUTING).map(([route, path], index) =>
+          <Menu.Item key={path} as={Link} to={path}>
+            <Icon link fitted name={routeIcons[index]} size='large' style={{ color: SSB_COLORS.BLUE }} />
+          </Menu.Item>
+        )}
         <Menu.Item
           onClick={() => setSettingsOpen(true)}
           icon={{ name: 'setting', size: 'large', 'data-testid': TEST_IDS.ACCESS_SETTINGS_BUTTON }}

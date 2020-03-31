@@ -5,17 +5,27 @@ import useAxios from 'axios-hooks'
 
 import { UpdateUser } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { API } from '../configurations'
+import { AUTH_API } from '../configurations'
 import { TEST_IDS, USER } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
-const { alternativeTestUserId, apiContext, execute, language, returnRoles, testRoles, testUserId, updatedTestUser } = TEST_CONFIGURATIONS
+const {
+  alternativeTestUserId,
+  apiContext,
+  execute,
+  language,
+  responseObject,
+  returnGroups,
+  returnRoles,
+  testUser,
+  updatedTestUser
+} = TEST_CONFIGURATIONS
 
-const setup = (isNew, roles, userId) => {
+const setup = (isNew, user) => {
   const { getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <UpdateUser isNew={isNew} refetch={jest.fn()} roles={roles} userId={userId} />
+        <UpdateUser isNew={isNew} refetch={jest.fn()} user={user} />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
@@ -24,10 +34,12 @@ const setup = (isNew, roles, userId) => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue([{ data: returnRoles, loading: false, error: null, response: null }, execute])
+  useAxios.mockReturnValue(
+    [{ data: { ...returnRoles, ...returnGroups }, loading: false, error: null, response: responseObject }, execute]
+  )
 
   test('Renders correctly on new user', () => {
-    const { getByPlaceholderText, getByTestId } = setup(true, [], '')
+    const { getByPlaceholderText, getByTestId } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.NEW_USER))
 
@@ -35,23 +47,22 @@ describe('Common mock', () => {
   })
 
   test('Renders correctly on update user', () => {
-    const { getAllByText, getByPlaceholderText, getByTestId } = setup(false, testRoles, testUserId)
+    const { getByPlaceholderText, getByTestId } = setup(false, testUser)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
 
-    expect(getAllByText(USER.UPDATE_USER[language])).toHaveLength(2)
     expect(getByPlaceholderText(USER.USER_ID[language])).toBeDisabled()
   })
 
   test('Functions correctly on PUT request', () => {
-    const { getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true, [], '')
+    const { getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.NEW_USER))
+    userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
+    userEvent.click(getByText(returnGroups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
     userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)
-    userEvent.click(getByText(returnRoles[API.ROLES][0].roleId))
     userEvent.click(getAllByText(USER.CREATE_USER[language])[1])
 
-    expect(execute).toHaveBeenCalledTimes(1)
-    expect(execute).toHaveBeenCalledWith(updatedTestUser)
+    expect(execute).toHaveBeenNthCalledWith(7, updatedTestUser)
   })
 })

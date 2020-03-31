@@ -5,12 +5,12 @@ import ErrorMessage from '../components/ErrorMessage'
 import { AppContextProvider } from '../utilities'
 import { TEST_CONFIGURATIONS } from '../setupTests'
 
-const { errorString, objectString } = TEST_CONFIGURATIONS
+const { errorHeader, errorObject, errorString, objectString } = TEST_CONFIGURATIONS
 
-const setup = error => {
+const setup = (error, title) => {
   const { getByText } = render(
     <AppContextProvider>
-      <ErrorMessage error={error} />
+      <ErrorMessage error={error} title={title} />
     </AppContextProvider>
   )
 
@@ -24,7 +24,6 @@ test('Renders string errors', () => {
 })
 
 test('Renders object errors when object traverse is possible', () => {
-  const errorObject = { response: { data: errorString } }
   const { getByText } = setup(errorObject)
 
   expect(getByText(errorString)).toBeInTheDocument()
@@ -35,4 +34,10 @@ test('Renders fallback error when object traverse is impossible', () => {
   const { getByText } = setup(errorObject)
 
   expect(getByText(objectString)).toBeInTheDocument()
+})
+
+test('Renders header when it is provided', () => {
+  const { getByText } = setup(errorString, errorHeader)
+
+  expect(getByText(errorHeader)).toBeInTheDocument()
 })

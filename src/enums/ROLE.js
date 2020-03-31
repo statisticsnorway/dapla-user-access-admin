@@ -3,13 +3,21 @@ export const ROLE = {
     en: 'Create role',
     nb: 'Opprett rolle'
   },
+  DESCRIPTION: {
+    en: 'Description',
+    nb: 'Beskrivelse'
+  },
   MAX_VALUATION: {
     en: 'Max valuation',
     nb: 'Maksimum verdivurdering'
   },
-  NAMESPACE_PREFIXES: {
-    en: 'Namespace prefixes',
-    nb: 'Namespace prefixes'
+  PATHS: {
+    en: 'Paths',
+    nb: 'Stier'
+  },
+  PATHS_FETCH_ERROR: {
+    en: 'Could not fetch paths',
+    nb: 'Kunne ikke hente stier'
   },
   PRIVILEGES: {
     en: 'Privileges',

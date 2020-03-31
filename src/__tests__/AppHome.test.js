@@ -10,6 +10,7 @@ import { TEST_CONFIGURATIONS } from '../setupTests'
 
 jest.mock('../components/role/RoleLookup', () => () => null)
 jest.mock('../components/user/UpdateUser', () => () => null)
+jest.mock('../components/group/GroupLookup', () => () => null)
 jest.mock('../components/access/UserAccess', () => () => null)
 
 const { alternativeTestUserId, apiContext, language, refetch, returnUser } = TEST_CONFIGURATIONS

@@ -5,6 +5,7 @@ export const TEST_IDS = {
   REFRESH_USER: 'refreshUserIcon',
   SEARCH_DROPDOWN: 'searchDropdownBox',
   TABLE_SORT: 'tableSortHeader',
+  UPDATE_GROUP: 'updateGroupIcon',
   UPDATE_ROLE: 'updateRoleIcon',
   UPDATE_USER: 'updateUserIcon'
 }
