@@ -2,9 +2,9 @@ import React from 'react'
 import { Icon, List, Popup } from 'semantic-ui-react'
 import { Text } from '@statisticsnorway/ssb-component-library'
 
-import { AUTH_API, SSB_COLORS } from '../configurations'
+import { AUTH_API, checkAccess, SSB_COLORS } from '../configurations'
 
-export const DescriptionPopup = (trigger, position='top left', description) =>
+export const DescriptionPopup = (trigger, description, position = 'top left') =>
   <Popup basic flowing position={position} trigger={trigger}>
     <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
     {description ? description : '[Placeholder description]'}
@@ -22,12 +22,6 @@ const ListItemGood = value =>
     {value}
   </List.Item>
 
-const ListItemUnkown = value =>
-  <List.Item key={value} style={{ color: SSB_COLORS.BLUE }}>
-    <Icon name='question' />
-    {value}
-  </List.Item>
-
 export const RolesView = (key, data) => {
   switch (key) {
     case AUTH_API.ROLE_OBJECT.STRING[0]:
@@ -38,29 +32,9 @@ export const RolesView = (key, data) => {
     case AUTH_API.ROLE_OBJECT.ARRAY[1]:
       return (
         <List horizontal size='large'>
-          {AUTH_API.ENUMS[key.toUpperCase()].map(value => {
-            if (Object.keys(data).length === 0) {
-              return ListItemGood(value)
-            } else {
-              if (data.hasOwnProperty(AUTH_API.EXCLUDES)) {
-                if (data[AUTH_API.EXCLUDES].includes(value)) {
-                  return ListItemBad(value)
-                } else {
-                  return ListItemGood(value)
-                }
-              } else {
-                if (data.hasOwnProperty(AUTH_API.INCLUDES)) {
-                  if (!data[AUTH_API.INCLUDES].includes(value)) {
-                    return ListItemBad(value)
-                  } else {
-                    return ListItemGood(value)
-                  }
-                } else {
-                  return ListItemUnkown(value)
-                }
-              }
-            }
-          })}
+          {AUTH_API.ENUMS[key.toUpperCase()].map(value =>
+            checkAccess(data, value) ? ListItemGood(value) : ListItemBad(value)
+          )}
         </List>
       )
 

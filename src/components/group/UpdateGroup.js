@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Header, Icon, Modal, Popup } from 'semantic-ui-react'
+import { Divider, Form, Header, Icon, Modal } from 'semantic-ui-react'
 import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
-
-import { ErrorMessage } from '../'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
-import { AUTH_API, SSB_COLORS, SSB_STYLE } from '../../configurations'
+import { AUTH_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
 import { GROUP, TEST_IDS, UI } from '../../enums'
 
 function UpdateGroup ({ group, isNew, refetch }) {
@@ -42,9 +40,7 @@ function UpdateGroup ({ group, isNew, refetch }) {
       onMount={() => refetchGet()}
       onClose={() => {
         setModalOpen(false)
-        if (!isNew) {
-          refetch()
-        }
+        refetch()
       }}
       trigger={
         DescriptionPopup(
@@ -52,12 +48,13 @@ function UpdateGroup ({ group, isNew, refetch }) {
             <Icon link name='users' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_GROUP} />
             <Icon corner link name={isNew ? 'plus' : 'edit'} onClick={() => setModalOpen(true)} />
           </Icon.Group>,
+          false,
           'left center'
         )
       }
     >
       <Header as='h2' style={SSB_STYLE}>
-        <Icon.Group size='big' style={{ marginRight: '0.2em', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+        <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon name='users' />
           <Icon corner name={isNew ? 'plus' : 'edit'} />
         </Icon.Group>
@@ -90,34 +87,14 @@ function UpdateGroup ({ group, isNew, refetch }) {
             placeholder={GROUP.ROLES[language]}
             noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
             onChange={(event, { value }) => setUpdatedRoles(value)}
+            label={populatedDropdown(
+              GROUP.ROLES[language], getLoading, refetchGet, getError, GROUP.ROLES_FETCH_ERROR[language]
+            )}
             options={!getLoading && !getError && getData !== undefined ? getData[AUTH_API.ROLES].map(({ roleId }) => ({
               key: roleId,
               text: roleId,
               value: roleId
             })) : []}
-            label={
-              <label>
-                {DescriptionPopup(<span>{GROUP.ROLES[language]} </span>)}
-                {DescriptionPopup(
-                  <Icon
-                    link
-                    loading={getLoading}
-                    name='sync alternate'
-                    onClick={() => refetchGet()}
-                    style={{ color: SSB_COLORS.BLUE }}
-                  />
-                )}
-                {getError &&
-                <Popup
-                  basic
-                  flowing
-                  trigger={<Icon name='exclamation triangle' style={{ color: SSB_COLORS.YELLOW }} />}
-                >
-                  <ErrorMessage error={getError} title={GROUP.ROLES_FETCH_ERROR[language]} />
-                </Popup>
-                }
-              </label>
-            }
           />
         </Form>
         <Divider hidden />

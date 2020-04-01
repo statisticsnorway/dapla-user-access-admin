@@ -5,9 +5,9 @@ import useAxios from 'axios-hooks'
 
 import { RolesTable } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
+import { AUTH_API } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 import { TEST_CONFIGURATIONS } from '../setupTests'
-import { AUTH_API } from '../configurations'
 
 jest.mock('../components/role/UpdateRole', () => () => null)
 

@@ -41,7 +41,7 @@ describe('Common mock', () => {
   test('Renders correctly on new user', () => {
     const { getByPlaceholderText, getByTestId } = setup(true)
 
-    userEvent.click(getByTestId(TEST_IDS.NEW_USER))
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
 
     expect(getByPlaceholderText(USER.USER_ID[language])).toBeInTheDocument()
   })
@@ -57,7 +57,7 @@ describe('Common mock', () => {
   test('Functions correctly on PUT request', () => {
     const { getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
 
-    userEvent.click(getByTestId(TEST_IDS.NEW_USER))
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
     userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.click(getByText(returnGroups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
     userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)

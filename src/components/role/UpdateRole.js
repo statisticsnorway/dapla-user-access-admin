@@ -1,25 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Header, Icon, Modal, Popup } from 'semantic-ui-react'
+import { Divider, Form, Header, Icon, Modal } from 'semantic-ui-react'
 import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
 
 import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
-import { AUTH_API, CATALOG_API, SSB_COLORS, SSB_STYLE } from '../../configurations'
+import { AUTH_API, CATALOG_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
 import { ROLE, TEST_IDS, UI } from '../../enums'
-import { ErrorMessage } from '../index'
 
 function UpdateRole ({ isNew, refetch, role }) {
   const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   const [modalOpen, setModalOpen] = useState(false)
-  const [pathOptions, setPathOptions] = useState([])
+  const [fetchedPathOptions, setFetchedPathOptions] = useState([])
   const [updatedStates, setUpdatedStates] = useState(isNew ? [] : role[AUTH_API.ROLE_OBJECT.ARRAY[1]]) // TODO: Handle includes/excludes
   const [updatedRoleId, setUpdatedRoleId] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.STRING[0]])
   const [updatedPrivileges, setUpdatedPrivileges] = useState(isNew ? [] : role[AUTH_API.ROLE_OBJECT.ARRAY[0]]) // TODO: Handle includes/excludes
   const [updatedMaxValuation, setUpdatedMaxValuation] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.ENUM])
   const [updatedDescription, setUpdatedDescription] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.STRING[1]])
   const [updatedPaths, setUpdatedPaths] = useState(isNew ? [] : role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES])
+  const [pathOptions, setPathOptions] = useState(
+    isNew ? [] : role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES].map(path => ({
+      key: path,
+      text: path,
+      value: path
+    }))
+  )
 
   const [{ data: getData, loading: getLoading, error: getError }, refetchGet] =
     useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`, { manual: true })
@@ -28,7 +34,7 @@ function UpdateRole ({ isNew, refetch, role }) {
 
   useEffect(() => {
     if (!getLoading && !getError && getData !== undefined) {
-      setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => ({
+      setFetchedPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => ({
         key: catalog.id.path,
         text: catalog.id.path,
         value: catalog.id.path
@@ -56,41 +62,23 @@ function UpdateRole ({ isNew, refetch, role }) {
       onMount={() => refetchGet()}
       onClose={() => {
         setModalOpen(false)
-        if (!isNew) {
-          refetch()
-        }
+        refetch()
       }}
       trigger={DescriptionPopup(
         <Icon.Group size='big' style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
-          <Icon
-            link
-            name='address card'
-            data-testid={TEST_IDS.UPDATE_ROLE}
-            onClick={() => setModalOpen(true)}
-          />
+          <Icon link name='address card' data-testid={TEST_IDS.UPDATE_ROLE} onClick={() => setModalOpen(true)} />
           <Icon corner link name={isNew ? 'plus' : 'edit'} onClick={() => setModalOpen(true)} />
         </Icon.Group>,
+        false,
         'left center'
       )}
     >
       <Header as='h2' style={SSB_STYLE}>
-        {isNew ?
-          <>
-            <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS.BLUE }}>
-              <Icon name='address card' />
-              <Icon corner name='edit' />
-            </Icon.Group>
-            {ROLE.CREATE_ROLE[language]}
-          </>
-          :
-          <>
-            <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS.BLUE }}>
-              <Icon name='address card' />
-              <Icon corner name='edit' />
-            </Icon.Group>
-            {ROLE.UPDATE_ROLE[language]}
-          </>
-        }
+        <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+          <Icon name='address card' />
+          <Icon corner name={isNew ? 'plus' : 'edit'} />
+        </Icon.Group>
+        {isNew ? ROLE.CREATE_ROLE[language] : ROLE.UPDATE_ROLE[language]}
       </Header>
       <Modal.Content style={SSB_STYLE}>
         <Form size='large'>
@@ -131,38 +119,18 @@ function UpdateRole ({ isNew, refetch, role }) {
             selection
             allowAdditions
             value={updatedPaths}
-            options={pathOptions}
+            options={[...fetchedPathOptions, ...pathOptions]}
             placeholder={ROLE.PATHS[language]}
             data-testid={TEST_IDS.SEARCH_DROPDOWN}
             additionLabel={`${UI.ADD[language]} `}
             noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
             onChange={(event, { value }) => setUpdatedPaths(value)}
+            label={populatedDropdown(
+              ROLE.PATHS[language], getLoading, refetchGet, getError, ROLE.PATHS_FETCH_ERROR[language]
+            )}
             onAddItem={(event, { value }) => setPathOptions(
               [{ key: value, text: value, value: value }, ...pathOptions]
             )}
-            label={
-              <label>
-                {DescriptionPopup(<span>{ROLE.PATHS[language]} </span>)}
-                {DescriptionPopup(
-                  <Icon
-                    link
-                    loading={getLoading}
-                    name='sync alternate'
-                    onClick={() => refetchGet()}
-                    style={{ color: SSB_COLORS.BLUE }}
-                  />
-                )}
-                {getError &&
-                <Popup
-                  basic
-                  flowing
-                  trigger={<Icon name='exclamation triangle' style={{ color: SSB_COLORS.YELLOW }} />}
-                >
-                  <ErrorMessage error={getError} title={ROLE.PATHS_FETCH_ERROR[language]} />
-                </Popup>
-                }
-              </label>
-            }
           />
           <Form.Dropdown
             required

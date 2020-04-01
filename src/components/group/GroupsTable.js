@@ -3,7 +3,7 @@ import useAxios from 'axios-hooks'
 import { Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
 
 import { ErrorMessage, UpdateGroup } from '../'
-import { ApiContext, LanguageContext } from '../../utilities'
+import { ApiContext, LanguageContext, sortArrayOfObjects } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 import { GROUP, TEST_IDS, UI } from '../../enums'
 
@@ -18,24 +18,13 @@ function GroupsTable () {
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
-      setGroups(data[AUTH_API.GROUPS].sort((a, b) =>
-        a[AUTH_API.GROUP_OBJECT.STRING[0]].localeCompare(b[AUTH_API.GROUP_OBJECT.STRING[0]])
-      ))
+      setGroups(sortArrayOfObjects(data[AUTH_API.GROUPS], [AUTH_API.GROUP_OBJECT.STRING[0]]))
     }
   }, [data, error, loading])
 
   const handleSort = () => {
     setDirection(direction === 'ascending' ? 'descending' : 'ascending')
-
-    if (direction === 'ascending') {
-      setGroups(groups.sort((a, b) =>
-        a[AUTH_API.GROUP_OBJECT.STRING[0]].localeCompare(b[AUTH_API.GROUP_OBJECT.STRING[0]])
-      ))
-    } else {
-      setGroups(groups.sort((a, b) =>
-        b[AUTH_API.GROUP_OBJECT.STRING[0]].localeCompare(a[AUTH_API.GROUP_OBJECT.STRING[0]])
-      ))
-    }
+    setGroups(sortArrayOfObjects(data[AUTH_API.GROUPS], [AUTH_API.GROUP_OBJECT.STRING[0]], direction))
   }
 
   const handleFilter = (string) => setGroups(data[AUTH_API.GROUPS].filter(({ groupId }) => groupId.includes(string)))
@@ -68,14 +57,18 @@ function GroupsTable () {
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
                 {GROUP.GROUP_ID[language]}
               </Table.HeaderCell>
+              <Table.HeaderCell />
               <Table.HeaderCell>{GROUP.DESCRIPTION[language]}</Table.HeaderCell>
               <Table.HeaderCell>{GROUP.ROLES[language]}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {groups.map(({ description, groupId, roles }) =>
+            {groups.map(({ description, groupId, roles }, index) =>
               <Table.Row key={groupId}>
-                <Table.Cell>{groupId}</Table.Cell>
+                <Table.Cell style={{ fontWeight: 'bold' }}>{groupId}</Table.Cell>
+                <Table.Cell textAlign='center'>
+                  <UpdateGroup isNew={false} refetch={refetch} group={groups[index]} />
+                </Table.Cell>
                 <Table.Cell>{description}</Table.Cell>
                 <Table.Cell>
                   <List>
