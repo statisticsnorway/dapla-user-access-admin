@@ -5,7 +5,7 @@ import { Button as SSBButton, Text, Title } from '@statisticsnorway/ssb-componen
 
 import { ApiContext, LanguageContext } from '../../utilities'
 import { AUTH_API, CATALOG_API, SSB_COLORS } from '../../configurations'
-import { TEST_IDS, UI, USER_ACCESS } from '../../enums'
+import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../../enums'
 
 function UserAcces ({ userId }) {
   const { authApi, catalogApi } = useContext(ApiContext)
@@ -51,7 +51,9 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={privilege}
-        options={AUTH_API.ENUMS.PRIVILEGES.map(privilege => ({ key: privilege, text: privilege, value: privilege }))}
+        options={AUTH_API.ENUMS.PRIVILEGES.map(privilege =>
+          ({ key: privilege, text: PRIVILEGE[privilege][language], value: privilege })
+        )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setPrivilege(value)
@@ -79,7 +81,9 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={state}
-        options={AUTH_API.ENUMS.STATES.map(state => ({ key: state, text: state, value: state }))}
+        options={AUTH_API.ENUMS.STATES.map(state =>
+          ({ key: state, text: DATASET_STATE[state][language], value: state })
+        )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setState(value)
@@ -89,7 +93,9 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={maxValuation}
-        options={AUTH_API.ENUMS.VALUATIONS.map(valuation => ({ key: valuation, text: valuation, value: valuation }))}
+        options={AUTH_API.ENUMS.VALUATIONS.map(valuation =>
+          ({ key: valuation, text: VALUATION[valuation][language], value: valuation })
+        )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setMaxValuation(value)

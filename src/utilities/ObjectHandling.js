@@ -10,11 +10,17 @@ export const convertToIncludesExcludes = (object, type) => {
   }
 
   if (object.hasOwnProperty(AUTH_API.INCLUDES) && !object.hasOwnProperty(AUTH_API.EXCLUDES)) {
-    return { [AUTH_API.EXCLUDES]: [], ...object }
+    return {
+      [AUTH_API.EXCLUDES]: AUTH_API.ENUMS[type].filter(type => !object[AUTH_API.INCLUDES].includes(type)),
+      ...object
+    }
   }
 
   if (!object.hasOwnProperty(AUTH_API.INCLUDES) && object.hasOwnProperty(AUTH_API.EXCLUDES)) {
-    return { [AUTH_API.INCLUDES]: [], ...object }
+    return {
+      [AUTH_API.INCLUDES]: AUTH_API.ENUMS[type].filter(type => !object[AUTH_API.EXCLUDES].includes(type)),
+      ...object
+    }
   }
 }
 

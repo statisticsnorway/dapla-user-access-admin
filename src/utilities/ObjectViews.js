@@ -3,6 +3,7 @@ import { Icon, List, Popup } from 'semantic-ui-react'
 import { Text } from '@statisticsnorway/ssb-component-library'
 
 import { AUTH_API, checkAccess, SSB_COLORS } from '../configurations'
+import { DATASET_STATE, PRIVILEGE, VALUATION } from '../enums'
 
 export const DescriptionPopup = (trigger, description, position = 'top left') =>
   <Popup basic flowing position={position} trigger={trigger}>
@@ -22,18 +23,31 @@ const ListItemGood = value =>
     {value}
   </List.Item>
 
-export const RolesView = (key, data) => {
+export const RolesView = (key, data, language) => {
   switch (key) {
     case AUTH_API.ROLE_OBJECT.STRING[0]:
     case AUTH_API.ROLE_OBJECT.STRING[1]:
       return <Text>{data.toString()}</Text>
 
     case AUTH_API.ROLE_OBJECT.ARRAY[0]:
+      return (
+        <List horizontal size='large'>
+          {AUTH_API.ENUMS[key.toUpperCase()].map(value =>
+            checkAccess(data, value) ?
+              ListItemGood(PRIVILEGE[value][language])
+              :
+              ListItemBad(PRIVILEGE[value][language])
+          )}
+        </List>
+      )
     case AUTH_API.ROLE_OBJECT.ARRAY[1]:
       return (
         <List horizontal size='large'>
           {AUTH_API.ENUMS[key.toUpperCase()].map(value =>
-            checkAccess(data, value) ? ListItemGood(value) : ListItemBad(value)
+            checkAccess(data, value) ?
+              ListItemGood(DATASET_STATE[value][language])
+              :
+              ListItemBad(DATASET_STATE[value][language])
           )}
         </List>
       )
@@ -44,10 +58,12 @@ export const RolesView = (key, data) => {
           {AUTH_API.ENUMS.VALUATIONS.map(value => {
               if (data === value) {
                 return (
-                  <List.Item key={value} style={{ fontWeight: 'bold', color: SSB_COLORS.GREEN }}>{value}</List.Item>
+                  <List.Item key={value} style={{ fontWeight: 'bold', color: SSB_COLORS.GREEN }}>
+                    {VALUATION[value][language]}
+                  </List.Item>
                 )
               } else {
-                return <List.Item key={value} disabled>{value}</List.Item>
+                return <List.Item key={value} disabled>{VALUATION[value][language]}</List.Item>
               }
             }
           )}

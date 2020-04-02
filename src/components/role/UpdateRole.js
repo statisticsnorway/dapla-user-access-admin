@@ -10,8 +10,8 @@ import {
   LanguageContext,
   moveIncludesExcludes
 } from '../../utilities'
-import { AUTH_API, CATALOG_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
-import { ROLE, TEST_IDS, UI } from '../../enums'
+import { AUTH_API, CATALOG_API, populatedDropdown, SSB_COLORS, SSB_STYLE, VALUATION_COLORS } from '../../configurations'
+import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI, VALUATION } from '../../enums'
 
 function UpdateRole ({ isNew, refetch, role }) {
   const { authApi, catalogApi } = useContext(ApiContext)
@@ -147,7 +147,7 @@ function UpdateRole ({ isNew, refetch, role }) {
                               style={{ color: SSB_COLORS.GREEN }}
                               onClick={() => movePrivilege(privilege, AUTH_API.EXCLUDES)}
                             >
-                              {privilege}
+                              {PRIVILEGE[privilege][language]}
                             </List.Item>
                           )}
                         </List>
@@ -161,7 +161,7 @@ function UpdateRole ({ isNew, refetch, role }) {
                               style={{ color: SSB_COLORS.RED }}
                               onClick={() => movePrivilege(privilege, AUTH_API.INCLUDES)}
                             >
-                              {privilege}
+                              {PRIVILEGE[privilege][language]}
                             </List.Item>
                           )}
                         </List>
@@ -187,7 +187,7 @@ function UpdateRole ({ isNew, refetch, role }) {
                               style={{ color: SSB_COLORS.GREEN }}
                               onClick={() => moveState(state, AUTH_API.EXCLUDES)}
                             >
-                              {state}
+                              {DATASET_STATE[state][language]}
                             </List.Item>
                           )}
                         </List>
@@ -201,7 +201,7 @@ function UpdateRole ({ isNew, refetch, role }) {
                               style={{ color: SSB_COLORS.RED }}
                               onClick={() => moveState(state, AUTH_API.INCLUDES)}
                             >
-                              {state}
+                              {DATASET_STATE[state][language]}
                             </List.Item>
                           )}
                         </List>
@@ -212,16 +212,20 @@ function UpdateRole ({ isNew, refetch, role }) {
               </Form.Field>
             </Grid.Column>
           </Grid>
-          <Form.Field required>
+          <Form.Field required style={{ marginTop: '1em' }}>
             <label>{DescriptionPopup(<span>{ROLE.MAX_VALUATION[language]}</span>)}</label>
             <Form.Group inline>
               {AUTH_API.ENUMS.VALUATIONS.map(valuation =>
                 <Form.Radio
                   key={valuation}
-                  label={valuation}
                   value={valuation}
                   checked={updatedMaxValuation === valuation}
                   onChange={(event, { value }) => setUpdatedMaxValuation(value)}
+                  label={
+                    <label><span style={{ color: VALUATION_COLORS[valuation] }}>
+                      {VALUATION[valuation][language]}
+                    </span></label>
+                  }
                 />
               )}
             </Form.Group>

@@ -3,7 +3,7 @@ import useAxios from 'axios-hooks'
 import { Accordion, Divider, Grid, Icon, Input } from 'semantic-ui-react'
 import { Text, Title } from '@statisticsnorway/ssb-component-library'
 
-import { GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
+import { ErrorMessage, GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
 import { AUTH_API, SSB_COLORS } from '../configurations'
 import { HOME, TEST_IDS, UI } from '../enums'
@@ -33,7 +33,7 @@ function AppHome () {
           <Input
             size='big'
             value={userId}
-            error={!!error}
+            error={!!error && !userEdited}
             disabled={loading}
             placeholder={UI.USER[language]}
             onKeyPress={({ key }) => {
@@ -64,11 +64,10 @@ function AppHome () {
             false,
             'right center'
           )}
+          <Divider fitted hidden style={{ marginTop: '1em' }} />
+          {!loading && !userEdited && error && <ErrorMessage error={error} />}
           {!error && !loading && !userEdited && data !== undefined &&
-          <>
-            <Divider fitted hidden style={{ marginTop: '1em' }} />
-            <UpdateUser isNew={false} refetch={refetch} user={data} />
-          </>
+          <UpdateUser isNew={false} refetch={refetch} user={data} />
           }
         </Grid.Column>
         <Grid.Column textAlign='right' verticalAlign='middle'>

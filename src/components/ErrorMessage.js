@@ -9,10 +9,13 @@ function ErrorMessage ({ error, title }) {
   const { language } = useContext(LanguageContext)
 
   const resolveError = getNestedObject(error, API.ERROR_PATH)
+  const alternateResolveError = getNestedObject(error, API.ERROR_STATUS_PATH)
 
   return (
     <Dialog type='warning' title={title ? title : UI.ERROR[language]}>
-      {resolveError === undefined ? error.toString() : resolveError}
+      {resolveError === undefined ? alternateResolveError === undefined ?
+        error.toString() : alternateResolveError : resolveError
+      }
     </Dialog>
   )
 }
