@@ -101,8 +101,10 @@ function RolesTable () {
                 </Table.Cell>
                 <Table.Cell
                   positive={maxValuation === AUTH_API.ENUMS.VALUATIONS[0]}
-                  negative={maxValuation === AUTH_API.ENUMS.VALUATIONS[3]}
-                  warning={AUTH_API.ENUMS.VALUATIONS[1].concat(AUTH_API.ENUMS.VALUATIONS[2]).includes(maxValuation)}
+                  negative={maxValuation === AUTH_API.ENUMS.VALUATIONS[AUTH_API.ENUMS.VALUATIONS.length - 1]}
+                  warning={AUTH_API.ENUMS.VALUATIONS.slice(
+                    1, (AUTH_API.ENUMS.VALUATIONS.length - 1)).includes(maxValuation
+                  )}
                 >
                   {VALUATION[maxValuation][language]}
                 </Table.Cell>
