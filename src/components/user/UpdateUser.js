@@ -51,9 +51,9 @@ function UpdateUser ({ isNew, refetch, user }) {
         }
       }}
       trigger={DescriptionPopup(
-        <Icon.Group size='big' style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
-          <Icon link name='user' data-testid={TEST_IDS.UPDATE_USER} onClick={() => setModalOpen(true)} />
-          <Icon corner link name={isNew ? 'plus' : 'edit'} onClick={() => setModalOpen(true)} />
+        <Icon.Group size={isNew ? 'huge' : 'big'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+          <Icon link name='user' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_USER} />
+          <Icon corner='top right' link name={isNew ? 'plus' : 'pencil'} onClick={() => setModalOpen(true)} />
         </Icon.Group>,
         false,
         'left center'

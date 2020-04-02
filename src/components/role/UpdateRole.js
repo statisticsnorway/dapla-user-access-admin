@@ -91,9 +91,9 @@ function UpdateRole ({ isNew, refetch, role }) {
         refetch()
       }}
       trigger={DescriptionPopup(
-        <Icon.Group size='big' style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
-          <Icon link name='address card' data-testid={TEST_IDS.UPDATE_ROLE} onClick={() => setModalOpen(true)} />
-          <Icon corner link name={isNew ? 'plus' : 'edit'} onClick={() => setModalOpen(true)} />
+        <Icon.Group size={isNew ? 'huge' : 'big'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+          <Icon link name='address card' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_ROLE} />
+          <Icon corner='top right' link name={isNew ? 'plus' : 'pencil'} onClick={() => setModalOpen(true)} />
         </Icon.Group>,
         false,
         'left center'
