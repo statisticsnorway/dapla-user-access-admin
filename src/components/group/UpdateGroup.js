@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Header, Icon, Modal } from 'semantic-ui-react'
+import { Divider, Form, Grid, Header, Icon, Modal } from 'semantic-ui-react'
 import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
 import { AUTH_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
@@ -62,22 +62,29 @@ function UpdateGroup ({ group, isNew, refetch }) {
       </Header>
       <Modal.Content style={SSB_STYLE}>
         <Form size='large'>
-          <Form.Input
-            required
-            disabled={!isNew}
-            value={updatedGroupId}
-            placeholder={GROUP.GROUP_ID[language]}
-            label={<label>{DescriptionPopup(<span>{GROUP.GROUP_ID[language]}</span>)}</label>}
-            onChange={(event, { value }) => setUpdatedGroupId(value)}
-          />
-          <Form.TextArea
-            rows={2}
-            required
-            value={updatedDescription}
-            placeholder={GROUP.DESCRIPTION[language]}
-            label={<label>{DescriptionPopup(<span>{GROUP.DESCRIPTION[language]}</span>)}</label>}
-            onChange={(event, { value }) => setUpdatedDescription(value)}
-          />
+          <Grid columns='equal'>
+            <Grid.Column>
+              <Form.Input
+                required
+                disabled={!isNew}
+                value={updatedGroupId}
+                placeholder={GROUP.GROUP_ID[language]}
+                label={<label>{DescriptionPopup(<span>{GROUP.GROUP_ID[language]}</span>)}</label>}
+                onChange={(event, { value }) => setUpdatedGroupId(value)}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Form.TextArea
+                rows={2}
+                required
+                value={updatedDescription}
+                placeholder={GROUP.DESCRIPTION[language]}
+                label={<label>{DescriptionPopup(<span>{GROUP.DESCRIPTION[language]}</span>)}</label>}
+                onChange={(event, { value }) => setUpdatedDescription(value)}
+              />
+            </Grid.Column>
+          </Grid>
+          <Divider hidden />
           <Form.Dropdown
             search
             multiple

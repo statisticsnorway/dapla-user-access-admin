@@ -35,7 +35,7 @@ function UpdateUser ({ isNew, refetch, user }) {
   return (
     <Modal
       closeIcon
-      size='large'
+      size='small'
       open={modalOpen}
       style={SSB_STYLE}
       closeOnEscape={false}

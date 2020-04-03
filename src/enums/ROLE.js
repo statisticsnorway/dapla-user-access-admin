@@ -15,6 +15,14 @@ export const ROLE = {
     en: 'Paths',
     nb: 'Stier'
   },
+  PATHS_INCLUDE: {
+    en: 'Included paths',
+    nb: 'Inkluderte ttier'
+  },
+  PATHS_EXCLUDE: {
+    en: 'Excluded paths',
+    nb: 'Ekskluderte stier'
+  },
   PATHS_FETCH_ERROR: {
     en: 'Could not fetch paths',
     nb: 'Kunne ikke hente stier'

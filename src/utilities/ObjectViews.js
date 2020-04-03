@@ -5,7 +5,7 @@ import { Text } from '@statisticsnorway/ssb-component-library'
 import { AUTH_API, checkAccess, SSB_COLORS } from '../configurations'
 import { DATASET_STATE, PRIVILEGE, VALUATION } from '../enums'
 
-export const DescriptionPopup = (trigger, description, position = 'top left') =>
+export const DescriptionPopup = (trigger, description = false, position = 'top left') =>
   <Popup basic flowing position={position} trigger={trigger}>
     <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
     {description ? description : '[Placeholder description]'}

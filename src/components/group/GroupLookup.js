@@ -25,7 +25,7 @@ function GroupLookup ({ groupId }) {
         {Object.entries(data).map(([key, value]) =>
           <Grid.Row key={key} verticalAlign='middle'>
             <Grid.Column width={4}>
-              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{GROUP[makeEnum(key)][language]}</span>, false)}
+              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{GROUP[makeEnum(key)][language]}</span>)}
             </Grid.Column>
             <Grid.Column width={12}>
               {GroupsView(key, value)}

@@ -30,10 +30,11 @@ export const TEST_CONFIGURATIONS = {
   errorHeader: 'Error header',
   errorString: 'A problem occured',
   errorObject: { response: { data: 'A problem occured' } },
+  errorStatus: { response: { statusText: 'Forbidden' } },
   execute: jest.fn(),
   executePut: jest.fn(),
   language: LANGUAGE.LANGUAGES.ENGLISH.languageCode,
-  objectString: '[object Object]',
+  objectToString: '[object Object]',
   otherLanguage: LANGUAGE.LANGUAGES.NORWEGIAN.languageCode,
   refetch: jest.fn(),
   responseObject: { data: { statusCode: 200 } },
@@ -67,8 +68,8 @@ export const TEST_CONFIGURATIONS = {
         [AUTH_API.ROLE_OBJECT.STRING[0]]: 'role1',
         [AUTH_API.ROLE_OBJECT.STRING[1]]: 'A role',
         [AUTH_API.ROLE_OBJECT.ENUM]: AUTH_API.ENUMS.VALUATIONS[0],
-        [AUTH_API.ROLE_OBJECT.ARRAY[0]]: { [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.PRIVILEGES[0]] },
-        [AUTH_API.ROLE_OBJECT.LIST]: { [AUTH_API.INCLUDES]: ['/test/1'] }
+        [AUTH_API.ROLE_OBJECT.LIST]: { [AUTH_API.INCLUDES]: ['/test/1'] },
+        [AUTH_API.ROLE_OBJECT.ARRAY[0]]: { [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.PRIVILEGES[0]] }
       }, {
         [AUTH_API.ROLE_OBJECT.STRING[0]]: 'role2',
         [AUTH_API.ROLE_OBJECT.STRING[1]]: 'Another role',
@@ -100,9 +101,9 @@ export const TEST_CONFIGURATIONS = {
     [AUTH_API.ROLE_OBJECT.STRING[0]]: 'testRoleId',
     [AUTH_API.ROLE_OBJECT.STRING[1]]: 'A test role',
     [AUTH_API.ROLE_OBJECT.ENUM]: AUTH_API.ENUMS.VALUATIONS[1],
+    [AUTH_API.ROLE_OBJECT.LIST]: { [AUTH_API.INCLUDES]: ['/test/1', '/test/2'] },
     [AUTH_API.ROLE_OBJECT.ARRAY[1]]: { [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.STATES[1]] },
-    [AUTH_API.ROLE_OBJECT.ARRAY[1]]: { [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.PRIVILEGES[1]] },
-    [AUTH_API.ROLE_OBJECT.LIST]: { [AUTH_API.INCLUDES]: ['/test/1', '/test/2'] }
+    [AUTH_API.ROLE_OBJECT.ARRAY[1]]: { [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.PRIVILEGES[1]] }
   },
   testRoleId: 'testRoleId',
   testUser: {
@@ -125,7 +126,7 @@ export const TEST_CONFIGURATIONS = {
       [AUTH_API.ROLE_OBJECT.ENUM]: AUTH_API.ENUMS.VALUATIONS[2],
       [AUTH_API.ROLE_OBJECT.ARRAY[1]]: { [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.STATES[2]] },
       [AUTH_API.ROLE_OBJECT.ARRAY[0]]: { [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.PRIVILEGES[2]] },
-      [AUTH_API.ROLE_OBJECT.LIST]: { [AUTH_API.INCLUDES]: ['/test/3'] }
+      [AUTH_API.ROLE_OBJECT.LIST]: { [AUTH_API.INCLUDES]: ['/test/3'], [AUTH_API.EXCLUDES]: [] }
     }
   },
   updatedTestUser: {

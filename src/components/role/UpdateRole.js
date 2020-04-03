@@ -22,7 +22,14 @@ function UpdateRole ({ isNew, refetch, role }) {
   const [updatedRoleId, setUpdatedRoleId] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.STRING[0]])
   const [updatedMaxValuation, setUpdatedMaxValuation] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.ENUM])
   const [updatedDescription, setUpdatedDescription] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.STRING[1]])
-  const [updatedPaths, setUpdatedPaths] = useState(isNew ? [] : role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES])
+  const [updatedPathsInclude, setUpdatedPathsInclude] = useState(isNew ? [] :
+    role[AUTH_API.ROLE_OBJECT.LIST].hasOwnProperty(AUTH_API.INCLUDES) ?
+      role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES] : []
+  )
+  const [updatedPathsExclude, setUpdatedPathsExclude] = useState(isNew ? [] :
+    role[AUTH_API.ROLE_OBJECT.LIST].hasOwnProperty(AUTH_API.EXCLUDES) ?
+      role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.EXCLUDES] : []
+  )
   const [updatedStates, setUpdatedStates] = useState(isNew ?
     { [AUTH_API.INCLUDES]: [], [AUTH_API.EXCLUDES]: AUTH_API.ENUMS.STATES.map(state => state) }
     :
@@ -230,26 +237,51 @@ function UpdateRole ({ isNew, refetch, role }) {
               )}
             </Form.Group>
           </Form.Field>
-          <Form.Dropdown
-            search
-            multiple
-            required
-            selection
-            allowAdditions
-            value={updatedPaths}
-            options={[...fetchedPathOptions, ...pathOptions]}
-            placeholder={ROLE.PATHS[language]}
-            data-testid={TEST_IDS.SEARCH_DROPDOWN}
-            additionLabel={`${UI.ADD[language]} `}
-            noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
-            onChange={(event, { value }) => setUpdatedPaths(value)}
-            label={populatedDropdown(
-              ROLE.PATHS[language], getLoading, refetchGet, getError, ROLE.PATHS_FETCH_ERROR[language]
-            )}
-            onAddItem={(event, { value }) => setPathOptions(
-              [{ key: value, text: value, value: value }, ...pathOptions]
-            )}
-          />
+          <Form.Field required style={{ marginTop: '1em' }}>
+            {populatedDropdown(ROLE.PATHS[language], getLoading, refetchGet, getError, ROLE.PATHS_FETCH_ERROR[language])}
+            <Grid columns='equal'>
+              <Grid.Column textAlign='center'>
+                <Icon size='large' name='check' style={{ color: SSB_COLORS.GREEN, marginBottom: '0.5em' }} />
+                <Form.Dropdown
+                  search
+                  multiple
+                  required
+                  selection
+                  allowAdditions
+                  value={updatedPathsInclude}
+                  data-testid={TEST_IDS.SEARCH_DROPDOWN}
+                  additionLabel={`${UI.ADD[language]} `}
+                  placeholder={ROLE.PATHS_INCLUDE[language]}
+                  options={[...fetchedPathOptions, ...pathOptions]}
+                  noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
+                  onChange={(event, { value }) => setUpdatedPathsInclude(value)}
+                  onAddItem={(event, { value }) => setPathOptions(
+                    [{ key: value, text: value, value: value }, ...pathOptions]
+                  )}
+                />
+              </Grid.Column>
+              <Grid.Column textAlign='center'>
+                <Icon size='large' name='ban' style={{ color: SSB_COLORS.RED, marginBottom: '0.5em' }} />
+                <Form.Dropdown
+                  search
+                  multiple
+                  required
+                  selection
+                  allowAdditions
+                  value={updatedPathsExclude}
+                  data-testid={TEST_IDS.SEARCH_DROPDOWN}
+                  additionLabel={`${UI.ADD[language]} `}
+                  placeholder={ROLE.PATHS_EXCLUDE[language]}
+                  options={[...fetchedPathOptions, ...pathOptions]}
+                  noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
+                  onChange={(event, { value }) => setUpdatedPathsExclude(value)}
+                  onAddItem={(event, { value }) => setPathOptions(
+                    [{ key: value, text: value, value: value }, ...pathOptions]
+                  )}
+                />
+              </Grid.Column>
+            </Grid>
+          </Form.Field>
         </Form>
         <Divider hidden />
         <SSBButton
@@ -257,7 +289,10 @@ function UpdateRole ({ isNew, refetch, role }) {
           disabled={loading}
           onClick={() => executePut({
             data: {
-              [AUTH_API.ROLE_OBJECT.LIST]: { [AUTH_API.INCLUDES]: updatedPaths },
+              [AUTH_API.ROLE_OBJECT.LIST]: {
+                [AUTH_API.INCLUDES]: updatedPathsInclude,
+                [AUTH_API.EXCLUDES]: updatedPathsExclude
+              },
               [AUTH_API.ROLE_OBJECT.ARRAY[1]]: updatedStates,
               [AUTH_API.ROLE_OBJECT.STRING[0]]: updatedRoleId,
               [AUTH_API.ROLE_OBJECT.ENUM]: updatedMaxValuation,

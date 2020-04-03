@@ -97,7 +97,16 @@ function RolesTable () {
                   <CheckedCell key={privilege} list={privileges} entry={privilege} />
                 )}
                 <Table.Cell>
-                  <List>{paths[AUTH_API.INCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}</List>
+                  {paths.hasOwnProperty(AUTH_API.INCLUDES) &&
+                  <List style={{ color: SSB_COLORS.GREEN }}>
+                    {paths[AUTH_API.INCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}
+                  </List>
+                  }
+                  {paths.hasOwnProperty(AUTH_API.EXCLUDES) &&
+                  <List style={{ color: SSB_COLORS.RED }}>
+                    {paths[AUTH_API.EXCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}
+                  </List>
+                  }
                 </Table.Cell>
                 <Table.Cell
                   positive={maxValuation === AUTH_API.ENUMS.VALUATIONS[0]}

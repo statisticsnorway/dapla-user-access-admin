@@ -25,7 +25,7 @@ function RoleLookup ({ roleId }) {
         {Object.entries(data).map(([key, value]) =>
           <Grid.Row key={key} verticalAlign='middle'>
             <Grid.Column width={4}>
-              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{ROLE[makeEnum(key)][language]}</span>, false)}
+              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{ROLE[makeEnum(key)][language]}</span>)}
             </Grid.Column>
             <Grid.Column width={12}>
               {RolesView(key, value, language)}
