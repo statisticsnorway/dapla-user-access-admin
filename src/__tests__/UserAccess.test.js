@@ -5,11 +5,12 @@ import useAxios from 'axios-hooks'
 
 import { UserAccess } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { AUTH_API } from '../configurations'
-import { TEST_IDS, UI, USER_ACCESS } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../enums'
 
-const { apiContext, emptyCatalogs, language, refetch, returnCatalogs, testUserId } = TEST_CONFIGURATIONS
+const { emptyCatalogs, language, returnCatalogs, testUserId } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
+const refetch = jest.fn()
 
 const setup = () => {
   const { getAllByText, getByTestId, getByText } = render(
@@ -39,7 +40,7 @@ test('Functions correctly on good response', () => {
   }, refetch])
   const { getByText } = setup()
 
-  userEvent.click(getByText(AUTH_API.ENUMS.PRIVILEGES[2]))
+  userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[2]][language]))
   userEvent.click(getByText(USER_ACCESS.CHECK[language]))
 
   expect(refetch).toHaveBeenCalled()
@@ -54,8 +55,8 @@ test('Functions correctly on bad response', () => {
   }, refetch])
   const { getByText } = setup()
 
-  userEvent.click(getByText(AUTH_API.ENUMS.STATES[2]))
-  userEvent.click(getByText(AUTH_API.ENUMS.VALUATIONS[2]))
+  userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[2]][language]))
+  userEvent.click(getByText(VALUATION[AUTH_API.ENUMS.VALUATIONS[2]][language]))
   userEvent.click(getByText(USER_ACCESS.CHECK[language]))
 
   expect(refetch).toHaveBeenCalled()

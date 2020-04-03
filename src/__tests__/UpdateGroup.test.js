@@ -5,20 +5,19 @@ import useAxios from 'axios-hooks'
 
 import { UpdateGroup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { AUTH_API } from '../configurations'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { GROUP, TEST_IDS } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const {
   alternativeTestGroupId,
-  apiContext,
-  execute,
   language,
   responseObject,
   returnRoles,
   testGroup,
   updatedTestGroup
 } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
+const execute = jest.fn()
 
 const setup = (isNew, group) => {
   const { getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
@@ -57,8 +56,8 @@ describe('Common mock', () => {
     const { getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_GROUP))
-    userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.type(getByPlaceholderText(GROUP.GROUP_ID[language]), alternativeTestGroupId)
+    userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.type(getByPlaceholderText(GROUP.DESCRIPTION[language]), updatedTestGroup.data.description)
     userEvent.click(getAllByText(GROUP.CREATE_GROUP[language])[1])
 

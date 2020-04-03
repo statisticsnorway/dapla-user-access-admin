@@ -5,24 +5,23 @@ import useAxios from 'axios-hooks'
 
 import { UpdateRole } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { AUTH_API } from '../configurations'
-import { ROLE, TEST_IDS, UI } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI } from '../enums'
 
 const {
   alternativeTestRoleId,
-  apiContext,
   emptyCatalogs,
   emptyRole,
-  executePut,
   language,
   responseObject,
   testRole,
   updatedTestRole
 } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
+const executePut = jest.fn()
 
 const setup = (isNew, role) => {
-  const { getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
+  const { getAllByTestId, getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
         <UpdateRole isNew={isNew} refetch={jest.fn()} role={role} />
@@ -30,7 +29,7 @@ const setup = (isNew, role) => {
     </ApiContext.Provider>
   )
 
-  return { getAllByText, getByPlaceholderText, getByTestId, getByText }
+  return { getAllByTestId, getAllByText, getByPlaceholderText, getByTestId, getByText }
 }
 
 describe('Common mock', () => {
@@ -64,13 +63,18 @@ describe('Common mock', () => {
   })
 
   test('Form changes works correctly', () => {
-    const { getByPlaceholderText, getAllByText, getByTestId, getByText } = setup(true)
+    const { getAllByTestId, getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
-    userEvent.click(getByText(AUTH_API.ENUMS.STATES[2]))
-    userEvent.click(getByText(AUTH_API.ENUMS.PRIVILEGES[2]))
-    userEvent.click(getByText(AUTH_API.ENUMS.VALUATIONS[2]))
-    userEvent.type(getByTestId(TEST_IDS.SEARCH_DROPDOWN).children[0], '/test/3') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[2]][language]))
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[5]][language]))
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[5]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[2]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
+    userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[0].children[0], '/test/3') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
+    userEvent.click(getByText(UI.ADD[language]))
+    userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[1].children[0], '/test/4') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
     userEvent.click(getByText(UI.ADD[language]))
     userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), alternativeTestRoleId)
     userEvent.type(getByPlaceholderText(ROLE.DESCRIPTION[language]), updatedTestRole.data.description)

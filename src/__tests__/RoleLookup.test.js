@@ -4,12 +4,13 @@ import useAxios from 'axios-hooks'
 
 import { RoleLookup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { AUTH_API } from '../configurations'
-import { TEST_CONFIGURATIONS } from '../setupTests'
+import { TEST_CONFIGURATIONS } from '../configurations'
 
 jest.mock('../components/role/UpdateRole', () => () => null)
 
-const { apiContext, errorObject, language, refetch, testRole, testRoleId } = TEST_CONFIGURATIONS
+const { errorObject, language, testRole, testRoleId } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
+const refetch = jest.fn()
 
 const setup = () => {
   const { getByText } = render(
@@ -27,13 +28,10 @@ test('Renders correctly', () => {
   useAxios.mockReturnValue([{ data: testRole, loading: false, error: null }, refetch])
   const { getByText } = setup()
 
-  const { roleId, description, paths, maxValuation } = testRole
+  const { roleId, description } = testRole
 
   expect(getByText(roleId)).toBeInTheDocument()
   expect(getByText(description)).toBeInTheDocument()
-  expect(getByText(maxValuation)).toBeInTheDocument()
-  expect(getByText(paths[AUTH_API.INCLUDES][0])).toBeInTheDocument()
-  expect(getByText(paths[AUTH_API.INCLUDES][1])).toBeInTheDocument()
 })
 
 test('Renders on error', () => {

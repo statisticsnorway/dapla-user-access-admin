@@ -20,8 +20,10 @@ function UpdateRole ({ isNew, refetch, role }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [fetchedPathOptions, setFetchedPathOptions] = useState([])
   const [updatedRoleId, setUpdatedRoleId] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.STRING[0]])
-  const [updatedMaxValuation, setUpdatedMaxValuation] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.ENUM])
   const [updatedDescription, setUpdatedDescription] = useState(isNew ? '' : role[AUTH_API.ROLE_OBJECT.STRING[1]])
+  const [updatedMaxValuation, setUpdatedMaxValuation] = useState(isNew ?
+    AUTH_API.ENUMS.VALUATIONS[3] : role[AUTH_API.ROLE_OBJECT.ENUM]
+  )
   const [updatedPathsInclude, setUpdatedPathsInclude] = useState(isNew ? [] :
     role[AUTH_API.ROLE_OBJECT.LIST].hasOwnProperty(AUTH_API.INCLUDES) ?
       role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES] : []

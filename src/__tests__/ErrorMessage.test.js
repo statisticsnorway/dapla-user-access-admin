@@ -3,7 +3,7 @@ import { render } from '@testing-library/react'
 
 import { ErrorMessage } from '../components'
 import { AppContextProvider } from '../utilities'
-import { TEST_CONFIGURATIONS } from '../setupTests'
+import { TEST_CONFIGURATIONS } from '../configurations'
 
 const { errorHeader, errorObject, errorStatus, errorString, objectToString } = TEST_CONFIGURATIONS
 
