@@ -3,8 +3,8 @@ import useAxios from 'axios-hooks'
 import { Divider, Grid, Icon, Input, List, Loader, Table } from 'semantic-ui-react'
 
 import { ErrorMessage, UpdateRole } from '../'
-import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
-import { AUTH_API, SSB_COLORS } from '../../configurations'
+import { ApiContext, DescriptionPopup, LanguageContext, sortArrayOfObjects } from '../../utilities'
+import { AUTH_API, checkAccess, SSB_COLORS } from '../../configurations'
 import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI, VALUATION } from '../../enums'
 
 function RolesTable () {
@@ -18,32 +18,26 @@ function RolesTable () {
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
-      setRoles(data[AUTH_API.ROLES].sort((a, b) =>
-        a[AUTH_API.ROLE_OBJECT.STRING[0]].localeCompare(b[AUTH_API.ROLE_OBJECT.STRING[0]])
-      ))
+      setRoles(sortArrayOfObjects(data[AUTH_API.ROLES], [AUTH_API.ROLE_OBJECT.STRING[0]]))
     }
   }, [data, error, loading])
 
   const handleSort = () => {
     setDirection(direction === 'ascending' ? 'descending' : 'ascending')
-
-    if (direction === 'ascending') {
-      setRoles(roles.sort((a, b) =>
-        a[AUTH_API.ROLE_OBJECT.STRING[0]].localeCompare(b[AUTH_API.ROLE_OBJECT.STRING[0]])
-      ))
-    } else {
-      setRoles(roles.sort((a, b) =>
-        b[AUTH_API.ROLE_OBJECT.STRING[0]].localeCompare(a[AUTH_API.ROLE_OBJECT.STRING[0]])
-      ))
-    }
+    setRoles(sortArrayOfObjects(data[AUTH_API.ROLES], [AUTH_API.ROLE_OBJECT.STRING[0]], direction))
   }
 
   const handleFilter = (string) => setRoles(data[AUTH_API.ROLES].filter(({ roleId }) => roleId.includes(string)))
 
-  const CheckedCell = ({ entry, list }) =>
-    <Table.Cell positive={list && list.includes(entry)}>
-      {list && list.includes(entry) && <Icon name='checkmark' style={{ color: SSB_COLORS.GREEN }} />}
-    </Table.Cell>
+  const CheckedCell = ({ entry, list }) => {
+    const positive = checkAccess(list, entry)
+
+    return (
+      <Table.Cell positive={positive} negative={!positive} textAlign='center'>
+        <Icon name={positive ? 'checkmark' : 'ban'} style={{ color: SSB_COLORS[positive ? 'GREEN' : 'RED'] }} />
+      </Table.Cell>
+    )
+  }
 
   return (
     <>
@@ -70,7 +64,7 @@ function RolesTable () {
         <Table celled sortable size='large'>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell colSpan={2} />
+              <Table.HeaderCell colSpan={3} />
               {DescriptionPopup(<Table.HeaderCell colSpan={4}>{ROLE.PRIVILEGES[language]}</Table.HeaderCell>)}
               <Table.HeaderCell colSpan={2} />
               {DescriptionPopup(<Table.HeaderCell colSpan={6}>{ROLE.STATES[language]}</Table.HeaderCell>)}
@@ -79,6 +73,7 @@ function RolesTable () {
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
                 {ROLE.ROLE_ID[language]}
               </Table.HeaderCell>
+              <Table.HeaderCell />
               <Table.HeaderCell>{ROLE.DESCRIPTION[language]}</Table.HeaderCell>
               {AUTH_API.ENUMS.PRIVILEGES.map(privilege =>
                 <Table.HeaderCell key={privilege}>{PRIVILEGE[privilege][language]}</Table.HeaderCell>
@@ -91,20 +86,34 @@ function RolesTable () {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {roles.map(({ description, maxValuation, roleId, paths, privileges, states }) =>
+            {roles.map(({ description, maxValuation, roleId, paths, privileges, states }, index) =>
               <Table.Row key={roleId}>
-                <Table.Cell>{roleId}</Table.Cell>
+                <Table.Cell style={{ fontWeight: 'bold' }}>{roleId}</Table.Cell>
+                <Table.Cell textAlign='center'>
+                  <UpdateRole isNew={false} refetch={refetch} role={roles[index]} />
+                </Table.Cell>
                 <Table.Cell>{description}</Table.Cell>
                 {AUTH_API.ENUMS.PRIVILEGES.map(privilege =>
                   <CheckedCell key={privilege} list={privileges} entry={privilege} />
                 )}
                 <Table.Cell>
-                  <List>{paths[AUTH_API.INCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}</List>
+                  {paths.hasOwnProperty(AUTH_API.INCLUDES) &&
+                  <List style={{ color: SSB_COLORS.GREEN }}>
+                    {paths[AUTH_API.INCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}
+                  </List>
+                  }
+                  {paths.hasOwnProperty(AUTH_API.EXCLUDES) &&
+                  <List style={{ color: SSB_COLORS.RED }}>
+                    {paths[AUTH_API.EXCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}
+                  </List>
+                  }
                 </Table.Cell>
                 <Table.Cell
                   positive={maxValuation === AUTH_API.ENUMS.VALUATIONS[0]}
-                  negative={maxValuation === AUTH_API.ENUMS.VALUATIONS[3]}
-                  warning={AUTH_API.ENUMS.VALUATIONS[1].concat(AUTH_API.ENUMS.VALUATIONS[2]).includes(maxValuation)}
+                  negative={maxValuation === AUTH_API.ENUMS.VALUATIONS[AUTH_API.ENUMS.VALUATIONS.length - 1]}
+                  warning={AUTH_API.ENUMS.VALUATIONS.slice(
+                    1, (AUTH_API.ENUMS.VALUATIONS.length - 1)).includes(maxValuation
+                  )}
                 >
                   {VALUATION[maxValuation][language]}
                 </Table.Cell>

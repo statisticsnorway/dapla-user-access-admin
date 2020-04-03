@@ -6,9 +6,8 @@ import useAxios from 'axios-hooks'
 
 import App from '../App'
 import { AppContextProvider } from '../utilities'
-import { API } from '../configurations'
+import { API, TEST_CONFIGURATIONS } from '../configurations'
 import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
 
 jest.mock('../components/AppHome', () => () => null)
 jest.mock('../components/role/RolesTable', () => () => null)

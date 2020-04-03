@@ -1,14 +1,15 @@
 import React, { useContext, useEffect } from 'react'
 import useAxios from 'axios-hooks'
 import { Grid } from 'semantic-ui-react'
-import { Title } from '@statisticsnorway/ssb-component-library'
 
 import { UpdateRole } from '../'
-import { ApiContext, RolesView } from '../../utilities'
+import { ApiContext, DescriptionPopup, LanguageContext, makeEnum, RolesView } from '../../utilities'
 import { AUTH_API } from '../../configurations'
+import { ROLE } from '../../enums'
 
 function RoleLookup ({ roleId }) {
   const { authApi } = useContext(ApiContext)
+  const { language } = useContext(LanguageContext)
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_ROLE(roleId)}`)
 
@@ -22,12 +23,12 @@ function RoleLookup ({ roleId }) {
     return (
       <Grid>
         {Object.entries(data).map(([key, value]) =>
-          <Grid.Row key={key}>
+          <Grid.Row key={key} verticalAlign='middle'>
             <Grid.Column width={4}>
-              <Title size={4}>{key}</Title>
+              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{ROLE[makeEnum(key)][language]}</span>)}
             </Grid.Column>
             <Grid.Column width={12}>
-              {RolesView(key, value)}
+              {RolesView(key, value, language)}
             </Grid.Column>
           </Grid.Row>
         )}

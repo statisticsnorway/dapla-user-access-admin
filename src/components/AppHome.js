@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Accordion, Grid, Icon } from 'semantic-ui-react'
-import { Input as SSBInput, Text, Title } from '@statisticsnorway/ssb-component-library'
+import { Accordion, Divider, Grid, Icon, Input } from 'semantic-ui-react'
+import { Text, Title } from '@statisticsnorway/ssb-component-library'
 
-import { GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
-import { ApiContext, DescriptionPopup, getNestedObject, LanguageContext } from '../utilities'
-import { API, AUTH_API, SSB_COLORS } from '../configurations'
+import { ErrorMessage, GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
+import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
+import { AUTH_API, SSB_COLORS } from '../configurations'
 import { HOME, TEST_IDS, UI } from '../enums'
 
 function AppHome () {
@@ -30,18 +30,22 @@ function AppHome () {
       <Grid.Row>
         <Grid.Column>
           <Title size={2}>{UI.USER[language]}</Title>
-          <SSBInput
+          <Input
+            size='big'
             value={userId}
-            error={!!error}
+            error={!!error && !userEdited}
+            disabled={loading}
             placeholder={UI.USER[language]}
-            handleChange={(value) => {
+            onKeyPress={({ key }) => {
+              if (key === 'Enter') {
+                refetch()
+                setUserEdited(false)
+              }
+            }}
+            onChange={(event, { value }) => {
               setUserId(value)
               setUserEdited(true)
             }}
-            errorMessage={
-              error && getNestedObject(error, API.ERROR_PATH) === undefined ?
-                error.toString() : getNestedObject(error, API.ERROR_PATH)
-            }
           />
           {DescriptionPopup(
             <Icon
@@ -51,13 +55,17 @@ function AppHome () {
               name='sync alternate'
               disabled={userId === ''}
               data-testid={TEST_IDS.REFRESH_USER}
-              style={{ color: SSB_COLORS.BLUE, marginTop: '0.5em', marginBottom: '0.5em' }}
+              style={{ color: SSB_COLORS.BLUE, marginBottom: '0.25em', marginLeft: '0.5em' }}
               onClick={() => {
                 refetch()
                 setUserEdited(false)
               }}
-            />
+            />,
+            false,
+            'right center'
           )}
+          <Divider fitted hidden style={{ marginTop: '1em' }} />
+          {!loading && !userEdited && error && <ErrorMessage error={error} />}
           {!error && !loading && !userEdited && data !== undefined &&
           <UpdateUser isNew={false} refetch={refetch} user={data} />
           }

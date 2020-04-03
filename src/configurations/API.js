@@ -1,11 +1,7 @@
 export const API = {
   ERROR_PATH: ['response', 'data'],
+  ERROR_STATUS_PATH: ['response', 'statusText'],
   GET_HEALTH: '/health'
-}
-
-export const CATALOG_API = {
-  CATALOGS: 'catalogs',
-  GET_CATALOGS: '/catalog'
 }
 
 export const AUTH_API = {
@@ -16,7 +12,7 @@ export const AUTH_API = {
   },
   EXCLUDES: 'excludes',
   GET_ACCESS: (path, privilege, state, maxValuation, userId) =>
-    `/access/${userId}?privilege=${privilege}&namespace=${path}&valuation=${maxValuation}&state=${state}`,
+    `/access/${userId}?privilege=${privilege}&path=${path}&valuation=${maxValuation}&state=${state}`,
   GET_GROUP: (groupId) => `/group/${groupId}`,
   GET_GROUPS: '/group',
   GET_ROLE: (roleId) => `/role/${roleId}`,
@@ -42,4 +38,31 @@ export const AUTH_API = {
     ARRAY: ['groups', 'roles'],
     STRING: 'userId'
   }
+}
+
+export const CATALOG_API = {
+  CATALOGS: 'catalogs',
+  GET_CATALOGS: '/catalog'
+}
+
+export const checkAccess = (data, value) => {
+  let positive = false
+
+  try {
+    if (data.hasOwnProperty(AUTH_API.INCLUDES) || data.hasOwnProperty(AUTH_API.EXCLUDES)) {
+      if (data.hasOwnProperty(AUTH_API.INCLUDES)) {
+        positive = data[AUTH_API.INCLUDES].includes(value)
+      }
+
+      if (data.hasOwnProperty(AUTH_API.EXCLUDES)) {
+        positive = !data[AUTH_API.EXCLUDES].includes(value)
+      }
+    } else {
+      positive = true
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
+  return positive
 }

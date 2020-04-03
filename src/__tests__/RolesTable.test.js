@@ -5,13 +5,14 @@ import useAxios from 'axios-hooks'
 
 import { RolesTable } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
-import { AUTH_API } from '../configurations'
 
 jest.mock('../components/role/UpdateRole', () => () => null)
 
-const { apiContext, errorObject, errorString, language, refetch, returnRoles } = TEST_CONFIGURATIONS
+const { errorObject, errorString, language, returnRoles } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
+const refetch = jest.fn()
 
 const setup = () => {
   const { getByPlaceholderText, getByTestId, getByText, queryAllByText } = render(

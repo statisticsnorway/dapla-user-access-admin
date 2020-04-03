@@ -5,14 +5,11 @@ import useAxios from 'axios-hooks'
 
 import { UpdateUser } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { AUTH_API } from '../configurations'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, USER } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
 
 const {
   alternativeTestUserId,
-  apiContext,
-  execute,
   language,
   responseObject,
   returnGroups,
@@ -20,6 +17,8 @@ const {
   testUser,
   updatedTestUser
 } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
+const execute = jest.fn()
 
 const setup = (isNew, user) => {
   const { getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
@@ -41,7 +40,7 @@ describe('Common mock', () => {
   test('Renders correctly on new user', () => {
     const { getByPlaceholderText, getByTestId } = setup(true)
 
-    userEvent.click(getByTestId(TEST_IDS.NEW_USER))
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
 
     expect(getByPlaceholderText(USER.USER_ID[language])).toBeInTheDocument()
   })
@@ -57,10 +56,10 @@ describe('Common mock', () => {
   test('Functions correctly on PUT request', () => {
     const { getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
 
-    userEvent.click(getByTestId(TEST_IDS.NEW_USER))
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
+    userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)
     userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.click(getByText(returnGroups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
-    userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)
     userEvent.click(getAllByText(USER.CREATE_USER[language])[1])
 
     expect(execute).toHaveBeenNthCalledWith(7, updatedTestUser)

@@ -1,14 +1,15 @@
 import React, { useContext, useEffect } from 'react'
 import useAxios from 'axios-hooks'
 import { Grid } from 'semantic-ui-react'
-import { Title } from '@statisticsnorway/ssb-component-library'
 
 import { UpdateGroup } from '../'
-import { ApiContext, GroupsView } from '../../utilities'
+import { ApiContext, DescriptionPopup, GroupsView, LanguageContext, makeEnum } from '../../utilities'
 import { AUTH_API } from '../../configurations'
+import { GROUP } from '../../enums'
 
 function GroupLookup ({ groupId }) {
   const { authApi } = useContext(ApiContext)
+  const { language } = useContext(LanguageContext)
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_GROUP(groupId)}`)
 
@@ -22,9 +23,9 @@ function GroupLookup ({ groupId }) {
     return (
       <Grid>
         {Object.entries(data).map(([key, value]) =>
-          <Grid.Row key={key}>
+          <Grid.Row key={key} verticalAlign='middle'>
             <Grid.Column width={4}>
-              <Title size={4}>{key}</Title>
+              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{GROUP[makeEnum(key)][language]}</span>)}
             </Grid.Column>
             <Grid.Column width={12}>
               {GroupsView(key, value)}
