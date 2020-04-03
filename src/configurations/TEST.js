@@ -1,6 +1,8 @@
 import { AUTH_API, CATALOG_API } from './'
 import { LANGUAGE } from '../enums'
 
+const errorString = 'A problem occured'
+
 export const TEST_CONFIGURATIONS = {
   alternativeTestGroupId: 'testGroupId2',
   alternativeTestRoleId: 'testRoleId2',
@@ -24,9 +26,9 @@ export const TEST_CONFIGURATIONS = {
   },
   emptyCatalogs: { [CATALOG_API.CATALOGS]: [] },
   errorHeader: 'Error header',
-  errorString: 'A problem occured',
-  errorObject: { response: { data: 'A problem occured' } },
-  errorStatus: { response: { statusText: 'A problem occured' } },
+  errorString: errorString,
+  errorObject: { response: { data: errorString } },
+  errorStatus: { response: { statusText: errorString } },
   language: LANGUAGE.LANGUAGES.ENGLISH.languageCode,
   objectToString: '[object Object]',
   otherLanguage: LANGUAGE.LANGUAGES.NORWEGIAN.languageCode,

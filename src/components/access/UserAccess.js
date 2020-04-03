@@ -7,7 +7,7 @@ import { ApiContext, LanguageContext } from '../../utilities'
 import { AUTH_API, CATALOG_API, SSB_COLORS } from '../../configurations'
 import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../../enums'
 
-function UserAcces ({ userId }) {
+function UserAccess ({ userId }) {
   const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
@@ -130,4 +130,4 @@ function UserAcces ({ userId }) {
   )
 }
 
-export default UserAcces
+export default UserAccess
