@@ -45,7 +45,13 @@ export const AUTH_API = {
 
 export const CATALOG_API = {
   CATALOGS: 'catalogs',
-  GET_CATALOGS: '/catalog'
+  GET_CATALOGS: '/catalog',
+  CATALOG_OBJECT: {
+    STRING: ['id.path', 'parentUri'],
+    ENUM: ['valuation', 'state'],
+    TIMESTAMP: 'timestamp'
+  },
+
 }
 
 export const checkAccess = (data, value) => {

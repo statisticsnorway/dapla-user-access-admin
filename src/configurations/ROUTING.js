@@ -2,5 +2,6 @@ export const ROUTING = {
   BASE: '/',
   GROUPS: '/groups',
   ROLES: '/roles',
-  USERS: '/users'
+  USERS: '/users',
+  CATALOGS: '/catalogs'
 }

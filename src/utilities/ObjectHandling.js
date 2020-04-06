@@ -41,9 +41,18 @@ export const moveIncludesExcludes = (includes, excludes, value, to) => {
 }
 
 export const sortArrayOfObjects = (array, by, direction = 'ascending') => {
-  if (direction === 'ascending') {
-    return array.sort((a, b) => a[by].localeCompare(b[by]))
-  } else {
-    return array.sort((a, b) => b[by].localeCompare(a[by]))
+  return (array && array[1]) ? array.sort(compareObjects(by, direction)) : array
+}
+
+function compareObjects(by, direction) {
+  return function innerSort(a, b) {
+    let aObj = a
+    let bObj = b
+    let byArray = by[0].split('.')
+    for (let idx = 0; idx < byArray.length; idx++) {
+      aObj = aObj[byArray[idx]]
+      bObj = bObj[byArray[idx]]
+    }
+    return direction === 'ascending' ? aObj.localeCompare(bObj) : bObj.localeCompare(aObj)
   }
 }
