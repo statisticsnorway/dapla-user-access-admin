@@ -8,7 +8,7 @@ import { LanguageContext } from '../utilities'
 import { ROUTING, SSB_COLORS } from '../configurations'
 import { LANGUAGE, TEST_IDS, UI } from '../enums'
 
-const routeIcons = ['user', 'users', 'address card']
+const routeIcons = ['user', 'users', 'address card', 'users']
 
 function AppMenu ({ setSettingsOpen }) {
   const { language, setLanguage } = useContext(LanguageContext)

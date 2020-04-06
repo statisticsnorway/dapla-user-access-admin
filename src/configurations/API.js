@@ -15,18 +15,19 @@ export const AUTH_API = {
     `/access/${userId}?privilege=${privilege}&path=${path}&valuation=${maxValuation}&state=${state}`,
   GET_GROUP: (groupId) => `/group/${groupId}`,
   GET_GROUPS: '/group',
+  PUT_GROUP: (groupId) => `/group/${groupId}`,
   GET_ROLE: (roleId) => `/role/${roleId}`,
   GET_ROLES: '/role',
+  PUT_ROLE: (roleId) => `/role/${roleId}`,
   GET_USER: (userId) => `/user/${userId}`,
+  GET_USERS: `/user`,
+  PUT_USER: (userId) => `/user/${userId}`,
+
   GROUP_OBJECT: {
     LIST: 'roles',
     STRING: ['groupId', 'description']
   },
   GROUPS: 'groups',
-  INCLUDES: 'includes',
-  PUT_GROUP: (groupId) => `/group/${groupId}`,
-  PUT_ROLE: (roleId) => `/role/${roleId}`,
-  PUT_USER: (userId) => `/user/${userId}`,
   ROLE_OBJECT: {
     ARRAY: ['privileges', 'states'],
     ENUM: 'maxValuation',
@@ -37,7 +38,9 @@ export const AUTH_API = {
   USER_OBJECT: {
     ARRAY: ['groups', 'roles'],
     STRING: 'userId'
-  }
+  },
+  USERS: 'users',
+  INCLUDES: 'includes'
 }
 
 export const CATALOG_API = {
