@@ -91,7 +91,7 @@ function AppHome () {
             />
           </Grid.Column>
           <Grid.Column>
-            <Title size={3}>{HOME.ROLES[language]}</Title>
+            <Title size={3}>{HOME.ROLES[language]} a</Title>
             <Accordion
               fluid
               styled

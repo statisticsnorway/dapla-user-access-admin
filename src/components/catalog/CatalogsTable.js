@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
+import { Accordion, Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
 
-import { ErrorMessage } from '../'
+import { ErrorMessage, RoleLookup } from '../'
 import { ApiContext, LanguageContext, sortArrayOfObjects, convertToDatetimeString } from '../../utilities'
 import { AUTH_API, CATALOG_API } from '../../configurations'
-import { CATALOG, TEST_IDS, UI } from '../../enums'
+import { CATALOG, CATALOGUSER, TEST_IDS, UI } from '../../enums'
+import CatalogUserLookup from './CatalogUserLookup'
+import { Text, Title } from '@statisticsnorway/ssb-component-library'
 
 function CatalogsTable () {
   const { catalogApi } = useContext(ApiContext)
@@ -32,6 +34,20 @@ function CatalogsTable () {
 
   const handleFilter = (string) => setCatalogs(data[CATALOG_API.CATALOGS].filter(({ id }) => id.path.includes(string)))
 
+  let activeIndex = 1
+  const handleClick = (e, titleProps) => {
+    console.log(activeIndex, "activeIndex før")
+    const { index } = titleProps
+    activeIndex = index
+    console.log(activeIndex, "activeIndex etter")
+  }
+
+  const isActive = (index) => {
+    console.log(index, "index")
+    console.log(activeIndex, "activeIndex")
+    return activeIndex === index
+  }
+
   return (
     <>
       <Grid columns='equal'>
@@ -57,6 +73,7 @@ function CatalogsTable () {
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
                 {CATALOG.PATH[language]}
               </Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.TIMESTAMP[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.TYPE[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.VALUATION[language]}</Table.HeaderCell>
@@ -68,28 +85,22 @@ function CatalogsTable () {
             {catalogs.map(({ id, type, valuation, state, parentUri }, index) =>
               <Table.Row key={id.path+id.timestamp}>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{id.path}</Table.Cell>
+                <Table.Cell textAlign='top'>
+                  <Accordion
+                    fluid
+                    styled
+                    defaultActiveIndex={-1}>
+                    <Accordion.Title active={activeIndex === index} index={index} onClick={handleClick}/>
+                    <Accordion.Content active={isActive(index)}>
+                      <CatalogUserLookup path={id.path.split('/').join('.')} />
+                    </Accordion.Content>
+                  </Accordion>
+                </Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{convertToDatetimeString(id.timestamp)}</Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{type}</Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{valuation}</Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{state}</Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{parentUri}</Table.Cell>
-                {/*<Table.Cell textAlign='center'>*/}
-                {/*  <UpdateCatalog isNew={false} refetch={refetch} catalog={catalogs[index]} />*/}
-                {/*</Table.Cell>*/}
-                {/*<Table.Cell>*/}
-                {/*  {groups &&*/}
-                {/*  <List>*/}
-                {/*    {groups.map(group => <List.Item key={group}>{group}</List.Item>)}*/}
-                {/*  </List>*/}
-                {/*  }*/}
-                {/*</Table.Cell>*/}
-                {/*<Table.Cell>*/}
-                {/*  {roles &&*/}
-                {/*  <List>*/}
-                {/*    {roles.map(role => <List.Item key={role}>{role}</List.Item>)}*/}
-                {/*  </List>*/}
-                {/*  }*/}
-                {/*</Table.Cell>*/}
               </Table.Row>
             )}
           </Table.Body>
