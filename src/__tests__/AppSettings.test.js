@@ -4,10 +4,11 @@ import userEvent from '@testing-library/user-event'
 
 import { AppSettings } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
+import { TEST_CONFIGURATIONS } from '../configurations'
 import { SETTINGS, TEST_IDS } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
 
-const { alternativeUrl, apiContext, language } = TEST_CONFIGURATIONS
+const { alternativeUrl, language } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 
 const setup = () => {
   const { getByPlaceholderText, getByTestId, getByText } = render(

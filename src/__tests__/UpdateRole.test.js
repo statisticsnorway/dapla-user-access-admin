@@ -5,14 +5,23 @@ import useAxios from 'axios-hooks'
 
 import { UpdateRole } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { API } from '../configurations'
-import { ROLE, TEST_IDS, UI } from '../enums'
-import { TEST_CONFIGURATIONS } from '../setupTests'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI } from '../enums'
 
-const { alternativeTestRoleId, apiContext, emptyRole, executePut, language, testRole, updatedTestRole } = TEST_CONFIGURATIONS
+const {
+  alternativeTestRoleId,
+  emptyCatalogs,
+  emptyRole,
+  language,
+  responseObject,
+  testRole,
+  updatedTestRole
+} = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
+const executePut = jest.fn()
 
 const setup = (isNew, role) => {
-  const { getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
+  const { getAllByTestId, getAllByText, getByPlaceholderText, getByTestId, getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
         <UpdateRole isNew={isNew} refetch={jest.fn()} role={role} />
@@ -20,29 +29,20 @@ const setup = (isNew, role) => {
     </ApiContext.Provider>
   )
 
-  return { getAllByText, getByPlaceholderText, getByTestId, getByText }
+  return { getAllByTestId, getAllByText, getByPlaceholderText, getByTestId, getByText }
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue([{ data: { [API.CATALOGS]: [] }, loading: false, error: null, response: null }, executePut])
+  useAxios.mockReturnValue(
+    [{ data: emptyCatalogs, loading: false, error: null, response: responseObject }, executePut]
+  )
 
   test('Renders correctly on new role', () => {
-    const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
+    const { getByPlaceholderText, getByTestId } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
 
-    expect(getAllByText(ROLE.CREATE_ROLE[language])).toHaveLength(2)
     expect(getByPlaceholderText(ROLE.ROLE_ID[language])).toBeInTheDocument()
-  })
-
-  test('Functions correctly on PUT request', () => {
-    const { getAllByText, getByPlaceholderText, getByTestId } = setup(true)
-
-    userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
-    userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), alternativeTestRoleId)
-    userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
-
-    expect(executePut).toHaveBeenCalledWith(emptyRole)
   })
 
   test('Renders correctly on update role', () => {
@@ -53,17 +53,35 @@ describe('Common mock', () => {
     expect(getByPlaceholderText(ROLE.ROLE_ID[language])).toBeDisabled()
   })
 
-  test('Form changes works correctly', () => {
-    const { getAllByText, getByTestId, getByText } = setup(false, testRole)
+  test('Functions correctly on PUT request', () => {
+    const { getAllByText, getByTestId } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
-    userEvent.type(getByTestId(TEST_IDS.SEARCH_DROPDOWN).children[0], '/test/3') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
-    userEvent.click(getByText(UI.ADD[language]))
-    userEvent.click(getByText(API.ENUMS.STATES[2]))
-    userEvent.click(getByText(API.ENUMS.PRIVILEGES[2]))
-    userEvent.click(getByText(API.ENUMS.VALUATIONS[2]))
-    userEvent.click(getAllByText(ROLE.UPDATE_ROLE[language])[1])
+    userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
 
-    expect(executePut).toHaveBeenNthCalledWith(2, updatedTestRole)
+    expect(executePut).toHaveBeenNthCalledWith(4, emptyRole)
+  })
+
+  test('Form changes works correctly', () => {
+    const { getAllByTestId, getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
+
+    userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[2]][language]))
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[5]][language]))
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[5]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[2]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
+    // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
+    userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[0].children[0], '/test/3')
+    userEvent.click(getByText(UI.ADD[language]))
+    // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
+    userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[1].children[0], '/test/4')
+    userEvent.click(getByText(UI.ADD[language]))
+    userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), alternativeTestRoleId)
+    userEvent.type(getByPlaceholderText(ROLE.DESCRIPTION[language]), updatedTestRole.data.description)
+    userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
+
+    expect(executePut).toHaveBeenNthCalledWith(6, updatedTestRole)
   })
 })

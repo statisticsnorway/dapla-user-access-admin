@@ -3,14 +3,14 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
 
-import { RolesTable } from '../components'
+import { GroupsTable } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 
-jest.mock('../components/role/UpdateRole', () => () => null)
+jest.mock('../components/group/UpdateGroup', () => () => null)
 
-const { errorObject, errorString, language, returnRoles } = TEST_CONFIGURATIONS
+const { errorObject, errorString, language, returnGroups } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const refetch = jest.fn()
 
@@ -18,7 +18,7 @@ const setup = () => {
   const { getByPlaceholderText, getByTestId, getByText, queryAllByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <RolesTable />
+        <GroupsTable />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
@@ -27,7 +27,7 @@ const setup = () => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue([{ data: returnRoles, loading: false, error: null }, refetch])
+  useAxios.mockReturnValue([{ data: returnGroups, loading: false, error: null }, refetch])
 
   test('Renders correctly', () => {
     const { getByPlaceholderText } = setup()
@@ -40,10 +40,10 @@ describe('Common mock', () => {
 
     userEvent.type(
       getByPlaceholderText(UI.FILTER_TABLE[language]),
-      returnRoles[AUTH_API.ROLES][1][AUTH_API.ROLE_OBJECT.STRING[0]]
+      returnGroups[AUTH_API.GROUPS][1][AUTH_API.GROUP_OBJECT.STRING[0]]
     )
 
-    expect(queryAllByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]])).toHaveLength(0)
+    expect(queryAllByText(returnGroups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]])).toHaveLength(0)
   })
 
   test('Sorts correctly', () => {

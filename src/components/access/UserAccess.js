@@ -4,29 +4,29 @@ import { Divider, Dropdown, Icon } from 'semantic-ui-react'
 import { Button as SSBButton, Text, Title } from '@statisticsnorway/ssb-component-library'
 
 import { ApiContext, LanguageContext } from '../../utilities'
-import { API, SSB_COLORS } from '../../configurations'
-import { ROLE, TEST_IDS, UI, USER_ACCESS } from '../../enums'
+import { AUTH_API, CATALOG_API, SSB_COLORS } from '../../configurations'
+import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../../enums'
 
-function UserAcces ({ userId }) {
+function UserAccess ({ userId }) {
   const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [state, setState] = useState(API.ENUMS.STATES[0])
-  const [namespace, setNamespace] = useState('')
-  const [privilege, setPrivilege] = useState(API.ENUMS.PRIVILEGES[0])
+  const [path, setPath] = useState('')
+  const [state, setState] = useState(AUTH_API.ENUMS.STATES[0])
+  const [pathOptions, setPathOptions] = useState([])
   const [verdict, setVerdict] = useState(USER_ACCESS.VERDICTS.UNKOWN)
-  const [maxValuation, setMaxValuation] = useState(API.ENUMS.VALUATIONS[0])
-  const [namespacePrefixesOptions, setNamespacePrefixesOptions] = useState([])
+  const [privilege, setPrivilege] = useState(AUTH_API.ENUMS.PRIVILEGES[0])
+  const [maxValuation, setMaxValuation] = useState(AUTH_API.ENUMS.VALUATIONS[0])
 
-  const [{ data: getData, loading: getLoading, error: getError }] = useAxios(`${catalogApi}${API.GET_CATALOGS}`)
+  const [{ data: getData, loading: getLoading, error: getError }] =
+    useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`)
   const [{ loading, error, response }, refetch] = useAxios(
-    `${authApi}${API.GET_ACCESS(namespace, privilege, state, maxValuation, userId)}`,
-    { manual: true }
+    `${authApi}${AUTH_API.GET_ACCESS(path, privilege, state, maxValuation, userId)}`, { manual: true }
   )
 
   useEffect(() => {
     if (!getLoading && !getError && getData !== undefined) {
-      setNamespacePrefixesOptions(getData[API.CATALOGS].map(catalog => ({
+      setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => ({
         key: catalog.id.path,
         text: catalog.id.path,
         value: catalog.id.path
@@ -51,7 +51,9 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={privilege}
-        options={API.ENUMS.PRIVILEGES.map(privilege => ({ key: privilege, text: privilege, value: privilege }))}
+        options={AUTH_API.ENUMS.PRIVILEGES.map(privilege =>
+          ({ key: privilege, text: PRIVILEGE[privilege][language], value: privilege })
+        )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setPrivilege(value)
@@ -61,26 +63,27 @@ function UserAcces ({ userId }) {
       <Dropdown
         search
         selection
+        value={path}
         allowAdditions
-        value={namespace}
-        options={namespacePrefixesOptions}
+        options={pathOptions}
         data-testid={TEST_IDS.SEARCH_DROPDOWN}
         additionLabel={`${UI.ADD[language]} `}
-        placeholder={ROLE.NAMESPACE_PREFIXES[language]}
         noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
-          setNamespace(value)
+          setPath(value)
         }}
-        onAddItem={(event, { value }) => setNamespacePrefixesOptions(
-          [{ key: value, text: value, value: value }, ...namespacePrefixesOptions]
+        onAddItem={(event, { value }) => setPathOptions(
+          [{ key: value, text: value, value: value }, ...pathOptions]
         )}
       />
       <Text>{` ${USER_ACCESS.GUIDE[2][language]} `}</Text>
       <Dropdown
         inline
         value={state}
-        options={API.ENUMS.STATES.map(state => ({ key: state, text: state, value: state }))}
+        options={AUTH_API.ENUMS.STATES.map(state =>
+          ({ key: state, text: DATASET_STATE[state][language], value: state })
+        )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setState(value)
@@ -90,7 +93,9 @@ function UserAcces ({ userId }) {
       <Dropdown
         inline
         value={maxValuation}
-        options={API.ENUMS.VALUATIONS.map(valuation => ({ key: valuation, text: valuation, value: valuation }))}
+        options={AUTH_API.ENUMS.VALUATIONS.map(valuation =>
+          ({ key: valuation, text: VALUATION[valuation][language], value: valuation })
+        )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
           setMaxValuation(value)
@@ -125,4 +130,4 @@ function UserAcces ({ userId }) {
   )
 }
 
-export default UserAcces
+export default UserAccess

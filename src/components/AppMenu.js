@@ -1,12 +1,14 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Icon, Image, Menu } from 'semantic-ui-react'
+import { Divider, Dropdown, Icon, Image, Menu } from 'semantic-ui-react'
 import { Title } from '@statisticsnorway/ssb-component-library'
 
 import SSBLogo from '../media/ssb-logo-rgb.svg'
 import { LanguageContext } from '../utilities'
 import { ROUTING, SSB_COLORS } from '../configurations'
 import { LANGUAGE, TEST_IDS, UI } from '../enums'
+
+const routeIcons = ['user', 'users', 'address card']
 
 function AppMenu ({ setSettingsOpen }) {
   const { language, setLanguage } = useContext(LanguageContext)
@@ -28,12 +30,17 @@ function AppMenu ({ setSettingsOpen }) {
         <Title size={1}>{UI.HEADER[language]}</Title>
       </Menu.Item>
       <Menu.Menu position='right'>
-        <Menu.Item as={Link} to={ROUTING.ROLES}>
-          <Icon link fitted name='users' size='large' style={{ color: SSB_COLORS.BLUE }} />
+        {Object.entries(ROUTING).map(([route, path], index) =>
+          <Menu.Item key={path} as={Link} to={path}>
+            <Icon link fitted name={routeIcons[index]} size='big' style={{ color: SSB_COLORS.BLUE }} />
+          </Menu.Item>
+        )}
+        <Menu.Item>
+          <Divider vertical />
         </Menu.Item>
         <Menu.Item
           onClick={() => setSettingsOpen(true)}
-          icon={{ name: 'setting', size: 'large', 'data-testid': TEST_IDS.ACCESS_SETTINGS_BUTTON }}
+          icon={{ name: 'setting', size: 'big', 'data-testid': TEST_IDS.ACCESS_SETTINGS_BUTTON }}
           style={{ color: SSB_COLORS.GREEN }}
         />
         <Dropdown item text={`${LANGUAGE.LANGUAGE[language]} (${LANGUAGE.LANGUAGE_CHOICE[language]})`}>

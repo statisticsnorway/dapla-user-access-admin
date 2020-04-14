@@ -1,29 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Header, Icon, Modal, Popup } from 'semantic-ui-react'
+import { Divider, Form, Header, Icon, Modal } from 'semantic-ui-react'
 import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
 
-import { ApiContext, LanguageContext } from '../../utilities'
-import { API, SSB_COLORS, SSB_STYLE } from '../../configurations'
+import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
+import { AUTH_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
 import { TEST_IDS, UI, USER } from '../../enums'
 
-function UpdateUser ({ isNew, refetch, roles, userId }) {
+function UpdateUser ({ isNew, refetch, user }) {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   const [modalOpen, setModalOpen] = useState(false)
-  const [updatedRoles, setUpdatedRoles] = useState(roles)
-  const [updatedUserId, setUpdatedUserId] = useState(userId)
+  const [updatedUserId, setUpdatedUserId] = useState(isNew ? '' : user[AUTH_API.USER_OBJECT.STRING])
+  const [updatedRoles, setUpdatedRoles] = useState(isNew ? [] : user[AUTH_API.USER_OBJECT.ARRAY[1]])
+  const [updatedGroups, setUpdatedGroups] = useState(isNew ? [] : user[AUTH_API.USER_OBJECT.ARRAY[0]])
 
-  const [{ data: getData, loading: getLoading, error: getError }, refetchGet] = useAxios(`${authApi}${API.GET_ROLES}`)
-  const [{ loading: putLoading, error: putError, response: putResponse }, executePut] = useAxios(
-    {
-      url: `${authApi}${API.PUT_USER(userId)}`,
-      method: 'PUT'
-    }, {
-      manual: true
-    }
-  )
+  const [{ data: getRolesData, loading: getRolesLoading, error: getRolesError }, refetchRolesGet] =
+    useAxios(`${authApi}${AUTH_API.GET_ROLES}`, { manual: true })
+  const [{ data: getGroupsData, loading: getGroupsLoading, error: getGroupsError }, refetchGroupsGet] =
+    useAxios(`${authApi}${AUTH_API.GET_GROUPS}`, { manual: true })
+  const [{ loading: putLoading, error: putError, response: putResponse }, executePut] =
+    useAxios({ url: `${authApi}${AUTH_API.PUT_USER(updatedUserId)}`, method: 'PUT' }, { manual: true })
 
   useEffect(() => {
     if (!putLoading && putResponse) {
@@ -37,58 +35,36 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
   return (
     <Modal
       closeIcon
-      size='large'
+      size='small'
       open={modalOpen}
       style={SSB_STYLE}
       closeOnEscape={false}
       closeOnDimmerClick={false}
+      onMount={() => {
+        refetchRolesGet()
+        refetchGroupsGet()
+      }}
       onClose={() => {
         setModalOpen(false)
         if (!isNew) {
           refetch()
         }
       }}
-      trigger={
-        <Popup
-          basic
-          flowing
-          trigger={
-            isNew ?
-              <Icon
-                link
-                size='big'
-                name='user plus'
-                data-testid={TEST_IDS.NEW_USER}
-                style={{ color: SSB_COLORS.GREEN }}
-                onClick={() => setModalOpen(true)}
-              />
-              :
-              <Icon.Group size='big' style={{ color: SSB_COLORS.BLUE }}>
-                <Icon link name='user' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_USER} />
-                <Icon corner link name='edit' onClick={() => setModalOpen(true)} />
-              </Icon.Group>
-          }
-        >
-          <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
-          Description
-        </Popup>
-      }
+      trigger={DescriptionPopup(
+        <Icon.Group size={isNew ? 'huge' : 'big'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+          <Icon link name='user' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_USER} />
+          <Icon corner='top right' link name={isNew ? 'plus' : 'pencil'} onClick={() => setModalOpen(true)} />
+        </Icon.Group>,
+        false,
+        'left center'
+      )}
     >
       <Header as='h2' style={SSB_STYLE}>
-        {isNew ?
-          <>
-            <Icon name='user plus' style={{ color: SSB_COLORS.GREEN }} />
-            {USER.CREATE_USER[language]}
-          </>
-          :
-          <>
-            <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS.BLUE }}>
-              <Icon name='user' />
-              <Icon corner name='edit' />
-            </Icon.Group>
-            {USER.UPDATE_USER[language]}
-          </>
-        }
+        <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+          <Icon name='user' />
+          <Icon corner name={isNew ? 'plus' : 'edit'} />
+        </Icon.Group>
+        {isNew ? USER.CREATE_USER[language] : USER.UPDATE_USER[language]}
       </Header>
       <Modal.Content style={SSB_STYLE}>
         <Form size='large'>
@@ -97,15 +73,8 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
             disabled={!isNew}
             value={updatedUserId}
             placeholder={USER.USER_ID[language]}
+            label={<label>{DescriptionPopup(<span>{USER.USER_ID[language]}</span>)}</label>}
             onChange={(event, { value }) => setUpdatedUserId(value)}
-            label={
-              <label>
-                <Popup basic flowing trigger={<span>{USER.USER_ID[language]}</span>}>
-                  <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
-                  Description
-                </Popup>
-              </label>
-            }
           />
           <Form.Dropdown
             search
@@ -116,38 +85,49 @@ function UpdateUser ({ isNew, refetch, roles, userId }) {
             placeholder={USER.ROLES[language]}
             noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
             onChange={(event, { value }) => setUpdatedRoles(value)}
-            options={!getLoading && !getError && getData !== undefined ? getData[API.ROLES].map(role => ({
-              key: role.roleId,
-              text: role.roleId,
-              value: role.roleId
-            })) : []}
-            label={
-              <label>
-                <Popup basic flowing trigger={<span>{USER.ROLES[language]} </span>}>
-                  <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
-                  Description
-                </Popup>
-                <Popup basic flowing trigger={
-                  <Icon
-                    link
-                    loading={getLoading}
-                    name='sync alternate'
-                    onClick={() => refetchGet()}
-                    style={{ color: SSB_COLORS.BLUE }}
-                  />
-                }>
-                  <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
-                  Description
-                </Popup>
-              </label>
-            }
+            label={populatedDropdown(
+              USER.ROLES[language], getRolesLoading, refetchRolesGet, getRolesError, USER.ROLES_FETCH_ERROR[language]
+            )}
+            options={!getRolesLoading && !getRolesError && getRolesData !== undefined ?
+              getRolesData[AUTH_API.ROLES].map(({ roleId }) => ({
+                key: roleId,
+                text: roleId,
+                value: roleId
+              }))
+              : []}
+          />
+          <Form.Dropdown
+            search
+            multiple
+            required
+            selection
+            value={updatedGroups}
+            placeholder={USER.GROUPS[language]}
+            noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
+            onChange={(event, { value }) => setUpdatedGroups(value)}
+            label={populatedDropdown(
+              USER.GROUPS[language], getGroupsLoading, refetchGroupsGet, getGroupsError, USER.ROLES_FETCH_ERROR[language]
+            )}
+            options={!getGroupsLoading && !getGroupsError && getGroupsData !== undefined ?
+              getGroupsData[AUTH_API.GROUPS].map(({ groupId }) => ({
+                key: groupId,
+                text: groupId,
+                value: groupId
+              }))
+              : []}
           />
         </Form>
         <Divider hidden />
         <SSBButton
           primary
           disabled={putLoading}
-          onClick={() => executePut({ data: { userId: updatedUserId, roles: updatedRoles } })}
+          onClick={() => executePut({
+            data: {
+              [AUTH_API.USER_OBJECT.STRING]: updatedUserId,
+              [AUTH_API.USER_OBJECT.ARRAY[1]]: updatedRoles,
+              [AUTH_API.USER_OBJECT.ARRAY[0]]: updatedGroups
+            }
+          })}
         >
           {isNew ? USER.CREATE_USER[language] : USER.UPDATE_USER[language]}
         </SSBButton>

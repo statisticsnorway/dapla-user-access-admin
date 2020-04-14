@@ -2,16 +2,16 @@ import React, { useContext, useEffect } from 'react'
 import useAxios from 'axios-hooks'
 import { Grid } from 'semantic-ui-react'
 
-import { UpdateRole } from '../'
-import { ApiContext, DescriptionPopup, LanguageContext, makeEnum, RolesView } from '../../utilities'
+import { UpdateGroup } from '../'
+import { ApiContext, DescriptionPopup, GroupsView, LanguageContext, makeEnum } from '../../utilities'
 import { AUTH_API } from '../../configurations'
-import { ROLE } from '../../enums'
+import { GROUP } from '../../enums'
 
-function RoleLookup ({ roleId }) {
+function GroupLookup ({ groupId }) {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_ROLE(roleId)}`)
+  const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_GROUP(groupId)}`)
 
   useEffect(() => {
     if (!loading && error) {
@@ -25,16 +25,16 @@ function RoleLookup ({ roleId }) {
         {Object.entries(data).map(([key, value]) =>
           <Grid.Row key={key} verticalAlign='middle'>
             <Grid.Column width={4}>
-              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{ROLE[makeEnum(key)][language]}</span>)}
+              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{GROUP[makeEnum(key)][language]}</span>)}
             </Grid.Column>
             <Grid.Column width={12}>
-              {RolesView(key, value, language)}
+              {GroupsView(key, value)}
             </Grid.Column>
           </Grid.Row>
         )}
         <Grid.Row>
           <Grid.Column textAlign='right'>
-            <UpdateRole isNew={false} refetch={refetch} role={data} />
+            <UpdateGroup group={data} isNew={false} refetch={refetch} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -44,4 +44,4 @@ function RoleLookup ({ roleId }) {
   }
 }
 
-export default RoleLookup
+export default GroupLookup
