@@ -18,5 +18,9 @@ export const CATALOGUSER = {
   GROUP: {
     en: 'Group',
     nb: 'Gruppe'
+  },
+  PRIVILEGES: {
+    en: 'Privileges',
+    nb: 'Rettigheter'
   }
 }

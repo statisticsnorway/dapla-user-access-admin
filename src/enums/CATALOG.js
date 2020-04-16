@@ -22,5 +22,9 @@ export const CATALOG = {
   PARENT_URI: {
     en: 'Parent-uri',
     nb: 'Forelder-uri'
+  },
+  USERS: {
+    en: 'Users',
+    nb: 'Brukere'
   }
 }

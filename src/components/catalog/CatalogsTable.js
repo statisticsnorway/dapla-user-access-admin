@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Accordion, Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
+import { Divider, Grid, Input, Loader, Table, Portal, Icon, Segment } from 'semantic-ui-react'
 
-import { ErrorMessage, RoleLookup } from '../'
-import { ApiContext, LanguageContext, sortArrayOfObjects, convertToDatetimeString } from '../../utilities'
+import { ErrorMessage } from '../'
+import { ApiContext, LanguageContext, sortArrayOfObjects, convertToDatetimeJsonString } from '../../utilities'
 import { AUTH_API, CATALOG_API } from '../../configurations'
-import { CATALOG, CATALOGUSER, TEST_IDS, UI } from '../../enums'
+import { CATALOG, TEST_IDS, UI } from '../../enums'
 import CatalogUserLookup from './CatalogUserLookup'
-import { Text, Title } from '@statisticsnorway/ssb-component-library'
 
 function CatalogsTable () {
   const { catalogApi } = useContext(ApiContext)
@@ -16,12 +15,9 @@ function CatalogsTable () {
   const [catalogs, setCatalogs] = useState([])
   const [direction, setDirection] = useState('descending')
 
-  // const [{ data, loading, error }, refetch] = useAxios(`${catalogApi}${AUTH_API.GET_CATALOGS}`)
-  const [{ data, loading, error }, refetch] = useAxios('http://localhost:10110/catalog')
+    const [{ data, loading, error }] = useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`)
 
   useEffect(() => {
-    console.log(`${catalogApi}${AUTH_API.GET_CATALOGS}`, 'uri')
-    console.log(data, "data in useEffect")
     if (!loading && !error && data !== undefined) {
       setCatalogs(sortArrayOfObjects(data[CATALOG_API.CATALOGS], [CATALOG_API.CATALOG_OBJECT.STRING[0]]))
     }
@@ -34,18 +30,13 @@ function CatalogsTable () {
 
   const handleFilter = (string) => setCatalogs(data[CATALOG_API.CATALOGS].filter(({ id }) => id.path.includes(string)))
 
-  let activeIndex = 1
-  const handleClick = (e, titleProps) => {
-    console.log(activeIndex, "activeIndex før")
-    const { index } = titleProps
-    activeIndex = index
-    console.log(activeIndex, "activeIndex etter")
+  let open = false
+  const handleOpen = () => {
+    open=true
   }
 
-  const isActive = (index) => {
-    console.log(index, "index")
-    console.log(activeIndex, "activeIndex")
-    return activeIndex === index
+  const handleClose = () => {
+    open=false
   }
 
   return (
@@ -73,7 +64,7 @@ function CatalogsTable () {
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
                 {CATALOG.PATH[language]}
               </Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell>{CATALOG.USERS[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.TIMESTAMP[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.TYPE[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.VALUATION[language]}</Table.HeaderCell>
@@ -83,20 +74,31 @@ function CatalogsTable () {
           </Table.Header>
           <Table.Body>
             {catalogs.map(({ id, type, valuation, state, parentUri }, index) =>
-              <Table.Row key={id.path+id.timestamp}>
+              <Table.Row key={index}>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{id.path}</Table.Cell>
-                <Table.Cell textAlign='top'>
-                  <Accordion
-                    fluid
-                    styled
-                    defaultActiveIndex={-1}>
-                    <Accordion.Title active={activeIndex === index} index={index} onClick={handleClick}/>
-                    <Accordion.Content active={isActive(index)}>
-                      <CatalogUserLookup path={id.path.split('/').join('.')} />
-                    </Accordion.Content>
-                  </Accordion>
+                <Table.Cell>
+                <Portal
+                  closeOnTriggerClick
+                  openOnTriggerClick
+                  trigger={
+                    <Icon name={open ? 'caret square left outline' : 'caret square right outline'}
+                          negative={open} positive={!open} />
+                  }
+                  onOpen={handleOpen}
+                  onClose={handleClose}
+                  >
+                  <Segment
+                    style={{
+                      left: '20%',
+                      position: 'fixed',
+                      zIndex: 100,
+                    }}
+                  >
+                    <CatalogUserLookup valuation={valuation} state={state} path={id.path.split('/').join('.')} />
+                  </Segment>
+                </Portal>
                 </Table.Cell>
-                <Table.Cell style={{ fontWeight: 'bold' }}>{convertToDatetimeString(id.timestamp)}</Table.Cell>
+                <Table.Cell style={{ fontWeight: 'bold' }}>{convertToDatetimeJsonString(id.timestamp)}</Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{type}</Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{valuation}</Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{state}</Table.Cell>

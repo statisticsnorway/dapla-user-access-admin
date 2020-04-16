@@ -13,7 +13,7 @@ export const AUTH_API = {
   EXCLUDES: 'excludes',
   GET_ACCESS: (path, privilege, state, maxValuation, userId) =>
     `/access/${userId}?privilege=${privilege}&path=${path}&valuation=${maxValuation}&state=${state}`,
-  GET_CATALOGACCESS: (path) => `/access/catalog/${path}`,
+  GET_CATALOGACCESS: (path, valuation, state) => `/access/catalog/${path}/${valuation}/${state}`,
   GET_GROUP: (groupId) => `/group/${groupId}`,
   GET_GROUPS: '/group',
   PUT_GROUP: (groupId) => `/group/${groupId}`,
@@ -42,7 +42,7 @@ export const AUTH_API = {
   },
   CATALOGACCESS: 'catalogAccess',
   CATALOGACCESS_OBJECT: {
-    STRING: ['path','user','role','group']
+    STRING: ['path','user','role','group','privileges']
   },
   USERS: 'users',
   INCLUDES: 'includes'
