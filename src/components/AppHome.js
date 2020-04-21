@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
+import { Link } from 'react-router-dom'
 import { Accordion, Divider, Grid, Icon, Input } from 'semantic-ui-react'
 import { Text, Title } from '@statisticsnorway/ssb-component-library'
 
 import { ErrorMessage, GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
-import { AUTH_API, SSB_COLORS } from '../configurations'
+import { AUTH_API, ROUTING, SSB_COLORS } from '../configurations'
 import { HOME, TEST_IDS, UI } from '../enums'
 
 function AppHome () {
@@ -72,6 +73,16 @@ function AppHome () {
         </Grid.Column>
         <Grid.Column textAlign='right' verticalAlign='middle'>
           <UpdateUser isNew={true} />
+          {DescriptionPopup(
+            <Link to={ROUTING.USERS}>
+              <Icon.Group size='huge' style={{ color: SSB_COLORS.BLUE, marginLeft: '1em' }}>
+                <Icon link name='user' />
+                <Icon corner='top right' link name='table' />
+              </Icon.Group>
+            </Link>,
+            false,
+            'top right'
+          )}
         </Grid.Column>
       </Grid.Row>
       {!error && !loading && !userEdited && data !== undefined &&

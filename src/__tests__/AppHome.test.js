@@ -1,4 +1,5 @@
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 import { render } from '@testing-library/react'
 import useAxios from 'axios-hooks'
 import userEvent from '@testing-library/user-event'
@@ -21,7 +22,9 @@ const setup = () => {
   const { getByPlaceholderText, getByTestId, getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <AppHome />
+        <MemoryRouter initialEntries={['/']}>
+          <AppHome />
+        </MemoryRouter>
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )

@@ -41,9 +41,33 @@ export const moveIncludesExcludes = (includes, excludes, value, to) => {
 }
 
 export const sortArrayOfObjects = (array, by, direction = 'ascending') => {
-  if (direction === 'ascending') {
-    return array.sort((a, b) => a[by].localeCompare(b[by]))
-  } else {
-    return array.sort((a, b) => b[by].localeCompare(a[by]))
+  return (array && array[1]) ? (by && by.length === 1 ? array.sort(compareObjects(by, direction)) :
+    array.sort(compareObjectsByMultipleFields(by, direction))) : []
+}
+
+function compareObjects (by, direction) {
+  return function innerSort (a, b) {
+    let aObj = a
+    let bObj = b
+    let byArray = by[0].split('.')
+
+    for (let idx = 0; idx < byArray.length; idx++) {
+      aObj = aObj[byArray[idx]]
+      bObj = bObj[byArray[idx]]
+    }
+
+    return direction === 'ascending' ? aObj.localeCompare(bObj) : bObj.localeCompare(aObj)
+  }
+}
+
+function compareObjectsByMultipleFields (by, direction) {
+  return function innerSort (a, b) {
+    if (by.length === 0) return 0 // force to equal if keys run out
+
+    let key = by[0] // take out the first key
+
+    if (a[key] < b[key]) return direction === 'ascending' ? -1 : 1 // will be 1 if DESC
+    else if (a[key] > b[key]) return direction === 'ascending' ? 1 : -1 // will be -1 if DESC
+    else return compareObjectsByMultipleFields(by.slice(1))(a, b)
   }
 }

@@ -11,7 +11,9 @@ import { LANGUAGE, SETTINGS, TEST_IDS, UI } from '../enums'
 
 jest.mock('../components/AppHome', () => () => null)
 jest.mock('../components/role/RolesTable', () => () => null)
+jest.mock('../components/user/UsersTable', () => () => null)
 jest.mock('../components/group/GroupsTable', () => () => null)
+jest.mock('../components/catalog/CatalogsTable', () => () => null)
 
 const { errorObject, language, otherLanguage } = TEST_CONFIGURATIONS
 

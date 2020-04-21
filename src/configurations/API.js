@@ -5,14 +5,19 @@ export const API = {
 }
 
 export const AUTH_API = {
+  CATALOGACCESS: 'catalogAccess',
+  CATALOGACCESS_OBJECT: {
+    STRING: ['path', 'user', 'role', 'group', 'privileges']
+  },
   ENUMS: {
     PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
-    STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER'],
+    STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER', 'TEMP'],
     VALUATIONS: ['OPEN', 'INTERNAL', 'SHIELDED', 'SENSITIVE']
   },
   EXCLUDES: 'excludes',
   GET_ACCESS: (path, privilege, state, maxValuation, userId) =>
     `/access/${userId}?privilege=${privilege}&path=${path}&valuation=${maxValuation}&state=${state}`,
+  GET_CATALOGACCESS: (path, valuation, state) => `/access/catalog/${path}/${valuation}/${state}`,
   GET_GROUP: (groupId) => `/group/${groupId}`,
   GET_GROUPS: '/group',
   GET_ROLE: (roleId) => `/role/${roleId}`,
@@ -22,6 +27,7 @@ export const AUTH_API = {
     LIST: 'roles',
     STRING: ['groupId', 'description']
   },
+  GET_USERS: '/user',
   GROUPS: 'groups',
   INCLUDES: 'includes',
   PUT_GROUP: (groupId) => `/group/${groupId}`,
@@ -37,12 +43,19 @@ export const AUTH_API = {
   USER_OBJECT: {
     ARRAY: ['groups', 'roles'],
     STRING: 'userId'
-  }
+  },
+  USERS: 'users'
 }
 
 export const CATALOG_API = {
   CATALOGS: 'catalogs',
-  GET_CATALOGS: '/catalog'
+  GET_CATALOGS: '/catalog',
+  CATALOG_OBJECT: {
+    STRING: ['id.path', 'parentUri'],
+    ENUM: ['valuation', 'state'],
+    TIMESTAMP: 'timestamp'
+  }
+
 }
 
 export const checkAccess = (data, value) => {

@@ -22,5 +22,9 @@ export const DATASET_STATE = {
   OTHER: {
     en: 'Other',
     nb: 'Annet'
+  },
+  TEMP: {
+    en: 'Temporary',
+    nb: 'Midlertidig'
   }
 }

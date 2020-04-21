@@ -37,8 +37,69 @@ export const TEST_CONFIGURATIONS = {
     [CATALOG_API.CATALOGS]: [
       {
         id: {
-          path: '/test/1'
+          path: '/test/1',
+          type: 'UNDBOUNDED',
+          timestamp: '1582719098762',
+          state: AUTH_API.ENUMS.STATES[0],
+          parentUri: 'file:///test/teststore',
+          valuation: AUTH_API.ENUMS.VALUATIONS[0]
         }
+      },
+      {
+        id: {
+          path: '/test/2',
+          type: 'UNDBOUNDED',
+          timestamp: '1582719098762',
+          state: AUTH_API.ENUMS.STATES[0],
+          parentUri: 'file:///test/teststore',
+          valuation: AUTH_API.ENUMS.VALUATIONS[0]
+        }
+      }
+    ]
+  },
+  returnCatalogAccessUsers: {
+    'catalogAccess': [
+      {
+        'path': '/skatt/person/rawdata-2018',
+        'role': 'skatt.person.rawdata',
+        'privileges': 'READ CREATE UPDATE ',
+        'user': 'magnus',
+        'group': 'skatt-test'
+      },
+      {
+        'path': '/skatt/person/rawdata-2018',
+        'role': 'skatt.person.rawdata',
+        'privileges': 'READ CREATE UPDATE ',
+        'user': 'marianne',
+        'group': 'skatt-test'
+      },
+      {
+        'path': '/skatt/person/rawdata-2018',
+        'role': 'skatt.person.rawdata',
+        'privileges': 'READ CREATE UPDATE ',
+        'user': 'mehran',
+        'group': 'skatt-test'
+      },
+      {
+        'path': '/skatt/person/rawdata-2018',
+        'role': 'skatt.person.rawdata',
+        'privileges': 'READ CREATE UPDATE ',
+        'user': 'ove',
+        'group': 'skatt-test'
+      },
+      {
+        'path': '/skatt/person/rawdata-2018',
+        'role': 'skatt.person.rawdata',
+        'privileges': 'READ CREATE UPDATE ',
+        'user': 'oyvind',
+        'group': 'skatt-test'
+      },
+      {
+        'path': '/skatt/person/rawdata-2018',
+        'role': 'skatt.person.rawdata',
+        'privileges': 'READ CREATE UPDATE ',
+        'user': 'rannveig',
+        'group': 'skatt-test'
       }
     ]
   },
@@ -86,6 +147,30 @@ export const TEST_CONFIGURATIONS = {
     [AUTH_API.USER_OBJECT.ARRAY[1]]: ['role1', 'role2'],
     [AUTH_API.USER_OBJECT.ARRAY[0]]: ['group1', 'group2']
   },
+  returnUsers: {
+    [AUTH_API.USERS]: [
+      {
+        [AUTH_API.USER_OBJECT.STRING]: 'user1',
+        [AUTH_API.USER_OBJECT.ARRAY[1]]: ['role1', 'role2'],
+        [AUTH_API.USER_OBJECT.ARRAY[0]]: ['group1', 'group2']
+      },
+      {
+        [AUTH_API.USER_OBJECT.STRING]: 'user2',
+        [AUTH_API.USER_OBJECT.ARRAY[1]]: ['role3', 'role4'],
+        [AUTH_API.USER_OBJECT.ARRAY[0]]: ['group3', 'group4']
+      }
+    ]
+  },
+  testUserCatalog: {
+    data: {
+      [CATALOG_API.CATALOG_OBJECT.STRING[0]]: '/test/1',
+      [CATALOG_API.CATALOG_OBJECT.STRING[1]]: 'file:///test/1',
+      [CATALOG_API.CATALOG_OBJECT.ENUM[0]]: AUTH_API.ENUMS.VALUATIONS[3],
+      [CATALOG_API.CATALOG_OBJECT.ENUM[1]]: AUTH_API.ENUMS.STATES[1],
+      [CATALOG_API.CATALOG_OBJECT.TIMESTAMP]: '1523765273'
+    }
+  },
+  testCatalogPath: '/test/1',
   testGroup: {
     [AUTH_API.GROUP_OBJECT.LIST]: ['role1', 'role2'],
     [AUTH_API.GROUP_OBJECT.STRING[0]]: 'testGroupId',

@@ -66,7 +66,7 @@ test('Adding paths works correctly', () => {
   useAxios.mockReturnValue([{ data: returnCatalogs, loading: false, error: null, response: null }, refetch])
   const { getAllByText, getByTestId } = setup()
 
-  userEvent.type(getByTestId(TEST_IDS.SEARCH_DROPDOWN).children[0], '/test/2') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
+  userEvent.type(getByTestId(TEST_IDS.SEARCH_DROPDOWN).children[0], '/test/3') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
   userEvent.click(getAllByText(UI.ADD[language])[1])
 
   expect(refetch).toHaveBeenCalled()

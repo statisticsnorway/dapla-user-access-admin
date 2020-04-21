@@ -67,7 +67,7 @@ function RolesTable () {
               <Table.HeaderCell colSpan={3} />
               {DescriptionPopup(<Table.HeaderCell colSpan={4}>{ROLE.PRIVILEGES[language]}</Table.HeaderCell>)}
               <Table.HeaderCell colSpan={2} />
-              {DescriptionPopup(<Table.HeaderCell colSpan={6}>{ROLE.STATES[language]}</Table.HeaderCell>)}
+              {DescriptionPopup(<Table.HeaderCell colSpan={7}>{ROLE.STATES[language]}</Table.HeaderCell>)}
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
