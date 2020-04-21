@@ -15,8 +15,11 @@ function CatalogUserLookup ({ path, valuation, state }) {
   const [direction, setDirection] = useState('ascending')
 
   useEffect(() => {
-    if (!loading && !error && data) {
+    if (!loading && !error && data !== undefined) {
+      // console.log(data['catalogAccess'], 'catalogAccess i useEffect før sortering')
+      // console.log(sortArrayOfObjects(data['catalogAccess'], ['user','group','role'], direction))
       setCatalogAccess(sortArrayOfObjects(data['catalogAccess'], ['user','group','role'], direction))
+      console.log(catalogAccess, 'catalogAccess i useEffect etter sortering')
     }
     if (!loading && error) {
       console.log(error.response)
@@ -39,7 +42,7 @@ function CatalogUserLookup ({ path, valuation, state }) {
                 <Table.HeaderCell>{CATALOGUSER.ROLE[language]}</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
-          {(!loading && !error && catalogAccess !== undefined) &&
+          {!loading && !error && catalogAccess !== undefined &&
           <Table.Body>
             {catalogAccess.map((ca, index) =>
               <Table.Row key={index}>

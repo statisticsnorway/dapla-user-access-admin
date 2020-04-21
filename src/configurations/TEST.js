@@ -136,5 +136,64 @@ export const TEST_CONFIGURATIONS = {
       [AUTH_API.USER_OBJECT.ARRAY[0]]: ['group1'],
       [AUTH_API.USER_OBJECT.STRING]: 'testUserId2'
     }
-  }
+  },
+  testUserCatalog: {
+    data: {
+      [CATALOG_API.CATALOG_OBJECT.STRING[0]]: '/test/1',
+      [CATALOG_API.CATALOG_OBJECT.STRING[1]]: 'file:///test/1',
+      [CATALOG_API.CATALOG_OBJECT.ENUM[0]]: AUTH_API.ENUMS.VALUATIONS[3],
+      [CATALOG_API.CATALOG_OBJECT.ENUM[1]]: AUTH_API.ENUMS.STATES[1],
+      [CATALOG_API.CATALOG_OBJECT.TIMESTAMP]: '1523765273'
+    }
+  },
+  testCatalogPath: '/test/1',
+  testCatalogValuation: 'SENSITIVE',
+  testCatalogState: 'INPUT',
+  returnCatalogAccessUsers: {
+      'catalogAccess': [
+        {
+          'path': '/skatt/person/rawdata-2018',
+          'role': 'skatt.person.rawdata',
+          'privileges': 'READ CREATE UPDATE ',
+          'user': 'magnus',
+          'group': 'skatt-test'
+        },
+        {
+          'path': '/skatt/person/rawdata-2018',
+          'role': 'skatt.person.rawdata',
+          'privileges': 'READ CREATE UPDATE ',
+          'user': 'marianne',
+          'group': 'skatt-test'
+        },
+        {
+          'path': '/skatt/person/rawdata-2018',
+          'role': 'skatt.person.rawdata',
+          'privileges': 'READ CREATE UPDATE ',
+          'user': 'mehran',
+          'group': 'skatt-test'
+        },
+        {
+          'path': '/skatt/person/rawdata-2018',
+          'role': 'skatt.person.rawdata',
+          'privileges': 'READ CREATE UPDATE ',
+          'user': 'ove',
+          'group': 'skatt-test'
+        },
+        {
+          'path': '/skatt/person/rawdata-2018',
+          'role': 'skatt.person.rawdata',
+          'privileges': 'READ CREATE UPDATE ',
+          'user': 'oyvind',
+          'group': 'skatt-test'
+        },
+        {
+          'path': '/skatt/person/rawdata-2018',
+          'role': 'skatt.person.rawdata',
+          'privileges': 'READ CREATE UPDATE ',
+          'user': 'rannveig',
+          'group': 'skatt-test'
+        }
+      ]
+    }
+
 }

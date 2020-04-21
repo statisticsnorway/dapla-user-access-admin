@@ -41,8 +41,9 @@ export const moveIncludesExcludes = (includes, excludes, value, to) => {
 }
 
 export const sortArrayOfObjects = (array, by, direction = 'ascending') => {
+  console.log(array, 'array i sort')
   return (array && array[1]) ? (by && by.length === 1 ? array.sort(compareObjects(by, direction)) :
-  array.sort(compareObjectsByMultipleFields(by, direction))) : array
+  array.sort(compareObjectsByMultipleFields(by, direction))) : []
 }
 
 function compareObjects(by, direction) {
