@@ -67,8 +67,8 @@ describe('Common mock', () => {
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
     userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[2]][language]))
-    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[5]][language]))
-    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[5]][language]))
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[6]][language]))
+    userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[6]][language]))
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[2]][language]))
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))

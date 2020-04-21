@@ -5,9 +5,13 @@ export const API = {
 }
 
 export const AUTH_API = {
+  CATALOGACCESS: 'catalogAccess',
+  CATALOGACCESS_OBJECT: {
+    STRING: ['path', 'user', 'role', 'group', 'privileges']
+  },
   ENUMS: {
     PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
-    STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER'],
+    STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER', 'TEMP'],
     VALUATIONS: ['OPEN', 'INTERNAL', 'SHIELDED', 'SENSITIVE']
   },
   EXCLUDES: 'excludes',
@@ -16,19 +20,19 @@ export const AUTH_API = {
   GET_CATALOGACCESS: (path, valuation, state) => `/access/catalog/${path}/${valuation}/${state}`,
   GET_GROUP: (groupId) => `/group/${groupId}`,
   GET_GROUPS: '/group',
-  PUT_GROUP: (groupId) => `/group/${groupId}`,
   GET_ROLE: (roleId) => `/role/${roleId}`,
   GET_ROLES: '/role',
-  PUT_ROLE: (roleId) => `/role/${roleId}`,
   GET_USER: (userId) => `/user/${userId}`,
-  GET_USERS: `/user`,
-  PUT_USER: (userId) => `/user/${userId}`,
-
   GROUP_OBJECT: {
     LIST: 'roles',
     STRING: ['groupId', 'description']
   },
+  GET_USERS: '/user',
   GROUPS: 'groups',
+  INCLUDES: 'includes',
+  PUT_GROUP: (groupId) => `/group/${groupId}`,
+  PUT_ROLE: (roleId) => `/role/${roleId}`,
+  PUT_USER: (userId) => `/user/${userId}`,
   ROLE_OBJECT: {
     ARRAY: ['privileges', 'states'],
     ENUM: 'maxValuation',
@@ -40,12 +44,7 @@ export const AUTH_API = {
     ARRAY: ['groups', 'roles'],
     STRING: 'userId'
   },
-  CATALOGACCESS: 'catalogAccess',
-  CATALOGACCESS_OBJECT: {
-    STRING: ['path','user','role','group','privileges']
-  },
-  USERS: 'users',
-  INCLUDES: 'includes'
+  USERS: 'users'
 }
 
 export const CATALOG_API = {
@@ -55,7 +54,7 @@ export const CATALOG_API = {
     STRING: ['id.path', 'parentUri'],
     ENUM: ['valuation', 'state'],
     TIMESTAMP: 'timestamp'
-  },
+  }
 
 }
 

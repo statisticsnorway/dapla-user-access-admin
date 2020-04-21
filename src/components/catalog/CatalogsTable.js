@@ -1,24 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Grid, Input, Loader, Table, Portal, Icon, Segment } from 'semantic-ui-react'
+import { Divider, Grid, Icon, Input, Loader, Portal, Segment, Table } from 'semantic-ui-react'
 
-import { ErrorMessage } from '../'
-import { ApiContext, LanguageContext, sortArrayOfObjects, convertToDatetimeJsonString } from '../../utilities'
-import { AUTH_API, CATALOG_API } from '../../configurations'
+import { CatalogUserLookup, ErrorMessage } from '../'
+import { ApiContext, convertToDatetimeJsonString, LanguageContext, sortArrayOfObjects } from '../../utilities'
+import { CATALOG_API } from '../../configurations'
 import { CATALOG, TEST_IDS, UI } from '../../enums'
-import CatalogUserLookup from './CatalogUserLookup'
 
 function CatalogsTable () {
   const { catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
+  const [open, setOpen] = useState([])
   const [catalogs, setCatalogs] = useState([])
   const [direction, setDirection] = useState('descending')
 
-    const [{ data, loading, error }] = useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`)
+  const [{ data, loading, error }] = useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`)
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
+      setOpen(data[CATALOG_API.CATALOGS].map(() => false))
       setCatalogs(sortArrayOfObjects(data[CATALOG_API.CATALOGS], [CATALOG_API.CATALOG_OBJECT.STRING[0]]))
     }
   }, [data, error, loading])
@@ -30,13 +31,14 @@ function CatalogsTable () {
 
   const handleFilter = (string) => setCatalogs(data[CATALOG_API.CATALOGS].filter(({ id }) => id.path.includes(string)))
 
-  let open = false
-  const handleOpen = () => {
-    open=true
+  const handleOpen = (index) => {
+    const newOpen = open.map((state, ix) => index === ix ? true : state)
+    setOpen(newOpen)
   }
 
-  const handleClose = () => {
-    open=false
+  const handleClose = (index) => {
+    const newOpen = open.map((state, ix) => index === ix ? false : state)
+    setOpen(newOpen)
   }
 
   return (
@@ -77,37 +79,28 @@ function CatalogsTable () {
               <Table.Row key={index}>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{id.path}</Table.Cell>
                 <Table.Cell>
-                <Portal
-                  closeOnTriggerClick
-                  openOnTriggerClick
-                  trigger={
-                    <Icon name={open ? 'caret square left outline' : 'caret square right outline'}
-                          negative={open} positive={!open} />
-                  }
-                  onOpen={handleOpen}
-                  onClose={handleClose}
+                  <Portal
+                    openOnTriggerClick
+                    closeOnTriggerClick
+                    onOpen={() => handleOpen(index)}
+                    onClose={() => handleClose(index)}
+                    trigger={<Icon name={open[index] ? 'caret square down outline' : 'caret square right outline'} />}
                   >
-                  <Segment
-                    style={{
-                      left: '20%',
-                      position: 'fixed',
-                      zIndex: 100,
-                    }}
-                  >
-                    <CatalogUserLookup valuation={valuation} state={state} path={id.path.split('/').join('.')} />
-                  </Segment>
-                </Portal>
+                    <Segment style={{ left: '20%', position: 'fixed', zIndex: 100 }}>
+                      <CatalogUserLookup valuation={valuation} state={state} path={id.path.split('/').join('.')} />
+                    </Segment>
+                  </Portal>
                 </Table.Cell>
-                <Table.Cell style={{ fontWeight: 'bold' }}>{convertToDatetimeJsonString(id.timestamp)}</Table.Cell>
-                <Table.Cell style={{ fontWeight: 'bold' }}>{type}</Table.Cell>
-                <Table.Cell style={{ fontWeight: 'bold' }}>{valuation}</Table.Cell>
-                <Table.Cell style={{ fontWeight: 'bold' }}>{state}</Table.Cell>
-                <Table.Cell style={{ fontWeight: 'bold' }}>{parentUri}</Table.Cell>
+                <Table.Cell>{convertToDatetimeJsonString(id.timestamp)}</Table.Cell>
+                <Table.Cell>{type}</Table.Cell>
+                <Table.Cell>{valuation}</Table.Cell>
+                <Table.Cell>{state}</Table.Cell>
+                <Table.Cell>{parentUri}</Table.Cell>
               </Table.Row>
             )}
           </Table.Body>
         </Table>
-}
+      }
     </>
   )
 }

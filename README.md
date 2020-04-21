@@ -1,12 +1,11 @@
 # user-access-admin
 [![Build Status](https://drone.prod-bip-ci.ssb.no/api/badges/statisticsnorway/user-access-admin/status.svg)](https://drone.prod-bip-ci.ssb.no/statisticsnorway/user-access-admin)
 
-This application aims to create a user interface for interacting with [dapla-user-access-service](https://github.com/statisticsnorway/dataset-access).
+This application aims to create a user interface against [dapla-user-access-service](https://github.com/statisticsnorway/dataset-access),
+somewhat supported by [dapla-catalog](https://github.com/statisticsnorway/dapla-catalog).
 
 Functionality includes:
-* Creating and editing users
-* Creating, ediding and listing groups
-* Creating, editing and listing roles
+* Creating, editing and listing users, groups and roles
 * Checking different access rights on datasets for any given user with any given group/role
 
 The project makes limited use of the [Component library for SSB](https://github.com/statisticsnorway/ssb-component-library)

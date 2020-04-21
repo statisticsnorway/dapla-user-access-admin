@@ -1,42 +1,50 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { render } from '@testing-library/react'
 import useAxios from 'axios-hooks'
 
-import { CatalogUserLookup, RoleLookup } from '../components'
+import { CatalogUserLookup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { TEST_CONFIGURATIONS } from '../configurations'
-import { UI } from '../enums'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import userEvent from '@testing-library/user-event'
+import { TEST_IDS } from '../enums'
 
-
-const { errorObject, language, returnCatalogAccessUsers, testCatalogPath, testCatalogValuation, testCatalogState } = TEST_CONFIGURATIONS
+const { errorObject, language, returnCatalogAccessUsers, testCatalogPath } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
-const refetch = jest.fn()
 
 const setup = () => {
-  const { getByText } = render(
+  const { getByTestId, getByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <CatalogUserLookup path={testCatalogPath} valuation={testCatalogValuation} state={testCatalogState} />
+        <CatalogUserLookup
+          path={testCatalogPath}
+          state={AUTH_API.ENUMS.STATES[1]}
+          valuation={AUTH_API.ENUMS.VALUATIONS[3]}
+        />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
 
-  return { getByText }
+  return { getByTestId, getByText }
 }
 
 describe('Common mock', () => {
+  useAxios.mockReturnValue([{ data: returnCatalogAccessUsers, loading: false, error: null }])
 
   test('Renders correctly', () => {
-    useAxios.mockReturnValue([{ data: returnCatalogAccessUsers, loading: false, error: null }, refetch])
     const { getByText } = setup()
 
     expect(getByText('rannveig')).toBeInTheDocument()
-    expect(getByText(description)).toBeInTheDocument()
   })
 
-  test('Renders on error', () => {
-    useAxios.mockReturnValue([{ data: undefined, loading: false, error: errorObject }, refetch])
-    setup()
-  })
+  test('Sorts correctly', () => {
+    const { getByTestId } = setup()
 
+    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
+    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
+  })
+})
+
+test('Renders on error', () => {
+  useAxios.mockReturnValue([{ data: undefined, loading: false, error: errorObject }])
+  setup()
 })

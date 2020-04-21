@@ -5,7 +5,7 @@ import { Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
 import { ErrorMessage, UpdateUser } from '../'
 import { ApiContext, LanguageContext, sortArrayOfObjects } from '../../utilities'
 import { AUTH_API } from '../../configurations'
-import { USER, TEST_IDS, UI } from '../../enums'
+import { TEST_IDS, UI, USER } from '../../enums'
 
 function UsersTable () {
   const { authApi } = useContext(ApiContext)
@@ -63,31 +63,27 @@ function UsersTable () {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {users.map(({ userId, groups, roles }, index) =>
+            {users.map(({ groups, roles, userId }, index) =>
               <Table.Row key={userId}>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{userId}</Table.Cell>
                 <Table.Cell textAlign='center'>
                   <UpdateUser isNew={false} refetch={refetch} user={users[index]} />
                 </Table.Cell>
                 <Table.Cell>
-                  {groups &&
                   <List>
-                    {groups.map(group => <List.Item key={group}>{group}</List.Item>)}
+                    {Array.isArray(groups) && groups.map(group => <List.Item key={group}>{group}</List.Item>)}
                   </List>
-                  }
                 </Table.Cell>
                 <Table.Cell>
-                  {roles &&
                   <List>
-                    {roles.map(role => <List.Item key={role}>{role}</List.Item>)}
+                    {Array.isArray(roles) && roles.map(role => <List.Item key={role}>{role}</List.Item>)}
                   </List>
-                  }
                 </Table.Cell>
               </Table.Row>
             )}
           </Table.Body>
         </Table>
-}
+      }
     </>
   )
 }
