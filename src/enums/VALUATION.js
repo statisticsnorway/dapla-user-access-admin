@@ -1,18 +1,18 @@
 export const VALUATION = {
-  OPEN: {
-    en: 'Open',
-    nb: 'Åpen'
-  },
   INTERNAL: {
     en: 'Internal',
     nb: 'Intern'
   },
-  SHIELDED: {
-    en: 'Shielded',
-    nb: 'Beskyttet'
+  OPEN: {
+    en: 'Open',
+    nb: 'Åpen'
   },
   SENSITIVE: {
     en: 'Sensitive',
     nb: 'Sensitiv'
+  },
+  SHIELDED: {
+    en: 'Shielded',
+    nb: 'Beskyttet'
   }
 }

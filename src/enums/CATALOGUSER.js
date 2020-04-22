@@ -1,7 +1,19 @@
 export const CATALOGUSER = {
+  GROUP: {
+    en: 'Group',
+    nb: 'Gruppe'
+  },
   PATH: {
     en: 'Path',
     nb: 'Sti'
+  },
+  PRIVILEGES: {
+    en: 'Privileges',
+    nb: 'Rettigheter'
+  },
+  ROLE: {
+    en: 'Role',
+    nb: 'Rolle'
   },
   USERS: {
     en: 'Users',
@@ -10,17 +22,5 @@ export const CATALOGUSER = {
   USER: {
     en: 'User',
     nb: 'Bruker'
-  },
-  ROLE: {
-    en: 'Role',
-    nb: 'Rolle'
-  },
-  GROUP: {
-    en: 'Group',
-    nb: 'Gruppe'
-  },
-  PRIVILEGES: {
-    en: 'Privileges',
-    nb: 'Rettigheter'
   }
 }

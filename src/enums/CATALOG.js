@@ -1,7 +1,19 @@
 export const CATALOG = {
+  PARENT_URI: {
+    en: 'Parent-uri',
+    nb: 'Forelder-uri'
+  },
   PATH: {
     en: 'Path',
     nb: 'Sti'
+  },
+  PSEUDO_CONFIG: {
+    en: 'Pseudo config',
+    nb: 'Pseudo config'
+  },
+  STATE: {
+    en: 'State',
+    nb: 'Tilstand'
   },
   TIMESTAMP: {
     en: 'Timestamp',
@@ -14,14 +26,6 @@ export const CATALOG = {
   VALUATION: {
     en: 'Valuation',
     nb: 'Verdivurdering'
-  },
-  STATE: {
-    en: 'State',
-    nb: 'Tilstand'
-  },
-  PARENT_URI: {
-    en: 'Parent-uri',
-    nb: 'Forelder-uri'
   },
   USERS: {
     en: 'Users',

@@ -1,27 +1,27 @@
 export const DATASET_STATE = {
-  RAW: {
-    en: 'Rawdata',
-    nb: 'Rådata'
-  },
   INPUT: {
     en: 'Input',
     nb: 'Inndata'
   },
-  PROCESSED: {
-    en: 'Processed',
-    nb: 'Klargjort'
+  OTHER: {
+    en: 'Other',
+    nb: 'Annet'
   },
   OUTPUT: {
     en: 'Output',
     nb: 'Utdata'
   },
+  PROCESSED: {
+    en: 'Processed',
+    nb: 'Klargjort'
+  },
   PRODUCT: {
     en: 'Product',
     nb: 'Produksjon'
   },
-  OTHER: {
-    en: 'Other',
-    nb: 'Annet'
+  RAW: {
+    en: 'Rawdata',
+    nb: 'Rådata'
   },
   TEMP: {
     en: 'Temporary',

@@ -36,70 +36,49 @@ export const TEST_CONFIGURATIONS = {
   returnCatalogs: {
     [CATALOG_API.CATALOGS]: [
       {
-        id: {
-          path: '/test/1',
-          type: 'UNDBOUNDED',
-          timestamp: '1582719098762',
-          state: AUTH_API.ENUMS.STATES[0],
-          parentUri: 'file:///test/teststore',
-          valuation: AUTH_API.ENUMS.VALUATIONS[0]
+        [CATALOG_API.CATALOG_OBJECT.ENUM[2]]: '',
+        [CATALOG_API.CATALOG_OBJECT.ENUM[1]]: AUTH_API.ENUMS.STATES[0],
+        [CATALOG_API.CATALOG_OBJECT.STRING[0]]: 'file:///test/teststore1',
+        [CATALOG_API.CATALOG_OBJECT.ENUM[0]]: AUTH_API.ENUMS.VALUATIONS[0],
+        [CATALOG_API.CATALOG_OBJECT.OBJECT.NAME]: {
+          [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]: '/test/1',
+          [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[1]]: '1582719098762'
         }
       },
       {
-        id: {
-          path: '/test/2',
-          type: 'UNDBOUNDED',
-          timestamp: '1582719098762',
-          state: AUTH_API.ENUMS.STATES[0],
-          parentUri: 'file:///test/teststore',
-          valuation: AUTH_API.ENUMS.VALUATIONS[0]
+        [CATALOG_API.CATALOG_OBJECT.ENUM[2]]: '',
+        [CATALOG_API.CATALOG_OBJECT.ENUM[1]]: AUTH_API.ENUMS.STATES[0],
+        [CATALOG_API.CATALOG_OBJECT.STRING[1]]: 'file:///test/teststore2',
+        [CATALOG_API.CATALOG_OBJECT.ENUM[0]]: AUTH_API.ENUMS.VALUATIONS[0],
+        [CATALOG_API.CATALOG_OBJECT.OBJECT.NAME]: {
+          [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]: '/test/2',
+          [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[1]]: '1582719098765'
         }
       }
     ]
   },
   returnCatalogAccessUsers: {
-    'catalogAccess': [
+    catalogAccess: [
       {
-        'path': '/skatt/person/rawdata-2018',
-        'role': 'skatt.person.rawdata',
-        'privileges': 'READ CREATE UPDATE ',
-        'user': 'magnus',
-        'group': 'skatt-test'
+        role: 'role1',
+        user: 'magnus',
+        group: 'group1',
+        path: '/test/rawdata-2020',
+        privileges: 'READ CREATE UPDATE'
       },
       {
-        'path': '/skatt/person/rawdata-2018',
-        'role': 'skatt.person.rawdata',
-        'privileges': 'READ CREATE UPDATE ',
-        'user': 'marianne',
-        'group': 'skatt-test'
+        role: 'role2',
+        group: 'group2',
+        user: 'marianne',
+        path: '/test/rawdata-2020',
+        privileges: 'READ CREATE UPDATE'
       },
       {
-        'path': '/skatt/person/rawdata-2018',
-        'role': 'skatt.person.rawdata',
-        'privileges': 'READ CREATE UPDATE ',
-        'user': 'mehran',
-        'group': 'skatt-test'
-      },
-      {
-        'path': '/skatt/person/rawdata-2018',
-        'role': 'skatt.person.rawdata',
-        'privileges': 'READ CREATE UPDATE ',
-        'user': 'ove',
-        'group': 'skatt-test'
-      },
-      {
-        'path': '/skatt/person/rawdata-2018',
-        'role': 'skatt.person.rawdata',
-        'privileges': 'READ CREATE UPDATE ',
-        'user': 'oyvind',
-        'group': 'skatt-test'
-      },
-      {
-        'path': '/skatt/person/rawdata-2018',
-        'role': 'skatt.person.rawdata',
-        'privileges': 'READ CREATE UPDATE ',
-        'user': 'rannveig',
-        'group': 'skatt-test'
+        role: 'role3',
+        group: 'group3',
+        user: 'rannveig',
+        path: '/test/rawdata-2020',
+        privileges: 'READ CREATE UPDATE'
       }
     ]
   },
@@ -163,11 +142,12 @@ export const TEST_CONFIGURATIONS = {
   },
   testUserCatalog: {
     data: {
-      [CATALOG_API.CATALOG_OBJECT.STRING[0]]: '/test/1',
-      [CATALOG_API.CATALOG_OBJECT.STRING[1]]: 'file:///test/1',
-      [CATALOG_API.CATALOG_OBJECT.ENUM[0]]: AUTH_API.ENUMS.VALUATIONS[3],
+      [CATALOG_API.CATALOG_OBJECT.ENUM[2]]: '',
+      [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]: '/test/1',
+      [CATALOG_API.CATALOG_OBJECT.STRING[0]]: 'file:///test/1',
+      [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[1]]: '1523765273',
       [CATALOG_API.CATALOG_OBJECT.ENUM[1]]: AUTH_API.ENUMS.STATES[1],
-      [CATALOG_API.CATALOG_OBJECT.TIMESTAMP]: '1523765273'
+      [CATALOG_API.CATALOG_OBJECT.ENUM[0]]: AUTH_API.ENUMS.VALUATIONS[3]
     }
   },
   testCatalogPath: '/test/1',
