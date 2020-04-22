@@ -13,7 +13,7 @@ function CatalogUserLookupPortal ({ handleClose, handleOpen, index, open, path, 
   const [direction, setDirection] = useState('descending')
 
   const [{ data, loading, error }, refetch] =
-    useAxios(`${authApi}${AUTH_API.GET_CATALOGACCESS(path.split('/').join('.'), valuation, state)}`, { manual: true })
+    useAxios(`${authApi}${AUTH_API.GET_CATALOGACCESS(path, valuation, state)}`, { manual: true })
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
