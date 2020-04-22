@@ -26,21 +26,27 @@ function UserAccess ({ userId }) {
 
   useEffect(() => {
     if (!getLoading && !getError && getData !== undefined) {
-      setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => ({
-        key: catalog.id.path,
-        text: catalog.id.path,
-        value: catalog.id.path
-      })))
+      setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => {
+        const path = catalog[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
+
+        return {
+          key: path,
+          text: path,
+          value: path
+        }
+      }))
     }
   }, [getLoading, getError, getData])
 
   useEffect(() => {
     if (!loading && !error && response) {
-      setVerdict(response.statusText)
+      console.log(response)
+      setVerdict(response.status)
     }
 
     if (!loading && error) {
-      setVerdict(error.response.statusText)
+      console.log(error.response)
+      setVerdict(error.response.status)
     }
   }, [error, loading, response])
 
