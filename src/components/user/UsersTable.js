@@ -12,7 +12,7 @@ function UsersTable () {
   const { language } = useContext(LanguageContext)
 
   const [users, setUsers] = useState([])
-  const [direction, setDirection] = useState('descending')
+  const [direction, setDirection] = useState('ascending')
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_USERS}`)
 

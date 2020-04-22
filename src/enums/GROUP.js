@@ -7,6 +7,10 @@ export const GROUP = {
     en: 'Description',
     nb: 'Beskrivelse'
   },
+  GROUP_ID: {
+    en: 'GroupId',
+    nb: 'GruppeId'
+  },
   ROLES: {
     en: 'Roles',
     nb: 'Roller'
@@ -18,9 +22,5 @@ export const GROUP = {
   UPDATE_GROUP: {
     en: 'Update group',
     nb: 'Oppdater gruppe'
-  },
-  GROUP_ID: {
-    en: 'GroupId',
-    nb: 'GruppeId'
   }
 }

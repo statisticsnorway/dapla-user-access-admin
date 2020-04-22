@@ -5,8 +5,8 @@ export const API = {
 }
 
 export const AUTH_API = {
-  CATALOGACCESS: 'catalogAccess',
-  CATALOGACCESS_OBJECT: {
+  CATALOG_ACCESS: 'catalogAccess',
+  CATALOG_ACCESS_OBJECT: {
     STRING: ['path', 'user', 'role', 'group', 'privileges']
   },
   ENUMS: {
@@ -49,13 +49,16 @@ export const AUTH_API = {
 
 export const CATALOG_API = {
   CATALOGS: 'catalogs',
-  GET_CATALOGS: '/catalog',
+  CATALOG_ACCESS: 'catalogAccess',
   CATALOG_OBJECT: {
-    STRING: ['id.path', 'parentUri'],
-    ENUM: ['valuation', 'state'],
-    TIMESTAMP: 'timestamp'
-  }
-
+    ENUM: ['valuation', 'state', 'type'],
+    OBJECT: {
+      NAME: 'id',
+      STRING: ['path', 'timestamp']
+    },
+    STRING: ['parentUri']
+  },
+  GET_CATALOGS: '/catalog'
 }
 
 export const checkAccess = (data, value) => {
