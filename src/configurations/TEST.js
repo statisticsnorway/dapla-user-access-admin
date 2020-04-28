@@ -2,6 +2,8 @@ import { AUTH_API, CATALOG_API } from './'
 import { LANGUAGE } from '../enums'
 
 const errorString = 'A problem occured'
+const readCreateUpdate = 'READ CREATE UPDATE'
+const path = '/test/rawdata-2020'
 
 export const TEST_CONFIGURATIONS = {
   alternativeTestGroupId: 'testGroupId2',
@@ -63,22 +65,22 @@ export const TEST_CONFIGURATIONS = {
         role: 'role1',
         user: 'magnus',
         group: 'group1',
-        path: '/test/rawdata-2020',
-        privileges: 'READ CREATE UPDATE'
+        path: path,
+        privileges: readCreateUpdate
       },
       {
         role: 'role2',
         group: 'group2',
         user: 'marianne',
-        path: '/test/rawdata-2020',
-        privileges: 'READ CREATE UPDATE'
+        path: path,
+        privileges: readCreateUpdate
       },
       {
         role: 'role3',
         group: 'group3',
         user: 'rannveig',
-        path: '/test/rawdata-2020',
-        privileges: 'READ CREATE UPDATE'
+        path: path,
+        privileges: readCreateUpdate
       }
     ]
   },
