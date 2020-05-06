@@ -3,7 +3,7 @@ import useAxios from 'axios-hooks'
 import { Icon, Portal } from 'semantic-ui-react'
 
 import { ApiContext, sortArrayOfObjects } from '../../utilities'
-import { AUTH_API, CATALOG_API } from '../../configurations'
+import { AUTH_API } from '../../configurations'
 import { CatalogUserLookup } from '../index'
 
 function CatalogUserLookupPortal ({ handleClose, handleOpen, index, open, path, valuation, state }) {
@@ -17,7 +17,7 @@ function CatalogUserLookupPortal ({ handleClose, handleOpen, index, open, path, 
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
-      setCatalogAccess(sortArrayOfObjects(data[CATALOG_API.CATALOG_ACCESS], ['user', 'group', 'role']))
+      setCatalogAccess(sortArrayOfObjects(data, ['user', 'group', 'role']))
     }
     if (!loading && error) {
       console.log(error.response)
@@ -26,7 +26,7 @@ function CatalogUserLookupPortal ({ handleClose, handleOpen, index, open, path, 
 
   const handleSort = () => {
     setDirection(direction === 'ascending' ? 'descending' : 'ascending')
-    setCatalogAccess(sortArrayOfObjects(data[CATALOG_API.CATALOG_ACCESS], ['user', 'group', 'role'], direction))
+    setCatalogAccess(sortArrayOfObjects(data, ['user', 'group', 'role'], direction))
   }
 
   return (
