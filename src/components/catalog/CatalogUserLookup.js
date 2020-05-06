@@ -27,7 +27,7 @@ function CatalogUserLookup ({ direction, handleSort, loading, error, catalogAcce
               {catalogAccess.map((ca, index) =>
                 <Table.Row key={index}>
                   <Table.Cell>{ca.user}</Table.Cell>
-                  <Table.Cell>{(ca.privileges).join(", ")}</Table.Cell>
+                  <Table.Cell>{ca.privileges.toString()}</Table.Cell>
                   <Table.Cell>{ca.group}</Table.Cell>
                   <Table.Cell>{ca.role}</Table.Cell>
                 </Table.Row>
