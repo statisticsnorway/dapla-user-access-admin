@@ -65,7 +65,7 @@ export const checkAccess = (data, value) => {
   let positive = false
 
   try {
-    if (data.hasOwnProperty(AUTH_API.INCLUDES) || data.hasOwnProperty(AUTH_API.EXCLUDES)) {
+    if (data && (data.hasOwnProperty(AUTH_API.INCLUDES) || data.hasOwnProperty(AUTH_API.EXCLUDES))) {
       if (data.hasOwnProperty(AUTH_API.INCLUDES)) {
         positive = data[AUTH_API.INCLUDES].includes(value)
       }

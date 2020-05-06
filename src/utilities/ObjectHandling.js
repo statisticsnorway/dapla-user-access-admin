@@ -5,12 +5,12 @@ export const convertToIncludesExcludes = (object, type) => {
     return { [AUTH_API.INCLUDES]: AUTH_API.ENUMS[type].map(value => value), [AUTH_API.EXCLUDES]: [] }
   } else if (object.hasOwnProperty(AUTH_API.INCLUDES) && !object.hasOwnProperty(AUTH_API.EXCLUDES)) {
     return {
-      [AUTH_API.EXCLUDES]: AUTH_API.ENUMS[type].filter(type => !object[AUTH_API.INCLUDES].includes(type)),
+      [AUTH_API.EXCLUDES]: AUTH_API.ENUMS[type].filter(inc => !object[AUTH_API.INCLUDES].includes(inc)),
       ...object
     }
   } else if (!object.hasOwnProperty(AUTH_API.INCLUDES) && object.hasOwnProperty(AUTH_API.EXCLUDES)) {
     return {
-      [AUTH_API.INCLUDES]: AUTH_API.ENUMS[type].filter(type => !object[AUTH_API.EXCLUDES].includes(type)),
+      [AUTH_API.INCLUDES]: AUTH_API.ENUMS[type].filter(exc => !object[AUTH_API.EXCLUDES].includes(exc)),
       ...object
     }
   } else {
@@ -49,7 +49,7 @@ function compareObjects (by, direction) {
   return function innerSort (a, b) {
     let aObj = a
     let bObj = b
-    let byArray = by[0].split('.')
+    const byArray = by[0].split('.')
 
     for (let idx = 0; idx < byArray.length; idx++) {
       aObj = aObj[byArray[idx]]
@@ -62,12 +62,22 @@ function compareObjects (by, direction) {
 
 function compareObjectsByMultipleFields (by, direction) {
   return function innerSort (a, b) {
-    if (by.length === 0) return 0 // force to equal if keys run out
+    if (by.length === 0) {
+      return 0
+    } // force to equal if keys run out
 
-    let key = by[0] // take out the first key
+    const key = by[0] // take out the first key
 
-    if (a[key] < b[key]) return direction === 'ascending' ? -1 : 1 // will be 1 if DESC
-    else if (a[key] > b[key]) return direction === 'ascending' ? 1 : -1 // will be -1 if DESC
-    else return compareObjectsByMultipleFields(by.slice(1))(a, b)
+    if (a[key] < b[key]) {
+      return direction === 'ascending' ? -1 : 1
+    } // will be 1 if DESC
+
+    else if (a[key] > b[key]) {
+      return direction === 'ascending' ? 1 : -1
+    }// will be -1 if DESC
+
+    else {
+      return compareObjectsByMultipleFields(by.slice(1))(a, b)
+    }
   }
 }

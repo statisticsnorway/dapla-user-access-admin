@@ -27,12 +27,12 @@ function UserAccess ({ userId }) {
   useEffect(() => {
     if (!getLoading && !getError && getData !== undefined) {
       setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => {
-        const path = catalog[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
+        const catalogPath = catalog[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
 
         return {
-          key: path,
-          text: path,
-          value: path
+          key: catalogPath,
+          text: catalogPath,
+          value: catalogPath
         }
       }))
     }
@@ -57,8 +57,8 @@ function UserAccess ({ userId }) {
       <Dropdown
         inline
         value={privilege}
-        options={AUTH_API.ENUMS.PRIVILEGES.map(privilege =>
-          ({ key: privilege, text: PRIVILEGE[privilege][language], value: privilege })
+        options={AUTH_API.ENUMS.PRIVILEGES.map(option =>
+          ({ key: option, text: PRIVILEGE[option][language], value: option })
         )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
@@ -87,8 +87,8 @@ function UserAccess ({ userId }) {
       <Dropdown
         inline
         value={state}
-        options={AUTH_API.ENUMS.STATES.map(state =>
-          ({ key: state, text: DATASET_STATE[state][language], value: state })
+        options={AUTH_API.ENUMS.STATES.map(option =>
+          ({ key: option, text: DATASET_STATE[option][language], value: option })
         )}
         onChange={(event, { value }) => {
           setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
