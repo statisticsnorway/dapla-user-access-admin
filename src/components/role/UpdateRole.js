@@ -8,7 +8,8 @@ import {
   convertToIncludesExcludes,
   DescriptionPopup,
   LanguageContext,
-  moveIncludesExcludes
+  moveIncludesExcludes,
+  setupPathOptions
 } from '../../utilities'
 import { AUTH_API, CATALOG_API, populatedDropdown, SSB_COLORS, SSB_STYLE, VALUATION_COLORS } from '../../configurations'
 import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI, VALUATION } from '../../enums'
@@ -42,13 +43,7 @@ function UpdateRole ({ isNew, refetch, role }) {
     :
     convertToIncludesExcludes(role[AUTH_API.ROLE_OBJECT.ARRAY[0]], AUTH_API.ROLE_OBJECT.ARRAY[0].toUpperCase())
   )
-  const [pathOptions, setPathOptions] = useState(isNew || !role.hasOwnProperty(AUTH_API.ROLE_OBJECT.LIST) ? [] :
-    role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES].map(path => ({
-      key: path,
-      text: path,
-      value: path
-    }))
-  )
+  const [pathOptions, setPathOptions] = useState(isNew ? [] : setupPathOptions(role))
 
   const [{ data: getData, loading: getLoading, error: getError }, refetchGet] =
     useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`, { manual: true })

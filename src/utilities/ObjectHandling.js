@@ -40,6 +40,33 @@ export const moveIncludesExcludes = (includes, excludes, value, to) => {
   return { [AUTH_API.INCLUDES]: returnIncludes, [AUTH_API.EXCLUDES]: returExcludes }
 }
 
+export const setupPathOptions = role => {
+  let includes = []
+  let excludes = []
+
+  if (role.hasOwnProperty(AUTH_API.ROLE_OBJECT.LIST)) {
+    if (role[AUTH_API.ROLE_OBJECT.LIST].hasOwnProperty(AUTH_API.INCLUDES)) {
+      includes = role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES].map(path => ({
+        key: path,
+        text: path,
+        value: path
+      }))
+    }
+
+    if (role[AUTH_API.ROLE_OBJECT.LIST].hasOwnProperty(AUTH_API.EXCLUDES)) {
+      excludes = role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.EXCLUDES].map(path => ({
+        key: path,
+        text: path,
+        value: path
+      }))
+    }
+
+    return includes.concat(excludes)
+  } else {
+    return []
+  }
+}
+
 export const sortArrayOfObjects = (array, by, direction = 'ascending') => {
   return (array && array[1]) ? (by && by.length === 1 ? array.sort(compareObjects(by, direction)) :
     array.sort(compareObjectsByMultipleFields(by, direction))) : []
