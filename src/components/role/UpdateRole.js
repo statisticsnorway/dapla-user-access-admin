@@ -42,7 +42,7 @@ function UpdateRole ({ isNew, refetch, role }) {
     :
     convertToIncludesExcludes(role[AUTH_API.ROLE_OBJECT.ARRAY[0]], AUTH_API.ROLE_OBJECT.ARRAY[0].toUpperCase())
   )
-  const [pathOptions, setPathOptions] = useState(isNew ? [] :
+  const [pathOptions, setPathOptions] = useState(isNew || !role.hasOwnProperty(AUTH_API.ROLE_OBJECT.LIST) ? [] :
     role[AUTH_API.ROLE_OBJECT.LIST][AUTH_API.INCLUDES].map(path => ({
       key: path,
       text: path,
