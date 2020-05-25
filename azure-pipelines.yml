@@ -32,7 +32,8 @@ jobs:
           SonarQube: 'bipSonarQube'
           scannerMode: 'CLI'
           configMode: 'manual'
-          cliProjectKey: '$(Build.Repository.Name)'
+          cliProjectKey: '$(Build.Repository.ID)'
+          cliProjectName: '$(Build.Repository.Name)'
           cliSources: '.'
       - task: SonarQubeAnalyze@4
       - task: Docker@2
