@@ -1,6 +1,6 @@
 {
   "name": "user-access-admin",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "private": true,
   "repository": {
     "type": "git",
@@ -19,9 +19,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "node ./node_modules/react-scripts/bin/react-scripts.js build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
-    "coverage": "node ./node_modules/react-scripts/bin/react-scripts.js test --coverage --watchAll=false",
+    "coverage": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

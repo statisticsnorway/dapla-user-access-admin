@@ -1,5 +1,5 @@
 # user-access-admin
-[![Build Status](https://drone.prod-bip-ci.ssb.no/api/badges/statisticsnorway/user-access-admin/status.svg)](https://drone.prod-bip-ci.ssb.no/statisticsnorway/user-access-admin)
+
 
 This application aims to create a user interface against [dapla-user-access-service](https://github.com/statisticsnorway/dataset-access),
 somewhat supported by [dapla-catalog](https://github.com/statisticsnorway/dapla-catalog).
@@ -12,9 +12,9 @@ The project makes limited use of the [Component library for SSB](https://github.
 and is based upon [react-reference-app](https://github.com/statisticsnorway/fe-react-reference-app).
 
 ### Try this application locally
-The first time you clone the repository, remember to run `yarn install`.
+The first time you clone the repository, remember to run `yarn` or `yarn install`.
 
-Run `yarn start` and navigate to `http://localhost:3000`.
+Run `yarn start` and navigate to `http://localhost:3000/`.
 
 `yarn test` runs all tests and `yarn coverage` calculates (rather unreliably) test coverage.
 
