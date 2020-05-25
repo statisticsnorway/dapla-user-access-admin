@@ -1,5 +1,5 @@
 # user-access-admin
-
+[![Build Status](https://dev.azure.com/statisticsnorway/Dapla/_apis/build/status/statisticsnorway.user-access-admin?branchName=master)](https://dev.azure.com/statisticsnorway/Dapla/_build/latest?definitionId=13&branchName=master)
 
 This application aims to create a user interface against [dapla-user-access-service](https://github.com/statisticsnorway/dataset-access),
 somewhat supported by [dapla-catalog](https://github.com/statisticsnorway/dapla-catalog).
