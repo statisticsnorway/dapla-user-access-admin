@@ -13,6 +13,6 @@ export const VALUATION = {
   },
   SHIELDED: {
     en: 'Shielded',
-    nb: 'Beskyttet'
+    nb: 'Skjermet'
   }
 }
