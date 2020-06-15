@@ -43,7 +43,7 @@ describe('Common mock', () => {
   test('Change language works correctly', () => {
     const { getByText } = setup()
 
-    userEvent.click(getByText(LANGUAGE.NORWEGIAN[language]))
+    userEvent.click(getByText(LANGUAGE.ENGLISH[language]))
 
     expect(getByText(UI.HEADER[otherLanguage])).toBeInTheDocument()
   })

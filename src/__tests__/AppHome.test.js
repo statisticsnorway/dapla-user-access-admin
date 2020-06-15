@@ -39,11 +39,11 @@ test('Renders correctly', () => {
   expect(getByText(UI.USER[language])).toBeInTheDocument()
 })
 
-test('Changing user works correctly', () => {
+test('Changing user works correctly', async () => {
   useAxios.mockReturnValue([{ data: returnUser, loading: false, error: null }, refetch])
   const { getByPlaceholderText, getByTestId } = setup()
 
-  userEvent.type(getByPlaceholderText(UI.USER[language]), alternativeTestUserId)
+  await userEvent.type(getByPlaceholderText(UI.USER[language]), alternativeTestUserId)
   userEvent.click(getByTestId(TEST_IDS.REFRESH_USER))
 
   expect(refetch).toHaveBeenCalled()

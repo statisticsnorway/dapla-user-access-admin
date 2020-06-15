@@ -7,12 +7,12 @@ export const ApiContext = React.createContext({
   catalogApi: process.env.REACT_APP_API_CATALOG
 })
 
-export const LanguageContext = React.createContext(LANGUAGE.LANGUAGES.ENGLISH.languageCode)
+export const LanguageContext = React.createContext(LANGUAGE.LANGUAGES.NORWEGIAN.languageCode)
 
 export const AppContextProvider = (props) => {
   const [authApi, setAuthApi] = useState(process.env.REACT_APP_API_AUTH)
   const [catalogApi, setCatalogApi] = useState(process.env.REACT_APP_API_CATALOG)
-  const [language, setLanguage] = useState(LANGUAGE.LANGUAGES.ENGLISH.languageCode)
+  const [language, setLanguage] = useState(LANGUAGE.LANGUAGES.NORWEGIAN.languageCode)
 
   return (
     <ApiContext.Provider value={{ authApi, catalogApi, setAuthApi, setCatalogApi }}>

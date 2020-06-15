@@ -82,3 +82,8 @@ export const checkAccess = (data, value) => {
 
   return positive
 }
+
+export const LOCAL_STORAGE = {
+  REMEMBER: 'rememberUser',
+  USER_ID: 'userId'
+}

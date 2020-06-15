@@ -29,11 +29,11 @@ test('Renders correctly', () => {
   expect(getByPlaceholderText(SETTINGS.CATALOG_API[language])).toHaveValue(apiContext.catalogApi)
 })
 
-test('Editing works correctly', () => {
+test('Editing works correctly', async () => {
   const { getByPlaceholderText, getByText } = setup()
 
-  userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), alternativeUrl)
-  userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), alternativeUrl)
+  await userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), alternativeUrl)
+  await userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), alternativeUrl)
 
   expect(getByText(SETTINGS.EDITED_VALUES[language])).toBeInTheDocument()
 
@@ -43,11 +43,11 @@ test('Editing works correctly', () => {
   expect(apiContext.setCatalogApi).toHaveBeenCalled()
 })
 
-test('Resetting to default values works correctly', () => {
+test('Resetting to default values works correctly', async () => {
   const { getByPlaceholderText, getByTestId } = setup()
 
-  userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), alternativeUrl)
-  userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), alternativeUrl)
+  await userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), alternativeUrl)
+  await userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), alternativeUrl)
 
   userEvent.click(getByTestId(TEST_IDS.DEFAULT_SETTINGS_BUTTON))
 

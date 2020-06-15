@@ -19,28 +19,42 @@ function CatalogsTable () {
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
-      setOpen(data[CATALOG_API.CATALOGS].map(() => false))
-      setCatalogs(sortArrayOfObjects(
-        data[CATALOG_API.CATALOGS],
-        [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]]
-      ))
+      try {
+        setOpen(data[CATALOG_API.CATALOGS].map(() => false))
+        setCatalogs(sortArrayOfObjects(
+          data[CATALOG_API.CATALOGS],
+          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]]
+        ))
+      } catch (e) {
+        console.log(e)
+      }
     }
   }, [data, error, loading])
 
   const handleSort = () => {
-    setDirection(direction === 'ascending' ? 'descending' : 'ascending')
-    setCatalogs(
-      sortArrayOfObjects(
-        data[CATALOG_API.CATALOGS],
-        [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]],
-        direction
+    try {
+      setDirection(direction === 'ascending' ? 'descending' : 'ascending')
+      setCatalogs(
+        sortArrayOfObjects(
+          data[CATALOG_API.CATALOGS],
+          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]],
+          direction
+        )
       )
-    )
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  const handleFilter = (string) => setCatalogs(data[CATALOG_API.CATALOGS].filter(({ id }) =>
-    id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]].includes(string)
-  ))
+  const handleFilter = (string) => {
+    try {
+      setCatalogs(data[CATALOG_API.CATALOGS].filter(({ id }) =>
+        id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]].includes(string)
+      ))
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const handleOpen = (index) => {
     const newOpen = open.map((state, ix) => index === ix ? true : state)
@@ -109,7 +123,7 @@ function CatalogsTable () {
                 <Table.Cell>{state}</Table.Cell>
                 <Table.Cell>{parentUri}</Table.Cell>
                 <Table.Cell textAlign='center'>
-                  <Popup basic flowing position='left center' trigger={<Icon name='user secret' size='large' />}>
+                  <Popup basic flowing position='left center' trigger={<Icon name='key' size='large' />}>
                     <pre>{JSON.stringify(pseudoConfig, null, 2)}</pre>
                   </Popup>
                 </Table.Cell>

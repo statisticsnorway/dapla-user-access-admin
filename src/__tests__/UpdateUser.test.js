@@ -53,11 +53,11 @@ describe('Common mock', () => {
     expect(getByPlaceholderText(USER.USER_ID[language])).toBeDisabled()
   })
 
-  test('Functions correctly on PUT request', () => {
+  test('Functions correctly on PUT request', async () => {
     const { getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
-    userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)
+    await userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)
     userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.click(getByText(returnGroups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
     userEvent.click(getAllByText(USER.CREATE_USER[language])[1])

@@ -35,10 +35,10 @@ describe('Common mock', () => {
     expect(getByPlaceholderText(UI.FILTER_TABLE[language])).toBeInTheDocument()
   })
 
-  test('Filters correctly', () => {
+  test('Filters correctly', async () => {
     const { getByPlaceholderText, queryAllByText } = setup()
 
-    userEvent.type(
+    await userEvent.type(
       getByPlaceholderText(UI.FILTER_TABLE[language]),
       returnCatalogs[CATALOG_API.CATALOGS][1][CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
     )
