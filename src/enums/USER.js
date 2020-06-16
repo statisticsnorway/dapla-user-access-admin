@@ -15,6 +15,10 @@ export const USER = {
     en: 'Could not fetch roles',
     nb: 'Kunne ikke hente roller'
   },
+  SET_USER: {
+    en: 'Set this user as the default and open it',
+    nb: 'Sett denne brukeren som standard og gå til den'
+  },
   UPDATE_USER: {
     en: 'Update user',
     nb: 'Oppdater bruker'

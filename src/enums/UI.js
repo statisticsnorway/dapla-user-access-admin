@@ -19,6 +19,10 @@ export const UI = {
     en: 'User access admin',
     nb: 'Tilgangsstyring for brukere'
   },
+  REMEMBER_ME: {
+    en: 'Remember me',
+    nb: 'Husk meg'
+  },
   SEARCH_NO_RESULTS: {
     en: 'No results found',
     nb: 'Fant ingen resultater'

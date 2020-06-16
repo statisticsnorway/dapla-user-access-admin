@@ -26,15 +26,19 @@ function UserAccess ({ userId }) {
 
   useEffect(() => {
     if (!getLoading && !getError && getData !== undefined) {
-      setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => {
-        const catalogPath = catalog[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
+      try {
+        setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => {
+          const catalogPath = catalog[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
 
-        return {
-          key: catalogPath,
-          text: catalogPath,
-          value: catalogPath
-        }
-      }))
+          return {
+            key: catalogPath,
+            text: catalogPath,
+            value: catalogPath
+          }
+        }))
+      } catch (e) {
+        console.log(e)
+      }
     }
   }, [getLoading, getError, getData])
 
@@ -67,6 +71,7 @@ function UserAccess ({ userId }) {
       />
       <Text>{` ${USER_ACCESS.GUIDE[1][language]} `}</Text>
       <Dropdown
+        fluid
         search
         selection
         value={path}

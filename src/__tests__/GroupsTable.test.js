@@ -35,10 +35,10 @@ describe('Common mock', () => {
     expect(getByPlaceholderText(UI.FILTER_TABLE[language])).toBeInTheDocument()
   })
 
-  test('Filters correctly', () => {
+  test('Filters correctly', async () => {
     const { getByPlaceholderText, queryAllByText } = setup()
 
-    userEvent.type(
+    await userEvent.type(
       getByPlaceholderText(UI.FILTER_TABLE[language]),
       returnGroups[AUTH_API.GROUPS][1][AUTH_API.GROUP_OBJECT.STRING[0]]
     )

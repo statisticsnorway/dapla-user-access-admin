@@ -31,9 +31,9 @@ export const TEST_CONFIGURATIONS = {
   errorString: errorString,
   errorObject: { response: { data: errorString } },
   errorStatus: { response: { statusText: errorString } },
-  language: LANGUAGE.LANGUAGES.ENGLISH.languageCode,
+  language: LANGUAGE.LANGUAGES.NORWEGIAN.languageCode,
   objectToString: '[object Object]',
-  otherLanguage: LANGUAGE.LANGUAGES.NORWEGIAN.languageCode,
+  otherLanguage: LANGUAGE.LANGUAGES.ENGLISH.languageCode,
   responseObject: { data: { statusCode: 200 } },
   returnCatalogs: {
     [CATALOG_API.CATALOGS]: [
@@ -178,13 +178,13 @@ export const TEST_CONFIGURATIONS = {
     data: {
       [AUTH_API.GROUP_OBJECT.LIST]: ['role1'],
       [AUTH_API.GROUP_OBJECT.STRING[0]]: 'testGroupId2',
-      [AUTH_API.GROUP_OBJECT.STRING[1]]: 'A test group described'
+      [AUTH_API.GROUP_OBJECT.STRING[1]]: ''
     }
   },
   updatedTestRole: {
     data: {
       [AUTH_API.ROLE_OBJECT.STRING[0]]: 'testRoleId2',
-      [AUTH_API.ROLE_OBJECT.STRING[1]]: 'A test role described',
+      [AUTH_API.ROLE_OBJECT.STRING[1]]: '',
       [AUTH_API.ROLE_OBJECT.ENUM]: AUTH_API.ENUMS.VALUATIONS[3],
       [AUTH_API.ROLE_OBJECT.ARRAY[1]]: {
         [AUTH_API.INCLUDES]: [AUTH_API.ENUMS.STATES[2]],

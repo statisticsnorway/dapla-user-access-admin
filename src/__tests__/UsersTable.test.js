@@ -1,11 +1,12 @@
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
 
 import { UsersTable } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
-import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import { AUTH_API, ROUTING, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 
 jest.mock('../components/user/UpdateUser', () => () => null)
@@ -18,7 +19,9 @@ const setup = () => {
   const { getByPlaceholderText, getByTestId, getByText, queryAllByText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <UsersTable />
+        <MemoryRouter initialEntries={[ROUTING.USERS]}>
+          <UsersTable />
+        </MemoryRouter>
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
@@ -35,10 +38,10 @@ describe('Common mock', () => {
     expect(getByPlaceholderText(UI.FILTER_TABLE[language])).toBeInTheDocument()
   })
 
-  test('Filters correctly', () => {
+  test('Filters correctly', async () => {
     const { getByPlaceholderText, queryAllByText } = setup()
 
-    userEvent.type(
+    await userEvent.type(
       getByPlaceholderText(UI.FILTER_TABLE[language]),
       returnUsers[AUTH_API.USERS][1][AUTH_API.USER_OBJECT.STRING]
     )

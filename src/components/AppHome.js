@@ -1,19 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Link } from 'react-router-dom'
-import { Accordion, Divider, Grid, Icon, Input } from 'semantic-ui-react'
+import { Accordion, Checkbox, Divider, Grid, Icon, Input } from 'semantic-ui-react'
 import { Text, Title } from '@statisticsnorway/ssb-component-library'
 
 import { ErrorMessage, GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
-import { AUTH_API, ROUTING, SSB_COLORS } from '../configurations'
+import { AUTH_API, LOCAL_STORAGE, ROUTING, SSB_COLORS } from '../configurations'
 import { HOME, TEST_IDS, UI } from '../enums'
 
 function AppHome () {
   const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [userId, setUserId] = useState('')
+  const [userId, setUserId] = useState(
+    localStorage.hasOwnProperty(LOCAL_STORAGE.USER_ID) &&
+    localStorage.hasOwnProperty(LOCAL_STORAGE.REMEMBER) &&
+    localStorage.getItem(LOCAL_STORAGE.REMEMBER) === 'true' ?
+      localStorage.getItem(LOCAL_STORAGE.USER_ID) : ''
+  )
+  const [rememberUser, setRememberUser] = useState(
+    localStorage.hasOwnProperty(LOCAL_STORAGE.REMEMBER) ? localStorage.getItem(LOCAL_STORAGE.REMEMBER) : 'false'
+  )
   const [userEdited, setUserEdited] = useState(false)
 
   const [{ data, loading, error }, refetch] =
@@ -41,6 +49,9 @@ function AppHome () {
               if (key === 'Enter') {
                 refetch()
                 setUserEdited(false)
+                if (rememberUser === 'true') {
+                  localStorage.setItem(LOCAL_STORAGE.USER_ID, userId)
+                }
               }
             }}
             onChange={(event, { value }) => {
@@ -56,15 +67,26 @@ function AppHome () {
               name='sync alternate'
               disabled={userId === ''}
               data-testid={TEST_IDS.REFRESH_USER}
-              style={{ color: SSB_COLORS.BLUE, marginBottom: '0.25em', marginLeft: '0.5em' }}
+              style={{ color: SSB_COLORS.BLUE, marginBottom: '0.25em', marginLeft: '0.5em', marginRight: '0.5em' }}
               onClick={() => {
                 refetch()
                 setUserEdited(false)
+                if (rememberUser === 'true') {
+                  localStorage.setItem(LOCAL_STORAGE.USER_ID, userId)
+                }
               }}
             />,
             false,
             'right center'
           )}
+          <Checkbox
+            label={UI.REMEMBER_ME[language]}
+            checked={rememberUser === 'true'}
+            onChange={() => {
+              localStorage.setItem(LOCAL_STORAGE.REMEMBER, rememberUser === 'true' ? 'false' : 'true')
+              setRememberUser(rememberUser === 'true' ? 'false' : 'true')
+            }}
+          />
           <Divider fitted hidden style={{ marginTop: '1em' }} />
           {!loading && !userEdited && error && <ErrorMessage error={error} />}
           {!error && !loading && !userEdited && data !== undefined &&
@@ -119,6 +141,7 @@ function AppHome () {
           <Grid.Column>
             <UserAccess userId={userId} />
           </Grid.Column>
+          <Grid.Column />
         </Grid.Row>
       </>
       }

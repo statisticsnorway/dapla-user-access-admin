@@ -62,7 +62,7 @@ describe('Common mock', () => {
     expect(executePut).toHaveBeenNthCalledWith(4, emptyRole)
   })
 
-  test('Form changes works correctly', () => {
+  test('Form changes works correctly', async () => {
     const { getAllByTestId, getAllByText, getByPlaceholderText, getByTestId, getByText } = setup(true)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
@@ -73,13 +73,12 @@ describe('Common mock', () => {
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
     // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
-    userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[0].children[0], '/test/3')
+    await userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[0].children[0], '/test/3')
     userEvent.click(getByText(UI.ADD[language]))
     // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
-    userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[1].children[0], '/test/4')
+    await userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[1].children[0], '/test/4')
     userEvent.click(getByText(UI.ADD[language]))
-    userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), alternativeTestRoleId)
-    userEvent.type(getByPlaceholderText(ROLE.DESCRIPTION[language]), updatedTestRole.data.description)
+    await userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), alternativeTestRoleId)
     userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
 
     expect(executePut).toHaveBeenNthCalledWith(6, updatedTestRole)

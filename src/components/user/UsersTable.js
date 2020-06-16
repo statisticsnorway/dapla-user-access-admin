@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
+import { Divider, Grid, Icon, Input, List, Loader, Table } from 'semantic-ui-react'
 
 import { ErrorMessage, UpdateUser } from '../'
-import { ApiContext, LanguageContext, sortArrayOfObjects } from '../../utilities'
-import { AUTH_API } from '../../configurations'
+import { ApiContext, DescriptionPopup, LanguageContext, sortArrayOfObjects } from '../../utilities'
+import { AUTH_API, LOCAL_STORAGE, ROUTING, SSB_COLORS } from '../../configurations'
 import { TEST_IDS, UI, USER } from '../../enums'
+import { Link } from 'react-router-dom'
 
 function UsersTable () {
   const { authApi } = useContext(ApiContext)
@@ -54,6 +55,7 @@ function UsersTable () {
         <Table celled sortable size='large'>
           <Table.Header>
             <Table.Row>
+              <Table.HeaderCell />
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
                 {USER.USER_ID[language]}
               </Table.HeaderCell>
@@ -65,6 +67,24 @@ function UsersTable () {
           <Table.Body>
             {users.map(({ groups, roles, userId }, index) =>
               <Table.Row key={userId}>
+                <Table.Cell textAlign='center'>
+                  <Link to={ROUTING.BASE}>
+                    {DescriptionPopup(
+                      <Icon
+                        link
+                        fitted
+                        name='eye'
+                        size='large'
+                        style={{ color: SSB_COLORS.BLUE }}
+                        onClick={() => {
+                          localStorage.setItem(LOCAL_STORAGE.REMEMBER, 'true')
+                          localStorage.setItem(LOCAL_STORAGE.USER_ID, userId)
+                        }}
+                      />,
+                      USER.SET_USER[language]
+                    )}
+                  </Link>
+                </Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{userId}</Table.Cell>
                 <Table.Cell textAlign='center'>
                   <UpdateUser isNew={false} refetch={refetch} user={users[index]} />
