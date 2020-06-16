@@ -23,8 +23,10 @@ function RolesTable () {
   }, [data, error, loading])
 
   const handleSort = () => {
-    setDirection(direction === 'ascending' ? 'descending' : 'ascending')
-    setRoles(sortArrayOfObjects(data[AUTH_API.ROLES], [AUTH_API.ROLE_OBJECT.STRING[0]], direction))
+    const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
+
+    setDirection(newDirection)
+    setRoles(sortArrayOfObjects(data[AUTH_API.ROLES], [AUTH_API.ROLE_OBJECT.STRING[0]], newDirection))
   }
 
   const handleFilter = (string) => setRoles(data[AUTH_API.ROLES].filter(({ roleId }) => roleId.includes(string)))
@@ -61,7 +63,7 @@ function RolesTable () {
           <ErrorMessage error={error} />
         </>
         :
-        <Table celled sortable size='large'>
+        <Table celled sortable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell colSpan={3} />

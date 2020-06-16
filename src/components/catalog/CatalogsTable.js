@@ -3,7 +3,13 @@ import useAxios from 'axios-hooks'
 import { Divider, Grid, Icon, Input, Loader, Popup, Table } from 'semantic-ui-react'
 
 import { CatalogUserLookupPortal, ErrorMessage } from '../'
-import { ApiContext, convertToDatetimeJsonString, LanguageContext, sortArrayOfObjects } from '../../utilities'
+import {
+  ApiContext,
+  convertToDatetimeJsonString,
+  LanguageContext,
+  sortArrayOfObjects,
+  truncateString
+} from '../../utilities'
 import { CATALOG_API } from '../../configurations'
 import { CATALOG, TEST_IDS, UI } from '../../enums'
 
@@ -23,7 +29,7 @@ function CatalogsTable () {
         setOpen(data[CATALOG_API.CATALOGS].map(() => false))
         setCatalogs(sortArrayOfObjects(
           data[CATALOG_API.CATALOGS],
-          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]]
+          [[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]]
         ))
       } catch (e) {
         console.log(e)
@@ -33,12 +39,14 @@ function CatalogsTable () {
 
   const handleSort = () => {
     try {
-      setDirection(direction === 'ascending' ? 'descending' : 'ascending')
+      const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
+
+      setDirection(newDirection)
       setCatalogs(
         sortArrayOfObjects(
           data[CATALOG_API.CATALOGS],
-          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]],
-          direction
+          [[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]],
+          newDirection
         )
       )
     } catch (e) {
@@ -85,7 +93,7 @@ function CatalogsTable () {
           <ErrorMessage error={error} />
         </>
         :
-        <Table celled sortable size='large'>
+        <Table celled sortable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
@@ -104,17 +112,27 @@ function CatalogsTable () {
             {catalogs.map(({ id, parentUri, pseudoConfig, state, type, valuation }, index) =>
               <Table.Row key={index}>
                 <Table.Cell style={{ fontWeight: 'bold' }}>
-                  {id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]}
+                  {id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]].length > 75 ?
+                    <Popup
+                      basic
+                      flowing
+                      trigger={truncateString(id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]], 75)}
+                    >
+                      {id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]}
+                    </Popup>
+                    :
+                    id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
+                  }
                 </Table.Cell>
                 <Table.Cell textAlign='center'>
                   <CatalogUserLookupPortal
                     open={open}
                     index={index}
                     state={state}
-                    path={id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]}
                     valuation={valuation}
                     handleOpen={handleOpen}
                     handleClose={handleClose}
+                    path={id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]}
                   />
                 </Table.Cell>
                 <Table.Cell>{convertToDatetimeJsonString(id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[1]])}</Table.Cell>

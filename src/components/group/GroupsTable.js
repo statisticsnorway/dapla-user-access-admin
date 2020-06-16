@@ -23,8 +23,10 @@ function GroupsTable () {
   }, [data, error, loading])
 
   const handleSort = () => {
-    setDirection(direction === 'ascending' ? 'descending' : 'ascending')
-    setGroups(sortArrayOfObjects(data[AUTH_API.GROUPS], [AUTH_API.GROUP_OBJECT.STRING[0]], direction))
+    const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
+
+    setDirection(newDirection)
+    setGroups(sortArrayOfObjects(data[AUTH_API.GROUPS], [AUTH_API.GROUP_OBJECT.STRING[0]], newDirection))
   }
 
   const handleFilter = (string) => setGroups(data[AUTH_API.GROUPS].filter(({ groupId }) => groupId.includes(string)))
@@ -51,7 +53,7 @@ function GroupsTable () {
           <ErrorMessage error={error} />
         </>
         :
-        <Table celled sortable size='large'>
+        <Table celled sortable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
