@@ -29,7 +29,7 @@ function CatalogsTable () {
         setOpen(data[CATALOG_API.CATALOGS].map(() => false))
         setCatalogs(sortArrayOfObjects(
           data[CATALOG_API.CATALOGS],
-          [[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]]
+          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]]
         ))
       } catch (e) {
         console.log(e)
@@ -45,7 +45,7 @@ function CatalogsTable () {
       setCatalogs(
         sortArrayOfObjects(
           data[CATALOG_API.CATALOGS],
-          [[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]],
+          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]],
           newDirection
         )
       )
