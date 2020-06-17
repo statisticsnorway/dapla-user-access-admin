@@ -3,5 +3,5 @@ export {
   convertToIncludesExcludes, getNestedObject, moveIncludesExcludes, setupPathOptions, sortArrayOfObjects
 } from './ObjectHandling'
 export { DescriptionPopup, GroupsView, RolesView } from './ObjectViews'
-export { makeEnum } from './StringHandling'
+export { makeEnum, truncateString } from './StringHandling'
 export { convertToDatetimeJsonString } from './TimestampHandling'

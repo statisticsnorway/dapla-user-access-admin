@@ -1,8 +1,4 @@
 export const CATALOG = {
-  PARENT_URI: {
-    en: 'Parent-uri',
-    nb: 'Forelder-uri'
-  },
   PATH: {
     en: 'Path',
     nb: 'Sti'

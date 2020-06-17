@@ -24,8 +24,10 @@ function UsersTable () {
   }, [data, error, loading])
 
   const handleSort = () => {
-    setDirection(direction === 'ascending' ? 'descending' : 'ascending')
-    setUsers(sortArrayOfObjects(data[AUTH_API.USERS], [AUTH_API.USER_OBJECT.STRING], direction))
+    const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
+
+    setDirection(newDirection)
+    setUsers(sortArrayOfObjects(data[AUTH_API.USERS], [AUTH_API.USER_OBJECT.STRING], newDirection))
   }
 
   const handleFilter = (string) => setUsers(data[AUTH_API.USERS].filter(({ userId }) => userId.includes(string)))
@@ -52,7 +54,7 @@ function UsersTable () {
           <ErrorMessage error={error} />
         </>
         :
-        <Table celled sortable size='large'>
+        <Table celled sortable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell />
