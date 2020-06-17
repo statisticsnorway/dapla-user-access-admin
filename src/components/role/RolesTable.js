@@ -66,7 +66,7 @@ function RolesTable () {
         <Table celled sortable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell colSpan={3} />
+              <Table.HeaderCell colSpan={2} />
               {DescriptionPopup(<Table.HeaderCell colSpan={4}>{ROLE.PRIVILEGES[language]}</Table.HeaderCell>)}
               <Table.HeaderCell colSpan={2} />
               {DescriptionPopup(<Table.HeaderCell colSpan={7}>{ROLE.STATES[language]}</Table.HeaderCell>)}
@@ -76,7 +76,6 @@ function RolesTable () {
                 {ROLE.ROLE_ID[language]}
               </Table.HeaderCell>
               <Table.HeaderCell />
-              <Table.HeaderCell>{ROLE.DESCRIPTION[language]}</Table.HeaderCell>
               {AUTH_API.ENUMS.PRIVILEGES.map(privilege =>
                 <Table.HeaderCell key={privilege}>{PRIVILEGE[privilege][language]}</Table.HeaderCell>
               )}
@@ -88,13 +87,12 @@ function RolesTable () {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {roles.map(({ description, maxValuation, roleId, paths, privileges, states }, index) =>
+            {roles.map(({ maxValuation, roleId, paths, privileges, states }, index) =>
               <Table.Row key={roleId}>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{roleId}</Table.Cell>
                 <Table.Cell textAlign='center'>
                   <UpdateRole isNew={false} refetch={refetch} role={roles[index]} />
                 </Table.Cell>
-                <Table.Cell>{description}</Table.Cell>
                 {AUTH_API.ENUMS.PRIVILEGES.map(privilege =>
                   <CheckedCell key={privilege} list={privileges} entry={privilege} />
                 )}

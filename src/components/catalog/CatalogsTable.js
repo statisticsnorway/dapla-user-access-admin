@@ -3,15 +3,9 @@ import useAxios from 'axios-hooks'
 import { Divider, Grid, Icon, Input, Loader, Popup, Table } from 'semantic-ui-react'
 
 import { CatalogUserLookupPortal, ErrorMessage } from '../'
-import {
-  ApiContext,
-  convertToDatetimeJsonString,
-  LanguageContext,
-  sortArrayOfObjects,
-  truncateString
-} from '../../utilities'
-import { CATALOG_API } from '../../configurations'
-import { CATALOG, TEST_IDS, UI } from '../../enums'
+import { ApiContext, convertToDatetimeJsonString, LanguageContext, truncateString } from '../../utilities'
+import { CATALOG_API, SSB_COLORS } from '../../configurations'
+import { CATALOG, UI } from '../../enums'
 
 function CatalogsTable () {
   const { catalogApi } = useContext(ApiContext)
@@ -19,40 +13,24 @@ function CatalogsTable () {
 
   const [open, setOpen] = useState([])
   const [catalogs, setCatalogs] = useState([])
-  const [direction, setDirection] = useState('ascending')
 
   const [{ data, loading, error }] = useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`)
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
-      try {
-        setOpen(data[CATALOG_API.CATALOGS].map(() => false))
-        setCatalogs(sortArrayOfObjects(
-          data[CATALOG_API.CATALOGS],
-          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]]
-        ))
-      } catch (e) {
-        console.log(e)
+      console.log(data)
+      if (Array.isArray(data[CATALOG_API.CATALOGS])) {
+        try {
+          setOpen(data[CATALOG_API.CATALOGS].map(() => false))
+          setCatalogs(data[CATALOG_API.CATALOGS])
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        console.log('Recieved catalogs is not of Array format')
       }
     }
   }, [data, error, loading])
-
-  const handleSort = () => {
-    try {
-      const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
-
-      setDirection(newDirection)
-      setCatalogs(
-        sortArrayOfObjects(
-          data[CATALOG_API.CATALOGS],
-          [[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING], [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]],
-          newDirection
-        )
-      )
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   const handleFilter = (string) => {
     try {
@@ -93,12 +71,10 @@ function CatalogsTable () {
           <ErrorMessage error={error} />
         </>
         :
-        <Table celled sortable compact='very' size='large'>
+        <Table celled compact='very' size='large'>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
-                {CATALOG.PATH[language]}
-              </Table.HeaderCell>
+              <Table.HeaderCell>{CATALOG.PATH[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.USERS[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.TIMESTAMP[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.TYPE[language]}</Table.HeaderCell>
@@ -139,7 +115,12 @@ function CatalogsTable () {
                 <Table.Cell>{valuation}</Table.Cell>
                 <Table.Cell>{state}</Table.Cell>
                 <Table.Cell textAlign='center'>
-                  <Popup basic flowing position='left center' trigger={<Icon name='key' size='large' />}>
+                  <Popup
+                    basic
+                    flowing
+                    position='left center'
+                    trigger={<Icon name='key' style={{ color: SSB_COLORS.YELLOW }} />}
+                  >
                     <pre>{JSON.stringify(pseudoConfig, null, 2)}</pre>
                   </Popup>
                 </Table.Cell>
