@@ -18,7 +18,6 @@ function CatalogsTable () {
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
-      console.log(data)
       if (Array.isArray(data[CATALOG_API.CATALOGS])) {
         try {
           setOpen(data[CATALOG_API.CATALOGS].map(() => false))
@@ -91,7 +90,7 @@ function CatalogsTable () {
                     <Popup
                       basic
                       flowing
-                      trigger={truncateString(id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]], 75)}
+                      trigger={<div>{truncateString(id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]], 75)}</div>}
                     >
                       {id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]}
                     </Popup>
