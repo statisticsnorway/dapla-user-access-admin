@@ -47,13 +47,6 @@ describe('Common mock', () => {
       returnCatalogs[CATALOG_API.CATALOGS][0][CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
     )).toHaveLength(0)
   })
-
-  test('Sorts correctly', () => {
-    const { getByTestId } = setup()
-
-    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
-    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
-  })
 })
 
 test('Renders on error', () => {
