@@ -104,12 +104,11 @@ function CatalogsTable () {
               <Table.HeaderCell>{CATALOG.TYPE[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.VALUATION[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.STATE[language]}</Table.HeaderCell>
-              <Table.HeaderCell>{CATALOG.PARENT_URI[language]}</Table.HeaderCell>
               <Table.HeaderCell>{CATALOG.PSEUDO_CONFIG[language]}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {catalogs.map(({ id, parentUri, pseudoConfig, state, type, valuation }, index) =>
+            {catalogs.map(({ id, pseudoConfig, state, type, valuation }, index) =>
               <Table.Row key={index}>
                 <Table.Cell style={{ fontWeight: 'bold' }}>
                   {id[CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]].length > 75 ?
@@ -139,7 +138,6 @@ function CatalogsTable () {
                 <Table.Cell>{type}</Table.Cell>
                 <Table.Cell>{valuation}</Table.Cell>
                 <Table.Cell>{state}</Table.Cell>
-                <Table.Cell>{parentUri}</Table.Cell>
                 <Table.Cell textAlign='center'>
                   <Popup basic flowing position='left center' trigger={<Icon name='key' size='large' />}>
                     <pre>{JSON.stringify(pseudoConfig, null, 2)}</pre>
