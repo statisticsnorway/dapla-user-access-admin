@@ -18,6 +18,7 @@ function CatalogsTable () {
 
   useEffect(() => {
     if (!loading && !error && data !== undefined) {
+      console.log(data)
       if (Array.isArray(data[CATALOG_API.CATALOGS])) {
         try {
           setOpen(data[CATALOG_API.CATALOGS].map(() => false))
