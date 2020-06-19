@@ -46,6 +46,7 @@ function RolesTable () {
       <Grid columns='equal'>
         <Grid.Column>
           <Input
+            fluid
             size='large'
             icon='search'
             disabled={loading || !!error}
@@ -53,6 +54,8 @@ function RolesTable () {
             onChange={(event, { value }) => handleFilter(value)}
           />
         </Grid.Column>
+        <Grid.Column />
+        <Grid.Column />
         <Grid.Column textAlign='right'>
           <UpdateRole isNew={true} refetch={refetch} />
         </Grid.Column>

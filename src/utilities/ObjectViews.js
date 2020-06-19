@@ -71,7 +71,14 @@ export const RolesView = (key, data, language) => {
       )
 
     case AUTH_API.ROLE_OBJECT.LIST:
-      return <List size='large'>{data[AUTH_API.INCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}</List>
+      return <List size='large'>
+        {data.hasOwnProperty(AUTH_API.INCLUDES) && data[AUTH_API.INCLUDES].map(path =>
+          <List.Item key={path} style={{ color: SSB_COLORS.GREEN }}>{path}</List.Item>
+        )}
+        {data.hasOwnProperty(AUTH_API.EXCLUDES) && data[AUTH_API.EXCLUDES].map(path =>
+          <List.Item key={path} style={{ color: SSB_COLORS.RED }}>{path}</List.Item>
+        )}
+      </List>
 
     default:
       return <Text>{data.toString()}</Text>
@@ -85,7 +92,7 @@ export const GroupsView = (key, data) => {
       return <Text>{data.toString()}</Text>
 
     case AUTH_API.GROUP_OBJECT.LIST:
-      return <List size='large'>{data.map(path => <List.Item key={path}>{path}</List.Item>)}</List>
+      return <List size='large'>{data.map(role => <List.Item key={role}>{role}</List.Item>)}</List>
 
     default:
       return <Text>{data.toString()}</Text>

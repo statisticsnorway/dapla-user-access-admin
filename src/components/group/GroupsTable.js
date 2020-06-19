@@ -36,6 +36,7 @@ function GroupsTable () {
       <Grid columns='equal'>
         <Grid.Column>
           <Input
+            fluid
             size='large'
             icon='search'
             disabled={loading || !!error}
@@ -43,6 +44,8 @@ function GroupsTable () {
             onChange={(event, { value }) => handleFilter(value)}
           />
         </Grid.Column>
+        <Grid.Column />
+        <Grid.Column />
         <Grid.Column textAlign='right'>
           <UpdateGroup isNew={true} refetch={refetch} />
         </Grid.Column>

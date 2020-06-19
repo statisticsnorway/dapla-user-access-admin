@@ -56,6 +56,7 @@ function CatalogsTable () {
       <Grid columns='equal'>
         <Grid.Column>
           <Input
+            fluid
             size='large'
             icon='search'
             disabled={loading || !!error}
@@ -63,6 +64,9 @@ function CatalogsTable () {
             onChange={(event, { value }) => handleFilter(value)}
           />
         </Grid.Column>
+        <Grid.Column />
+        <Grid.Column />
+        <Grid.Column />
       </Grid>
       {loading ? <Loader active inline='centered' /> : error ?
         <>

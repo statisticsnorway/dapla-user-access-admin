@@ -7,6 +7,7 @@ import { ApiContext, LanguageContext } from '../utilities'
 import { TEST_CONFIGURATIONS } from '../configurations'
 
 jest.mock('../components/role/UpdateRole', () => () => null)
+jest.mock('../components/role/RoleLookup', () => () => null)
 
 const { errorObject, language, testGroup, testGroupId } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())

@@ -7,6 +7,10 @@ export const UI = {
     en: 'Something went wrong, check settings',
     nb: 'Noe gikk galt, sjekk innstillingene'
   },
+  CATALOGS: {
+    en: 'Paths',
+    nb: 'Stier'
+  },
   ERROR: {
     en: 'Error',
     nb: 'Problem'
@@ -15,13 +19,21 @@ export const UI = {
     en: 'Filter table',
     nb: 'Filtrere tabellen'
   },
+  GROUPS: {
+    en: 'Groups',
+    nb: 'Grupper'
+  },
   HEADER: {
     en: 'User access admin',
-    nb: 'Tilgangsstyring for brukere'
+    nb: 'Tilgangsstyring'
   },
   REMEMBER_ME: {
     en: 'Remember me',
     nb: 'Husk meg'
+  },
+  ROLES: {
+    en: 'Roles',
+    nb: 'Roller'
   },
   SEARCH_NO_RESULTS: {
     en: 'No results found',
