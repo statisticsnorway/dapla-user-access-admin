@@ -23,6 +23,25 @@ const ListItemGood = value =>
     {value}
   </List.Item>
 
+export const PseudoConfigView = pseudoConfig => {
+  if (typeof pseudoConfig === 'object' && pseudoConfig !== null) {
+    if (Object.keys(pseudoConfig).length !== 0) {
+      return <Popup
+        basic
+        flowing
+        position='left center'
+        trigger={<Icon name='key' style={{ color: SSB_COLORS.YELLOW }} />}
+      >
+        <pre>{JSON.stringify(pseudoConfig, null, 2)}</pre>
+      </Popup>
+    } else {
+      return null
+    }
+  } else {
+    return null
+  }
+}
+
 export const RolesView = (key, data, language) => {
   switch (key) {
     case AUTH_API.ROLE_OBJECT.STRING[0]:
