@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Grid, Header, Icon, Modal } from 'semantic-ui-react'
-import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
+import { Button, Divider, Form, Grid, Header, Icon, Modal } from 'semantic-ui-react'
+
 import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
 import { AUTH_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
 import { GROUP, TEST_IDS, UI } from '../../enums'
@@ -105,7 +105,7 @@ function UpdateGroup ({ group, isNew, refetch }) {
           />
         </Form>
         <Divider hidden />
-        <SSBButton
+        <Button
           primary
           disabled={putLoading}
           onClick={() => executePut({
@@ -117,7 +117,7 @@ function UpdateGroup ({ group, isNew, refetch }) {
           })}
         >
           {isNew ? GROUP.CREATE_GROUP[language] : GROUP.UPDATE_GROUP[language]}
-        </SSBButton>
+        </Button>
       </Modal.Content>
     </Modal>
   )

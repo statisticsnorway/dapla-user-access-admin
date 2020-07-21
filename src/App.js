@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Route, Switch } from 'react-router-dom'
-import { Loader, Segment } from 'semantic-ui-react'
-import { Divider as SSBDivider } from '@statisticsnorway/ssb-component-library'
+import { Divider, Loader, Segment } from 'semantic-ui-react'
 
 import {
   AppHome,
@@ -48,7 +47,7 @@ function App () {
   return (
     <>
       <AppMenu setSettingsOpen={setSettingsOpen} />
-      <SSBDivider dark />
+      <Divider />
       <Segment basic>
         {authLoading || catalogLoading ?
           <Loader active inline='centered' /> : authError || catalogError ?

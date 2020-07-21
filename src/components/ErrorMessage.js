@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Dialog } from '@statisticsnorway/ssb-component-library'
+import { Message } from 'semantic-ui-react'
 
 import { getNestedObject, LanguageContext } from '../utilities'
 import { API } from '../configurations'
@@ -11,13 +11,13 @@ function ErrorMessage ({ error, title }) {
   const resolveError = getNestedObject(error, API.ERROR_PATH)
   const alternateResolveError = getNestedObject(error, API.ERROR_STATUS_PATH)
 
-  return (
-    <Dialog type='warning' title={title ? title : UI.ERROR[language]}>
-      {resolveError === undefined ? alternateResolveError === undefined ?
-        error.toString() : alternateResolveError : resolveError
-      }
-    </Dialog>
-  )
+  return <Message
+    error
+    header={title ? title : UI.ERROR[language]}
+    content={resolveError === undefined ? alternateResolveError === undefined ?
+      error.toString() : alternateResolveError : resolveError
+    }
+  />
 }
 
 export default ErrorMessage

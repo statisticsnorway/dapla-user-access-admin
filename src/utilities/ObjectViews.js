@@ -1,6 +1,5 @@
 import React from 'react'
 import { Icon, List, Popup } from 'semantic-ui-react'
-import { Text } from '@statisticsnorway/ssb-component-library'
 
 import { AUTH_API, checkAccess, SSB_COLORS } from '../configurations'
 import { DATASET_STATE, PRIVILEGE, VALUATION } from '../enums'
@@ -46,7 +45,7 @@ export const RolesView = (key, data, language) => {
   switch (key) {
     case AUTH_API.ROLE_OBJECT.STRING[0]:
     case AUTH_API.ROLE_OBJECT.STRING[1]:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
 
     case AUTH_API.ROLE_OBJECT.ARRAY[0]:
       return (
@@ -100,7 +99,7 @@ export const RolesView = (key, data, language) => {
       </List>
 
     default:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
   }
 }
 
@@ -108,12 +107,12 @@ export const GroupsView = (key, data) => {
   switch (key) {
     case AUTH_API.GROUP_OBJECT.STRING[0]:
     case AUTH_API.GROUP_OBJECT.STRING[1]:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
 
     case AUTH_API.GROUP_OBJECT.LIST:
       return <List size='large'>{data.map(role => <List.Item key={role}>{role}</List.Item>)}</List>
 
     default:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
   }
 }

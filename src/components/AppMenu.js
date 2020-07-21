@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Icon, Image, Menu } from 'semantic-ui-react'
-import { Title } from '@statisticsnorway/ssb-component-library'
+import { Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react'
 
 import SSBLogo from '../media/ssb-logo-rgb.svg'
 import { LanguageContext } from '../utilities'
@@ -27,7 +26,7 @@ function AppMenu ({ setSettingsOpen }) {
         <Image size='medium' src={SSBLogo} />
       </Menu.Item>
       <Menu.Item>
-        <Title size={1}>{UI.HEADER[language]}</Title>
+        <Header size='huge' content={UI.HEADER[language]} />
       </Menu.Item>
       <Menu.Menu position='right'>
         {Object.entries(ROUTING).filter(([route]) => route !== 'BASE' && route !== 'USERS').map(([route, path], index) =>

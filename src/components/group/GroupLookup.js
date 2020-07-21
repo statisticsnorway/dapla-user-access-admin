@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import useAxios from 'axios-hooks'
 import { Accordion, Grid } from 'semantic-ui-react'
-import { Text } from '@statisticsnorway/ssb-component-library'
 
 import { RoleLookup, UpdateGroup } from '../'
 import { ApiContext, DescriptionPopup, GroupsView, LanguageContext, makeEnum } from '../../utilities'
@@ -36,7 +35,7 @@ function GroupLookup ({ groupId }) {
                   defaultActiveIndex={-1}
                   panels={value.map(role => ({
                     key: role,
-                    title: { content: (<Text>{role}</Text>) },
+                    title: { content: (<b>{role}</b>) },
                     content: { content: (<RoleLookup roleId={role} />) }
                   }))}
                 />
