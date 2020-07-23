@@ -19,13 +19,24 @@ function RoleLookup ({ roleId }) {
     }
   }, [error, loading, data])
 
+  const setRoleDescription = key => {
+    try {
+      return ROLE[makeEnum(key)][language]
+    } catch (e) {
+      console.log(e)
+      console.log(key)
+
+      return '-'
+    }
+  }
+
   if (!loading && !error && data !== undefined) {
     return (
       <Grid>
         {Object.entries(data).map(([key, value]) =>
           <Grid.Row key={key} verticalAlign='middle'>
             <Grid.Column width={4}>
-              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{ROLE[makeEnum(key)][language]}</span>)}
+              {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{setRoleDescription(key)}</span>)}
             </Grid.Column>
             <Grid.Column width={12}>
               {RolesView(key, value, language)}
