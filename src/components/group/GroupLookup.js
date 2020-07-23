@@ -33,7 +33,7 @@ function GroupLookup ({ groupId }) {
                   fluid
                   styled
                   defaultActiveIndex={-1}
-                  panels={value.map(role => ({
+                  panels={value.filter(role => role !== '').map(role => ({
                     key: role,
                     title: { content: (<b>{role}</b>) },
                     content: { content: (<RoleLookup roleId={role} />) }
