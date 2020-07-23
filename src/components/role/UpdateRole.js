@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Grid, Header, Icon, List, Modal, Segment } from 'semantic-ui-react'
-import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
+import { Button, Divider, Form, Grid, Header, Icon, List, Modal, Segment } from 'semantic-ui-react'
 
 import {
   ApiContext,
@@ -281,7 +280,7 @@ function UpdateRole ({ isNew, refetch, role }) {
           </Form.Field>
         </Form>
         <Divider hidden />
-        <SSBButton
+        <Button
           primary
           disabled={loading}
           onClick={() => executePut({
@@ -299,7 +298,7 @@ function UpdateRole ({ isNew, refetch, role }) {
           })}
         >
           {isNew ? ROLE.CREATE_ROLE[language] : ROLE.UPDATE_ROLE[language]}
-        </SSBButton>
+        </Button>
       </Modal.Content>
     </Modal>
   )

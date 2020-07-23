@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Form, Header, Icon, Modal } from 'semantic-ui-react'
-import { Button as SSBButton } from '@statisticsnorway/ssb-component-library'
+import { Button, Divider, Form, Header, Icon, Modal } from 'semantic-ui-react'
 
 import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
 import { AUTH_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
@@ -118,7 +117,7 @@ function UpdateUser ({ isNew, refetch, user }) {
           />
         </Form>
         <Divider hidden />
-        <SSBButton
+        <Button
           primary
           disabled={putLoading}
           onClick={() => executePut({
@@ -130,7 +129,7 @@ function UpdateUser ({ isNew, refetch, user }) {
           })}
         >
           {isNew ? USER.CREATE_USER[language] : USER.UPDATE_USER[language]}
-        </SSBButton>
+        </Button>
       </Modal.Content>
     </Modal>
   )

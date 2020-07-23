@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Dropdown, Icon } from 'semantic-ui-react'
-import { Button as SSBButton, Text, Title } from '@statisticsnorway/ssb-component-library'
+import { Button, Divider, Dropdown, Header, Icon } from 'semantic-ui-react'
 
 import { ApiContext, LanguageContext } from '../../utilities'
 import { AUTH_API, CATALOG_API, SSB_COLORS } from '../../configurations'
@@ -56,8 +55,8 @@ function UserAccess ({ userId }) {
 
   return (
     <>
-      <Title size={3}>{USER_ACCESS.HEADER[language]}</Title>
-      <Text>{`${USER_ACCESS.GUIDE[0][language]} `}</Text>
+      <Header size='medium' content={USER_ACCESS.HEADER[language]} />
+      {`${USER_ACCESS.GUIDE[0][language]} `}
       <Dropdown
         inline
         value={privilege}
@@ -69,7 +68,7 @@ function UserAccess ({ userId }) {
           setPrivilege(value)
         }}
       />
-      <Text>{` ${USER_ACCESS.GUIDE[1][language]} `}</Text>
+      {` ${USER_ACCESS.GUIDE[1][language]} `}
       <Dropdown
         fluid
         search
@@ -88,7 +87,7 @@ function UserAccess ({ userId }) {
           [{ key: value, text: value, value: value }, ...pathOptions]
         )}
       />
-      <Text>{` ${USER_ACCESS.GUIDE[2][language]} `}</Text>
+      {` ${USER_ACCESS.GUIDE[2][language]} `}
       <Dropdown
         inline
         value={state}
@@ -100,7 +99,7 @@ function UserAccess ({ userId }) {
           setState(value)
         }}
       />
-      <Text>{` ${USER_ACCESS.GUIDE[3][language]} `}</Text>
+      {` ${USER_ACCESS.GUIDE[3][language]} `}
       <Dropdown
         inline
         value={maxValuation}
@@ -113,7 +112,7 @@ function UserAccess ({ userId }) {
         }}
       />
       <Divider hidden />
-      <Text>{`${USER_ACCESS.ACCESS[language]}: `}</Text>
+      {`${USER_ACCESS.ACCESS[language]}: `}
       {loading ? <Icon loading size='large' name='sync alternate' style={{ color: SSB_COLORS.BLUE }} /> :
         <>
           <Icon
@@ -132,11 +131,11 @@ function UserAccess ({ userId }) {
                     SSB_COLORS.RED : SSB_COLORS.YELLOW
             }}
           />
-          <Text>{`(${verdict})`}</Text>
+          {`(${verdict})`}
         </>
       }
       <Divider hidden />
-      <SSBButton primary disabled={loading} onClick={() => refetch()}>{USER_ACCESS.CHECK[language]}</SSBButton>
+      <Button primary disabled={loading} onClick={() => refetch()}>{USER_ACCESS.CHECK[language]}</Button>
     </>
   )
 }

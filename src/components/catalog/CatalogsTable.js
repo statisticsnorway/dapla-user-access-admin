@@ -1,10 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Grid, Icon, Input, Loader, Popup, Table } from 'semantic-ui-react'
+import { Divider, Grid, Input, Loader, Popup, Table } from 'semantic-ui-react'
 
 import { CatalogUserLookupPortal, ErrorMessage } from '../'
-import { ApiContext, convertToDatetimeJsonString, LanguageContext, truncateString } from '../../utilities'
-import { CATALOG_API, SSB_COLORS } from '../../configurations'
+import {
+  ApiContext,
+  convertToDatetimeJsonString,
+  LanguageContext,
+  PseudoConfigView,
+  truncateString
+} from '../../utilities'
+import { CATALOG_API } from '../../configurations'
 import { CATALOG, UI } from '../../enums'
 
 function CatalogsTable () {
@@ -56,6 +62,7 @@ function CatalogsTable () {
       <Grid columns='equal'>
         <Grid.Column>
           <Input
+            fluid
             size='large'
             icon='search'
             disabled={loading || !!error}
@@ -63,6 +70,9 @@ function CatalogsTable () {
             onChange={(event, { value }) => handleFilter(value)}
           />
         </Grid.Column>
+        <Grid.Column />
+        <Grid.Column />
+        <Grid.Column />
       </Grid>
       {loading ? <Loader active inline='centered' /> : error ?
         <>
@@ -113,16 +123,7 @@ function CatalogsTable () {
                 <Table.Cell>{type}</Table.Cell>
                 <Table.Cell>{valuation}</Table.Cell>
                 <Table.Cell>{state}</Table.Cell>
-                <Table.Cell textAlign='center'>
-                  <Popup
-                    basic
-                    flowing
-                    position='left center'
-                    trigger={<Icon name='key' style={{ color: SSB_COLORS.YELLOW }} />}
-                  >
-                    <pre>{JSON.stringify(pseudoConfig, null, 2)}</pre>
-                  </Popup>
-                </Table.Cell>
+                <Table.Cell textAlign='center'>{PseudoConfigView(pseudoConfig)}</Table.Cell>
               </Table.Row>
             )}
           </Table.Body>

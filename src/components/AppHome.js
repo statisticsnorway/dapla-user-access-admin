@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Link } from 'react-router-dom'
-import { Accordion, Checkbox, Divider, Grid, Icon, Input } from 'semantic-ui-react'
-import { Text, Title } from '@statisticsnorway/ssb-component-library'
+import { Accordion, Checkbox, Divider, Grid, Header, Icon, Input } from 'semantic-ui-react'
 
 import { ErrorMessage, GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
@@ -38,7 +37,7 @@ function AppHome () {
     <Grid columns='equal'>
       <Grid.Row>
         <Grid.Column>
-          <Title size={2}>{UI.USER[language]}</Title>
+          <Header size='large' content={UI.USER[language]} />
           <Input
             size='big'
             value={userId}
@@ -111,27 +110,27 @@ function AppHome () {
       <>
         <Grid.Row>
           <Grid.Column>
-            <Title size={3}>{HOME.GROUPS[language]}</Title>
+            <Header size='medium' content={HOME.GROUPS[language]} />
             <Accordion
               fluid
               styled
               defaultActiveIndex={-1}
               panels={data.hasOwnProperty(AUTH_API.GROUPS) ? data[AUTH_API.GROUPS].map(groupId => ({
                 key: groupId,
-                title: { content: (<Text>{groupId}</Text>) },
+                title: { content: (<b>{groupId}</b>) },
                 content: { content: (<GroupLookup groupId={groupId} />) }
               })) : []}
             />
           </Grid.Column>
           <Grid.Column>
-            <Title size={3}>{HOME.ROLES[language]}</Title>
+            <Header size='medium' content={HOME.ROLES[language]} />
             <Accordion
               fluid
               styled
               defaultActiveIndex={-1}
               panels={data.hasOwnProperty(AUTH_API.ROLES) ? data[AUTH_API.ROLES].map(roleId => ({
                 key: roleId,
-                title: { content: (<Text>{roleId}</Text>) },
+                title: { content: (<b>{roleId}</b>) },
                 content: { content: (<RoleLookup roleId={roleId} />) }
               })) : []}
             />

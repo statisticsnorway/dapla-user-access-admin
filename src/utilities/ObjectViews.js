@@ -1,6 +1,5 @@
 import React from 'react'
 import { Icon, List, Popup } from 'semantic-ui-react'
-import { Text } from '@statisticsnorway/ssb-component-library'
 
 import { AUTH_API, checkAccess, SSB_COLORS } from '../configurations'
 import { DATASET_STATE, PRIVILEGE, VALUATION } from '../enums'
@@ -23,11 +22,30 @@ const ListItemGood = value =>
     {value}
   </List.Item>
 
+export const PseudoConfigView = pseudoConfig => {
+  if (typeof pseudoConfig === 'object' && pseudoConfig !== null) {
+    if (Object.keys(pseudoConfig).length !== 0) {
+      return <Popup
+        basic
+        flowing
+        position='left center'
+        trigger={<Icon name='key' style={{ color: SSB_COLORS.YELLOW }} />}
+      >
+        <pre>{JSON.stringify(pseudoConfig, null, 2)}</pre>
+      </Popup>
+    } else {
+      return null
+    }
+  } else {
+    return null
+  }
+}
+
 export const RolesView = (key, data, language) => {
   switch (key) {
     case AUTH_API.ROLE_OBJECT.STRING[0]:
     case AUTH_API.ROLE_OBJECT.STRING[1]:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
 
     case AUTH_API.ROLE_OBJECT.ARRAY[0]:
       return (
@@ -71,10 +89,17 @@ export const RolesView = (key, data, language) => {
       )
 
     case AUTH_API.ROLE_OBJECT.LIST:
-      return <List size='large'>{data[AUTH_API.INCLUDES].map(path => <List.Item key={path}>{path}</List.Item>)}</List>
+      return <List size='large'>
+        {data.hasOwnProperty(AUTH_API.INCLUDES) && data[AUTH_API.INCLUDES].map(path =>
+          <List.Item key={path} style={{ color: SSB_COLORS.GREEN }}>{path}</List.Item>
+        )}
+        {data.hasOwnProperty(AUTH_API.EXCLUDES) && data[AUTH_API.EXCLUDES].map(path =>
+          <List.Item key={path} style={{ color: SSB_COLORS.RED }}>{path}</List.Item>
+        )}
+      </List>
 
     default:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
   }
 }
 
@@ -82,12 +107,12 @@ export const GroupsView = (key, data) => {
   switch (key) {
     case AUTH_API.GROUP_OBJECT.STRING[0]:
     case AUTH_API.GROUP_OBJECT.STRING[1]:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
 
     case AUTH_API.GROUP_OBJECT.LIST:
-      return <List size='large'>{data.map(path => <List.Item key={path}>{path}</List.Item>)}</List>
+      return <List size='large'>{data.map(role => <List.Item key={role}>{role}</List.Item>)}</List>
 
     default:
-      return <Text>{data.toString()}</Text>
+      return data.toString()
   }
 }

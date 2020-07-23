@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react'
 import useAxios from 'axios-hooks'
-import { Grid } from 'semantic-ui-react'
+import { Accordion, Grid } from 'semantic-ui-react'
 
-import { UpdateGroup } from '../'
+import { RoleLookup, UpdateGroup } from '../'
 import { ApiContext, DescriptionPopup, GroupsView, LanguageContext, makeEnum } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 import { GROUP } from '../../enums'
@@ -24,11 +24,24 @@ function GroupLookup ({ groupId }) {
       <Grid>
         {Object.entries(data).map(([key, value]) =>
           <Grid.Row key={key} verticalAlign='middle'>
-            <Grid.Column width={4}>
+            <Grid.Column width={3}>
               {DescriptionPopup(<span style={{ fontWeight: 'bold' }}>{GROUP[makeEnum(key)][language]}</span>)}
             </Grid.Column>
-            <Grid.Column width={12}>
-              {GroupsView(key, value)}
+            <Grid.Column width={13}>
+              {key === AUTH_API.GROUP_OBJECT.LIST ?
+                <Accordion
+                  fluid
+                  styled
+                  defaultActiveIndex={-1}
+                  panels={value.map(role => ({
+                    key: role,
+                    title: { content: (<b>{role}</b>) },
+                    content: { content: (<RoleLookup roleId={role} />) }
+                  }))}
+                />
+                :
+                GroupsView(key, value)
+              }
             </Grid.Column>
           </Grid.Row>
         )}

@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { Container, Divider, Grid, Header, Icon, List, Modal, Popup, Segment } from 'semantic-ui-react'
-import { Button as SSBButton, Divider as SSBDivider, Input as SSBInput } from '@statisticsnorway/ssb-component-library'
+import { Button, Container, Divider, Form, Grid, Header, Icon, List, Modal, Popup, Segment } from 'semantic-ui-react'
 
-import { ApiContext, getNestedObject, LanguageContext } from '../utilities'
-import { API, SSB_COLORS, SSB_STYLE } from '../configurations'
+import { ErrorMessage } from './'
+import { ApiContext, LanguageContext } from '../utilities'
+import { SSB_COLORS, SSB_STYLE } from '../configurations'
 import { SETTINGS, TEST_IDS } from '../enums'
 
 function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen }) {
@@ -21,37 +21,35 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
         {SETTINGS.HEADER[language]}
       </Header>
       <Modal.Content as={Segment} basic loading={loading} style={SSB_STYLE}>
-        <SSBInput
-          value={authUrl}
-          disabled={loading}
-          label={SETTINGS.AUTH_API[language]}
-          error={authError && !settingsEdited}
-          placeholder={SETTINGS.AUTH_API[language]}
-          handleChange={(value) => {
-            setAuthUrl(value)
-            setSettingsEdited(true)
-          }}
-          errorMessage={
-            authError && !settingsEdited && getNestedObject(authError, API.ERROR_PATH) === undefined ?
-              authError.toString() : getNestedObject(authError, API.ERROR_PATH)
-          }
-        />
+        <Form size='large'>
+          <Form.Input
+            value={authUrl}
+            disabled={loading}
+            label={SETTINGS.AUTH_API[language]}
+            error={!!authError && !settingsEdited}
+            placeholder={SETTINGS.AUTH_API[language]}
+            onChange={(event, { value }) => {
+              setAuthUrl(value)
+              setSettingsEdited(true)
+            }}
+          />
+        </Form>
+        {!loading && !settingsEdited && authError && <ErrorMessage error={authError} />}
         <Divider hidden />
-        <SSBInput
-          disabled={loading}
-          value={catalogUrl}
-          label={SETTINGS.CATALOG_API[language]}
-          error={catalogError && !settingsEdited}
-          placeholder={SETTINGS.CATALOG_API[language]}
-          handleChange={(value) => {
-            setCatalogUrl(value)
-            setSettingsEdited(true)
-          }}
-          errorMessage={
-            catalogError && !settingsEdited && getNestedObject(catalogError, API.ERROR_PATH) === undefined ?
-              catalogError.toString() : getNestedObject(catalogError, API.ERROR_PATH)
-          }
-        />
+        <Form size='large'>
+          <Form.Input
+            disabled={loading}
+            value={catalogUrl}
+            label={SETTINGS.CATALOG_API[language]}
+            error={!!catalogError && !settingsEdited}
+            placeholder={SETTINGS.CATALOG_API[language]}
+            onChange={(event, { value }) => {
+              setCatalogUrl(value)
+              setSettingsEdited(true)
+            }}
+          />
+        </Form>
+        {!loading && !settingsEdited && catalogError && <ErrorMessage error={catalogError} />}
         <Container style={{ marginTop: '1em' }}>
           {settingsEdited &&
           <>
@@ -62,8 +60,9 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
           <Divider hidden />
           <Grid columns='equal'>
             <Grid.Column>
-              <SSBButton
+              <Button
                 primary
+                size='large'
                 disabled={loading}
                 onClick={() => {
                   setAuthApi(authUrl)
@@ -73,7 +72,7 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
               >
                 <Icon name='sync' style={{ paddingRight: '0.5em' }} />
                 {SETTINGS.APPLY[language]}
-              </SSBButton>
+              </Button>
             </Grid.Column>
             <Grid.Column textAlign='right'>
               <Popup basic flowing position='left center' trigger={
@@ -84,7 +83,6 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
                   size='large'
                   style={{ color: SSB_COLORS.BLUE }}
                   data-testid={TEST_IDS.DEFAULT_SETTINGS_BUTTON}
-                  // There is a bug in https://github.com/statisticsnorway/ssb-component-library preventing values from updating when updated from another source then itself
                   onClick={() => {
                     setAuthUrl(process.env.REACT_APP_API_AUTH)
                     setAuthApi(process.env.REACT_APP_API_AUTH)
@@ -102,7 +100,7 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
         </Container>
       </Modal.Content>
       <Container fluid textAlign='center'>
-        <SSBDivider light />
+        <Divider />
         <List horizontal divided link size='small' style={{ marginTop: '3em', marginBottom: '3em' }}>
           <List.Item as='a' href={`${process.env.REACT_APP_SOURCE_URL}`} icon={{ fitted: true, name: 'github' }} />
           <List.Item content={`${SETTINGS.APP_VERSION[language]}: ${process.env.REACT_APP_VERSION}`} />
