@@ -46,5 +46,9 @@ export const UI = {
   USER: {
     en: 'User',
     nb: 'Bruker'
+  },
+  USERS: {
+    en: 'Users',
+    nb: 'Brukere'
   }
 }
