@@ -7,7 +7,7 @@ import { LanguageContext } from '../utilities'
 import { ROUTING, SSB_COLORS } from '../configurations'
 import { LANGUAGE, TEST_IDS, UI } from '../enums'
 
-const routeIcons = ['users', 'address card', 'folder open']
+const routeIcons = ['user', 'users', 'address card', 'folder open']
 
 function AppMenu ({ setSettingsOpen }) {
   const { language, setLanguage } = useContext(LanguageContext)
@@ -29,7 +29,7 @@ function AppMenu ({ setSettingsOpen }) {
         <Header size='huge' content={UI.HEADER[language]} />
       </Menu.Item>
       <Menu.Menu position='right'>
-        {Object.entries(ROUTING).filter(([route]) => route !== 'BASE' && route !== 'USERS').map(([route, path], index) =>
+        {Object.entries(ROUTING).filter(([route]) => route !== 'BASE').map(([route, path], index) =>
           <Menu.Item key={path} as={Link} to={path}>
             <Icon link fitted name={routeIcons[index]} size='big' style={{ color: SSB_COLORS.BLUE }} />
             {UI[route][language]}
