@@ -18,11 +18,6 @@ export const convertToIncludesExcludes = (object, type) => {
   }
 }
 
-export const getNestedObject = (nestedObject, pathArray) =>
-  pathArray.reduce((object, key) =>
-    (object && object[key] !== 'undefined') ? object[key] : undefined, nestedObject
-  )
-
 export const moveIncludesExcludes = (includes, excludes, value, to) => {
   let returnIncludes
   let returExcludes
@@ -91,19 +86,15 @@ function compareObjectsByMultipleFields (by, direction) {
   return function innerSort (a, b) {
     if (by.length === 0) {
       return 0
-    } // force to equal if keys run out
+    }
 
-    const key = by[0] // take out the first key
+    const key = by[0]
 
     if (a[key] < b[key]) {
       return direction === 'ascending' ? -1 : 1
-    } // will be 1 if DESC
-
-    else if (a[key] > b[key]) {
+    } else if (a[key] > b[key]) {
       return direction === 'ascending' ? 1 : -1
-    }// will be -1 if DESC
-
-    else {
+    } else {
       return compareObjectsByMultipleFields(by.slice(1))(a, b)
     }
   }

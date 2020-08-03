@@ -6,7 +6,7 @@ import useAxios from 'axios-hooks'
 import { CatalogsTable } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { CATALOG_API, TEST_CONFIGURATIONS } from '../configurations'
-import { TEST_IDS, UI } from '../enums'
+import { UI } from '../enums'
 
 jest.mock('../components/catalog/CatalogUserLookupPortal', () => () => null)
 

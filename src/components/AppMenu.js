@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react'
+import { LANGUAGE, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
 import SSBLogo from '../media/ssb-logo-rgb.svg'
 import { LanguageContext } from '../utilities'
-import { ROUTING, SSB_COLORS } from '../configurations'
-import { LANGUAGE, TEST_IDS, UI } from '../enums'
+import { ROUTING } from '../configurations'
+import { TEST_IDS, UI } from '../enums'
 
 const routeIcons = ['user', 'users', 'address card', 'folder open']
 

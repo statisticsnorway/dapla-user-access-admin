@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Button, Divider, Form, Grid, Header, Icon, Modal } from 'semantic-ui-react'
+import { SSB_COLORS, SSB_STYLE } from '@statisticsnorway/dapla-js-utilities'
 
 import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
-import { AUTH_API, populatedDropdown, SSB_COLORS, SSB_STYLE } from '../../configurations'
+import { AUTH_API, populatedDropdown } from '../../configurations'
 import { GROUP, TEST_IDS, UI } from '../../enums'
 
 function UpdateGroup ({ group, isNew, refetch }) {

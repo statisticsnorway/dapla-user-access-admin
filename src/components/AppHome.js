@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Link } from 'react-router-dom'
 import { Accordion, Checkbox, Divider, Grid, Header, Icon, Input } from 'semantic-ui-react'
+import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
-import { ErrorMessage, GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
+import { GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
-import { AUTH_API, LOCAL_STORAGE, ROUTING, SSB_COLORS } from '../configurations'
+import { AUTH_API, LOCAL_STORAGE, ROUTING } from '../configurations'
 import { HOME, TEST_IDS, UI } from '../enums'
 
 function AppHome () {
@@ -87,7 +88,7 @@ function AppHome () {
             }}
           />
           <Divider fitted hidden style={{ marginTop: '1em' }} />
-          {!loading && !userEdited && error && <ErrorMessage error={error} />}
+          {!loading && !userEdited && error && <ErrorMessage error={error} language={language} />}
           {!error && !loading && !userEdited && data !== undefined &&
           <UpdateUser isNew={false} refetch={refetch} user={data} />
           }

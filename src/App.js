@@ -2,17 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Route, Switch } from 'react-router-dom'
 import { Divider, Loader, Segment } from 'semantic-ui-react'
+import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
-import {
-  AppHome,
-  AppMenu,
-  AppSettings,
-  CatalogsTable,
-  ErrorMessage,
-  GroupsTable,
-  RolesTable,
-  UsersTable
-} from './components'
+import { AppHome, AppMenu, AppSettings, CatalogsTable, GroupsTable, RolesTable, UsersTable } from './components'
 import { ApiContext, LanguageContext } from './utilities'
 import { API, ROUTING } from './configurations'
 import { UI } from './enums'
@@ -51,7 +43,7 @@ function App () {
       <Segment basic>
         {authLoading || catalogLoading ?
           <Loader active inline='centered' /> : authError || catalogError ?
-            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} /> : authReady && catalogReady &&
+            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} language={language} /> : authReady && catalogReady &&
             <Switch>
               <Route path={ROUTING.USERS}>
                 <UsersTable />

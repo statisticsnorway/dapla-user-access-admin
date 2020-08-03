@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Divider, Grid, Icon, Input, List, Loader, Table } from 'semantic-ui-react'
+import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
-import { ErrorMessage, UpdateUser } from '../'
+import { UpdateUser } from '../'
 import { ApiContext, DescriptionPopup, LanguageContext, sortArrayOfObjects } from '../../utilities'
-import { AUTH_API, LOCAL_STORAGE, ROUTING, SSB_COLORS } from '../../configurations'
+import { AUTH_API, LOCAL_STORAGE, ROUTING } from '../../configurations'
 import { TEST_IDS, UI, USER } from '../../enums'
 import { Link } from 'react-router-dom'
 
@@ -51,7 +52,7 @@ function UsersTable () {
       {loading ? <Loader active inline='centered' /> : error ?
         <>
           <Divider hidden />
-          <ErrorMessage error={error} />
+          <ErrorMessage error={error} language={language} />
         </>
         :
         <Table celled sortable compact='very' size='large'>

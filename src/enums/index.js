@@ -1,7 +1,6 @@
 export { DATASET_STATE } from './DATASET_STATE'
 export { GROUP } from './GROUP'
 export { HOME } from './HOME'
-export { LANGUAGE } from './LANGUAGE'
 export { PRIVILEGE } from './PRIVILEGE'
 export { ROLE } from './ROLE'
 export { SETTINGS } from './SETTINGS'

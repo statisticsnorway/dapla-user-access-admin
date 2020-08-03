@@ -1,7 +1,8 @@
 import React from 'react'
 import { Icon, List, Popup } from 'semantic-ui-react'
+import { SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
-import { AUTH_API, checkAccess, SSB_COLORS } from '../configurations'
+import { AUTH_API, checkAccess } from '../configurations'
 import { DATASET_STATE, PRIVILEGE, VALUATION } from '../enums'
 
 export const DescriptionPopup = (trigger, description = false, position = 'top left') =>

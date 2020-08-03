@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-
-import { LANGUAGE } from '../enums'
+import { LANGUAGE } from '@statisticsnorway/dapla-js-utilities'
 
 export const ApiContext = React.createContext({
   authApi: process.env.REACT_APP_API_AUTH,
