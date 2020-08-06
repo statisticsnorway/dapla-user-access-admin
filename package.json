@@ -1,12 +1,22 @@
 {
   "name": "user-access-admin",
-  "version": "0.3.12",
-  "private": true,
+  "version": "0.3.13",
+  "description": "Administration of user access for Statistics Norway Dataplatform",
   "repository": {
     "type": "git",
-    "url": "https://github.com/statisticsnorway/user-access-admin"
+    "url": "git+https://github.com/statisticsnorway/user-access-admin.git"
   },
+  "author": "Statistics Norway",
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "homepage": "https://github.com/statisticsnorway/user-access-admin",
   "dependencies": {
+    "@statisticsnorway/dapla-js-utilities": "^0.1.1",
     "axios": "^0.19.2",
     "axios-hooks": "^2.1.0",
     "react": "^16.13.0",
@@ -14,7 +24,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^1.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

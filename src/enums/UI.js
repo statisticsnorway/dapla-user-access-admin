@@ -11,10 +11,6 @@ export const UI = {
     en: 'Paths',
     nb: 'Stier'
   },
-  ERROR: {
-    en: 'Error',
-    nb: 'Problem'
-  },
   FILTER_TABLE: {
     en: 'Filter table',
     nb: 'Filtrere tabellen'

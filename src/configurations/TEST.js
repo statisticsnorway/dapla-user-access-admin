@@ -1,5 +1,6 @@
+import { LANGUAGE } from '@statisticsnorway/dapla-js-utilities'
+
 import { AUTH_API, CATALOG_API } from './'
-import { LANGUAGE } from '../enums'
 
 const errorString = 'A problem occured'
 const readCreateUpdate = 'READ CREATE UPDATE'
@@ -27,12 +28,9 @@ export const TEST_CONFIGURATIONS = {
     }
   },
   emptyCatalogs: { [CATALOG_API.CATALOGS]: [] },
-  errorHeader: 'Error header',
   errorString: errorString,
   errorObject: { response: { data: errorString } },
-  errorStatus: { response: { statusText: errorString } },
   language: LANGUAGE.LANGUAGES.NORWEGIAN.languageCode,
-  objectToString: '[object Object]',
   otherLanguage: LANGUAGE.LANGUAGES.ENGLISH.languageCode,
   responseObject: { data: { statusCode: 200 } },
   returnCatalogs: {
@@ -141,16 +139,6 @@ export const TEST_CONFIGURATIONS = {
         [AUTH_API.USER_OBJECT.ARRAY[0]]: ['group3', 'group4']
       }
     ]
-  },
-  testUserCatalog: {
-    data: {
-      [CATALOG_API.CATALOG_OBJECT.ENUM[2]]: '',
-      [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]: '/test/1',
-      [CATALOG_API.CATALOG_OBJECT.STRING[0]]: 'file:///test/1',
-      [CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[1]]: '1523765273',
-      [CATALOG_API.CATALOG_OBJECT.ENUM[1]]: AUTH_API.ENUMS.STATES[1],
-      [CATALOG_API.CATALOG_OBJECT.ENUM[0]]: AUTH_API.ENUMS.VALUATIONS[3]
-    }
   },
   testCatalogPath: '/test/1',
   testGroup: {

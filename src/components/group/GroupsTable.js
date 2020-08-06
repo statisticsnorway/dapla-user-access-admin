@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
+import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
-import { ErrorMessage, UpdateGroup } from '../'
+import { UpdateGroup } from '../'
 import { ApiContext, LanguageContext, sortArrayOfObjects } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 import { GROUP, TEST_IDS, UI } from '../../enums'
@@ -53,7 +54,7 @@ function GroupsTable () {
       {loading ? <Loader active inline='centered' /> : error ?
         <>
           <Divider hidden />
-          <ErrorMessage error={error} />
+          <ErrorMessage error={error} language={language} />
         </>
         :
         <Table celled sortable compact='very' size='large'>

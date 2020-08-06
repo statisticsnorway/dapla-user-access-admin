@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Icon, Portal } from 'semantic-ui-react'
 
+import { CatalogUserLookup } from '../'
 import { ApiContext, sortArrayOfObjects } from '../../utilities'
 import { AUTH_API } from '../../configurations'
-import { CatalogUserLookup } from '../index'
 
 function CatalogUserLookupPortal ({ handleClose, handleOpen, index, open, path, valuation, state }) {
   const { authApi } = useContext(ApiContext)

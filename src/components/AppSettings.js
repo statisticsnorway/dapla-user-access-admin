@@ -1,9 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { Button, Container, Divider, Form, Grid, Header, Icon, List, Modal, Popup, Segment } from 'semantic-ui-react'
+import { ErrorMessage, SSB_COLORS, SSB_STYLE } from '@statisticsnorway/dapla-js-utilities'
 
-import { ErrorMessage } from './'
 import { ApiContext, LanguageContext } from '../utilities'
-import { SSB_COLORS, SSB_STYLE } from '../configurations'
 import { SETTINGS, TEST_IDS } from '../enums'
 
 function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen }) {
@@ -34,7 +33,7 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
             }}
           />
         </Form>
-        {!loading && !settingsEdited && authError && <ErrorMessage error={authError} />}
+        {!loading && !settingsEdited && authError && <ErrorMessage error={authError} language={language} />}
         <Divider hidden />
         <Form size='large'>
           <Form.Input
@@ -49,7 +48,7 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
             }}
           />
         </Form>
-        {!loading && !settingsEdited && catalogError && <ErrorMessage error={catalogError} />}
+        {!loading && !settingsEdited && catalogError && <ErrorMessage error={catalogError} language={language} />}
         <Container style={{ marginTop: '1em' }}>
           {settingsEdited &&
           <>

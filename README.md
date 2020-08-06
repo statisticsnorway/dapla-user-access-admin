@@ -1,12 +1,13 @@
 # user-access-admin
 [![Build Status](https://dev.azure.com/statisticsnorway/Dapla/_apis/build/status/statisticsnorway.user-access-admin?branchName=master)](https://dev.azure.com/statisticsnorway/Dapla/_build/latest?definitionId=13&branchName=master)
 
-This application aims to create a user interface against [dapla-user-access-service](https://github.com/statisticsnorway/dataset-access),
-somewhat supported by [dapla-catalog](https://github.com/statisticsnorway/dapla-catalog).
+This application is built for in-house use in SSB and it aims to create a user interface against 
+[dapla-user-access-service](https://github.com/statisticsnorway/dataset-access), somewhat supported by 
+[dapla-catalog](https://github.com/statisticsnorway/dapla-catalog).
 
 Functionality includes:
 * Creating, editing and listing users, groups and roles
-* Checking different access rights on datasets for any given user with any given group/role
+* Checking different access rights on datasets (catalogs) for any given user with any given group/role
 
 The project makes limited use of the [Component library for SSB](https://github.com/statisticsnorway/ssb-component-library)
 and is based upon [react-reference-app](https://github.com/statisticsnorway/fe-react-reference-app).

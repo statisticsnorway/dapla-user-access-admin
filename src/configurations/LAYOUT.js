@@ -1,9 +1,8 @@
 import React from 'react'
 import { Icon, Popup } from 'semantic-ui-react'
+import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
-import { ErrorMessage } from '../components'
 import { DescriptionPopup } from '../utilities'
-import { SSB_COLORS } from './'
 
 export const populatedDropdown = (label, loading, refetch, error, errorTitle) =>
   <label>

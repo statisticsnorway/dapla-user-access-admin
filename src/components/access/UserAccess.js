@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { Button, Divider, Dropdown, Header, Icon } from 'semantic-ui-react'
+import { SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
 import { ApiContext, LanguageContext } from '../../utilities'
-import { AUTH_API, CATALOG_API, SSB_COLORS } from '../../configurations'
+import { AUTH_API, CATALOG_API } from '../../configurations'
 import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../../enums'
 
 function UserAccess ({ userId }) {
