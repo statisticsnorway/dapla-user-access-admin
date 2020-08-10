@@ -22,7 +22,7 @@ function AppMenu ({ setSettingsOpen }) {
   )
 
   return (
-    <Menu secondary size='huge' icon='labeled' style={{ padding: '1em' }}>
+    <Menu secondary size='huge' icon='labeled' style={{ padding: '1rem', paddingTop: '2rem' }}>
       <Menu.Item as={Link} to={ROUTING.BASE}>
         <Image size='medium' src={SSBLogo} />
       </Menu.Item>

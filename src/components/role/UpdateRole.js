@@ -103,8 +103,8 @@ function UpdateRole ({ isNew, refetch, role }) {
         'left center'
       )}
     >
-      <Header as='h2' style={SSB_STYLE}>
-        <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+      <Header size='large' style={SSB_STYLE}>
+        <Icon.Group size='large' style={{ marginRight: '0.25rem', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon name='address card' />
           <Icon corner name={isNew ? 'plus' : 'edit'} />
         </Icon.Group>
@@ -140,7 +140,7 @@ function UpdateRole ({ isNew, refetch, role }) {
                 <label>{DescriptionPopup(<span>{ROLE.PRIVILEGES[language]}</span>)}</label>
                 <Segment secondary>
                   <Grid columns={2} textAlign='center'>
-                    <Divider vertical><Icon name='exchange' color='grey' style={{ fontSize: '1.5em' }} /></Divider>
+                    <Divider vertical><Icon name='exchange' color='grey' style={{ fontSize: '1.5rem' }} /></Divider>
                     <Grid.Row>
                       <Grid.Column>
                         <Icon size='large' name='check' style={{ color: SSB_COLORS.GREEN }} />
@@ -180,7 +180,7 @@ function UpdateRole ({ isNew, refetch, role }) {
                 <label>{DescriptionPopup(<span>{ROLE.STATES[language]}</span>)}</label>
                 <Segment secondary>
                   <Grid columns={2} textAlign='center'>
-                    <Divider vertical><Icon name='exchange' color='grey' style={{ fontSize: '1.5em' }} /></Divider>
+                    <Divider vertical><Icon name='exchange' color='grey' style={{ fontSize: '1.5rem' }} /></Divider>
                     <Grid.Row>
                       <Grid.Column>
                         <Icon size='large' name='check' style={{ color: SSB_COLORS.GREEN }} />
@@ -216,7 +216,7 @@ function UpdateRole ({ isNew, refetch, role }) {
               </Form.Field>
             </Grid.Column>
           </Grid>
-          <Form.Field required style={{ marginTop: '1em' }}>
+          <Form.Field required style={{ marginTop: '1rem' }}>
             <label>{DescriptionPopup(<span>{ROLE.MAX_VALUATION[language]}</span>)}</label>
             <Form.Group inline>
               {AUTH_API.ENUMS.VALUATIONS.map(valuation =>
@@ -234,11 +234,11 @@ function UpdateRole ({ isNew, refetch, role }) {
               )}
             </Form.Group>
           </Form.Field>
-          <Form.Field required style={{ marginTop: '1em' }}>
+          <Form.Field required style={{ marginTop: '1rem' }}>
             {populatedDropdown(ROLE.PATHS[language], getLoading, refetchGet, getError, ROLE.PATHS_FETCH_ERROR[language])}
             <Grid columns='equal'>
               <Grid.Column textAlign='center'>
-                <Icon size='large' name='check' style={{ color: SSB_COLORS.GREEN, marginBottom: '0.5em' }} />
+                <Icon size='large' name='check' style={{ color: SSB_COLORS.GREEN, marginBottom: '0.5rem' }} />
                 <Form.Dropdown
                   search
                   multiple
@@ -258,7 +258,7 @@ function UpdateRole ({ isNew, refetch, role }) {
                 />
               </Grid.Column>
               <Grid.Column textAlign='center'>
-                <Icon size='large' name='ban' style={{ color: SSB_COLORS.RED, marginBottom: '0.5em' }} />
+                <Icon size='large' name='ban' style={{ color: SSB_COLORS.RED, marginBottom: '0.5rem' }} />
                 <Form.Dropdown
                   search
                   multiple

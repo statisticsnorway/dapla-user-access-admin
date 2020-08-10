@@ -67,7 +67,7 @@ function AppHome () {
               name='sync alternate'
               disabled={userId === ''}
               data-testid={TEST_IDS.REFRESH_USER}
-              style={{ color: SSB_COLORS.BLUE, marginBottom: '0.25em', marginLeft: '0.5em', marginRight: '0.5em' }}
+              style={{ color: SSB_COLORS.BLUE, marginBottom: '0.25rem', marginLeft: '0.5rem', marginRight: '0.5rem' }}
               onClick={() => {
                 refetch()
                 setUserEdited(false)
@@ -87,7 +87,7 @@ function AppHome () {
               setRememberUser(rememberUser === 'true' ? 'false' : 'true')
             }}
           />
-          <Divider fitted hidden style={{ marginTop: '1em' }} />
+          <Divider fitted hidden style={{ marginTop: '1rem' }} />
           {!loading && !userEdited && error && <ErrorMessage error={error} language={language} />}
           {!error && !loading && !userEdited && data !== undefined &&
           <UpdateUser isNew={false} refetch={refetch} user={data} />
@@ -97,7 +97,7 @@ function AppHome () {
           <UpdateUser isNew={true} />
           {DescriptionPopup(
             <Link to={ROUTING.USERS}>
-              <Icon.Group size='huge' style={{ color: SSB_COLORS.BLUE, marginLeft: '1em' }}>
+              <Icon.Group size='huge' style={{ color: SSB_COLORS.BLUE, marginLeft: '1rem' }}>
                 <Icon link name='user' />
                 <Icon corner='top right' link name='table' />
               </Icon.Group>
