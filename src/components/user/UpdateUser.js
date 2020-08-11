@@ -59,8 +59,8 @@ function UpdateUser ({ isNew, refetch, user }) {
         'left center'
       )}
     >
-      <Header as='h2' style={SSB_STYLE}>
-        <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+      <Header size='large' style={SSB_STYLE}>
+        <Icon.Group size='large' style={{ marginRight: '0.2rem', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon name='user' />
           <Icon corner name={isNew ? 'plus' : 'edit'} />
         </Icon.Group>

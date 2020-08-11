@@ -17,8 +17,8 @@ function App () {
   const [catalogReady, setCatalogReady] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
-  const [{ loading: authLoading, error: authError }] = useAxios(`${authApi}${API.GET_HEALTH}`)
-  const [{ loading: catalogLoading, error: catalogError }] = useAxios(`${catalogApi}${API.GET_HEALTH}`)
+  const [{ loading: authLoading, error: authError }] = useAxios(`${authApi}${API.GET_HEALTH}`, { useCache: false })
+  const [{ loading: catalogLoading, error: catalogError }] = useAxios(`${catalogApi}${API.GET_HEALTH}`, { useCache: false })
 
   useEffect(() => {
     if (!authLoading && !authError) {

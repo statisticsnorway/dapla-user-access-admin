@@ -54,8 +54,8 @@ function UpdateGroup ({ group, isNew, refetch }) {
         )
       }
     >
-      <Header as='h2' style={SSB_STYLE}>
-        <Icon.Group size='large' style={{ marginRight: '0.2em', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+      <Header size='large' style={SSB_STYLE}>
+        <Icon.Group size='large' style={{ marginRight: '0.25rem', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon name='users' />
           <Icon corner name={isNew ? 'plus' : 'edit'} />
         </Icon.Group>

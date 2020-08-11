@@ -51,9 +51,6 @@ test('Resetting to default values works correctly', async () => {
 
   userEvent.click(getByTestId(TEST_IDS.DEFAULT_SETTINGS_BUTTON))
 
-  // There is a bug in https://github.com/statisticsnorway/ssb-component-library preventing values from updating when updated from another source then itself
-  //expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(api.authApi)
-  //expect(getByPlaceholderText(SETTINGS.CATALOG_API[language])).toHaveValue(api.catalogApi)
-  expect(apiContext.setAuthApi).toHaveBeenCalledWith(apiContext.authApi)
-  expect(apiContext.setCatalogApi).toHaveBeenCalledWith(apiContext.catalogApi)
+  expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(apiContext.authApi)
+  expect(getByPlaceholderText(SETTINGS.CATALOG_API[language])).toHaveValue(apiContext.catalogApi)
 })
