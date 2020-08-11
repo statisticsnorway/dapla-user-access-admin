@@ -56,10 +56,10 @@
     "collectCoverageFrom": [
       "src/**",
       "!src/index.js",
+      "!src/ssb-logo-rgb.svg",
       "!src/**/index.js",
       "!src/configurations/**",
       "!src/enums/**",
-      "!src/media/**",
       "!src/__tests__/test-data/**"
     ],
     "coverageThreshold": {
