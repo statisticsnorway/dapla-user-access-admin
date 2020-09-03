@@ -3,7 +3,7 @@ import useAxios from 'axios-hooks'
 import { Accordion, Grid } from 'semantic-ui-react'
 
 import { RoleLookup, UpdateGroup } from '../'
-import { ApiContext, DescriptionPopup, GroupsView, LanguageContext, makeEnum } from '../../utilities'
+import { ApiContext, DescriptionPopup, LanguageContext, makeEnum } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 import { GROUP } from '../../enums'
 
@@ -39,8 +39,7 @@ function GroupLookup ({ groupId }) {
                     content: { content: (<RoleLookup roleId={role} />) }
                   }))}
                 />
-                :
-                GroupsView(key, value)
+                : value
               }
             </Grid.Column>
           </Grid.Row>

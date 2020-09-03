@@ -1,0 +1,22 @@
+{
+  "catalogs": [
+    {
+      "id": {
+        "path": "/test/1",
+        "timestamp": "1582719098762"
+      },
+      "type": "",
+      "state": "RAW",
+      "valuation": "OPEN"
+    },
+    {
+      "id": {
+        "path": "/test/2",
+        "timestamp": "1582719098765"
+      },
+      "type": "",
+      "state": "RAW",
+      "valuation": "OPEN"
+    }
+  ]
+}

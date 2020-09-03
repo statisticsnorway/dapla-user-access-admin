@@ -7,10 +7,6 @@ export const UI = {
     en: 'Something went wrong, check settings',
     nb: 'Noe gikk galt, sjekk innstillingene'
   },
-  CATALOGS: {
-    en: 'Paths',
-    nb: 'Stier'
-  },
   FILTER_TABLE: {
     en: 'Filter table',
     nb: 'Filtrere tabellen'

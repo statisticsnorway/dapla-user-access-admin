@@ -1,8 +1,8 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
-import { render } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { LANGUAGE } from '@statisticsnorway/dapla-js-utilities'
 
 import App from '../App'
@@ -14,7 +14,6 @@ jest.mock('../components/AppHome', () => () => null)
 jest.mock('../components/role/RolesTable', () => () => null)
 jest.mock('../components/user/UsersTable', () => () => null)
 jest.mock('../components/group/GroupsTable', () => () => null)
-jest.mock('../components/catalog/CatalogsTable', () => () => null)
 
 const { errorObject, language, otherLanguage } = TEST_CONFIGURATIONS
 

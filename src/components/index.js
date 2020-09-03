@@ -1,7 +1,4 @@
 export { default as UserAccess } from './access/UserAccess'
-export { default as CatalogsTable } from './catalog/CatalogsTable'
-export { default as CatalogUserLookup } from './catalog/CatalogUserLookup'
-export { default as CatalogUserLookupPortal } from './catalog/CatalogUserLookupPortal'
 export { default as GroupLookup } from './group/GroupLookup'
 export { default as GroupsTable } from './group/GroupsTable'
 export { default as UpdateGroup } from './group/UpdateGroup'

@@ -1,0 +1,11 @@
+{
+  "data": {
+    "userId": "testUserId2",
+    "roles": [
+      "role1"
+    ],
+    "groups": [
+      "group1"
+    ]
+  }
+}

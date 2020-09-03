@@ -1,14 +1,17 @@
 import React from 'react'
-import { render } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
 
 import { UserAccess } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../enums'
 
-const { emptyCatalogs, language, returnCatalogs, testUserId } = TEST_CONFIGURATIONS
+import Catalogs from './test-data/Catalogs.json'
+import EmptyCatalogs from './test-data/EmptyCatalogs.json'
+
+const { language, testUserId } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const refetch = jest.fn()
 
@@ -25,7 +28,7 @@ const setup = () => {
 }
 
 test('Renders correctly', () => {
-  useAxios.mockReturnValue([{ data: emptyCatalogs, loading: false, error: null, response: null }, refetch])
+  useAxios.mockReturnValue([{ data: EmptyCatalogs, loading: false, error: null, response: null }, refetch])
   const { getByText } = setup()
 
   expect(getByText(USER_ACCESS.HEADER[language])).toBeInTheDocument()
@@ -33,7 +36,7 @@ test('Renders correctly', () => {
 
 test('Functions correctly on good response', () => {
   useAxios.mockReturnValue([{
-    data: emptyCatalogs,
+    data: EmptyCatalogs,
     loading: false,
     error: null,
     response: { response: { statusText: USER_ACCESS.VERDICTS.OK } }
@@ -48,7 +51,7 @@ test('Functions correctly on good response', () => {
 
 test('Functions correctly on bad response', () => {
   useAxios.mockReturnValue([{
-    data: emptyCatalogs,
+    data: EmptyCatalogs,
     loading: false,
     error: { response: { statusText: USER_ACCESS.VERDICTS.FORBIDDEN } },
     response: null
@@ -63,7 +66,7 @@ test('Functions correctly on bad response', () => {
 })
 
 test('Adding paths works correctly', async () => {
-  useAxios.mockReturnValue([{ data: returnCatalogs, loading: false, error: null, response: null }, refetch])
+  useAxios.mockReturnValue([{ data: Catalogs, loading: false, error: null, response: null }, refetch])
   const { getAllByText, getByTestId } = setup()
 
   await userEvent.type(getByTestId(TEST_IDS.SEARCH_DROPDOWN).children[0], '/test/3') // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75

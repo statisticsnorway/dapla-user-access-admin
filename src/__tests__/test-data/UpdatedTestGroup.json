@@ -1,0 +1,9 @@
+{
+  "data": {
+    "groupId": "testGroupId2",
+    "description": " new group descriptionA",
+    "roles": [
+      "role1"
+    ]
+  }
+}

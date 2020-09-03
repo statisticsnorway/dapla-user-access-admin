@@ -1,22 +1,19 @@
 import React from 'react'
-import { render } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
 
 import { UpdateUser } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, USER } from '../enums'
 
-const {
-  alternativeTestUserId,
-  language,
-  responseObject,
-  returnGroups,
-  returnRoles,
-  testUser,
-  updatedTestUser
-} = TEST_CONFIGURATIONS
+import Roles from './test-data/Roles.json'
+import Groups from './test-data/Groups.json'
+import TestUser from './test-data/TestUser.json'
+import UpdatedTestUser from './test-data/UpdatedTestUser.json'
+
+const { alternativeTestUserId, language, responseObject } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const execute = jest.fn()
 
@@ -34,7 +31,7 @@ const setup = (isNew, user) => {
 
 describe('Common mock', () => {
   useAxios.mockReturnValue(
-    [{ data: { ...returnRoles, ...returnGroups }, loading: false, error: null, response: responseObject }, execute]
+    [{ data: { ...Roles, ...Groups }, loading: false, error: null, response: responseObject }, execute]
   )
 
   test('Renders correctly on new user', () => {
@@ -46,7 +43,7 @@ describe('Common mock', () => {
   })
 
   test('Renders correctly on update user', () => {
-    const { getByPlaceholderText, getByTestId } = setup(false, testUser)
+    const { getByPlaceholderText, getByTestId } = setup(false, TestUser)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
 
@@ -58,10 +55,10 @@ describe('Common mock', () => {
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_USER))
     await userEvent.type(getByPlaceholderText(USER.USER_ID[language]), alternativeTestUserId)
-    userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
-    userEvent.click(getByText(returnGroups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
+    userEvent.click(getByText(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
+    userEvent.click(getByText(Groups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
     userEvent.click(getAllByText(USER.CREATE_USER[language])[1])
 
-    expect(execute).toHaveBeenNthCalledWith(7, updatedTestUser)
+    expect(execute).toHaveBeenNthCalledWith(7, UpdatedTestUser)
   })
 })

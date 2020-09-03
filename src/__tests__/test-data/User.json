@@ -1,0 +1,11 @@
+{
+  "userId": "user1",
+  "roles": [
+    "role1",
+    "role2"
+  ],
+  "groups": [
+    "group1",
+    "group2"
+  ]
+}

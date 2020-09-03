@@ -1,0 +1,24 @@
+{
+  "roleId": "testRoleId",
+  "description": "A test role",
+  "states": {
+    "includes": [
+      "INPUT"
+    ]
+  },
+  "maxValuation": "INTERNAL",
+  "privileges": {
+    "includes": [
+      "CREATE"
+    ]
+  },
+  "paths": {
+    "includes": [
+      "/test/1",
+      "/test/2"
+    ],
+    "excludes": [
+      "/test/3"
+    ]
+  }
+}

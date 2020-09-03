@@ -1,0 +1,38 @@
+{
+  "data": {
+    "roleId": "testRoleId2",
+    "description": " new role descriptionA",
+    "states": {
+      "includes": [
+        "PROCESSED"
+      ],
+      "excludes": [
+        "RAW",
+        "INPUT",
+        "OUTPUT",
+        "PRODUCT",
+        "OTHER",
+        "TEMP"
+      ]
+    },
+    "maxValuation": "OPEN",
+    "privileges": {
+      "includes": [
+        "UPDATE"
+      ],
+      "excludes": [
+        "READ",
+        "CREATE",
+        "DELETE"
+      ]
+    },
+    "paths": {
+      "includes": [
+        "/test/3"
+      ],
+      "excludes": [
+        "/test/4"
+      ]
+    }
+  }
+}

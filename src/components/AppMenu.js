@@ -1,14 +1,13 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react'
-import { LANGUAGE, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
+import { LANGUAGE, SSB_COLORS, ssb_logo_rgb } from '@statisticsnorway/dapla-js-utilities'
 
-import SSBLogo from '../ssb-logo-rgb.svg'
 import { LanguageContext } from '../utilities'
 import { ROUTING } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 
-const routeIcons = ['user', 'users', 'address card', 'folder open']
+const routeIcons = ['user', 'users', 'address card']
 
 function AppMenu ({ setSettingsOpen }) {
   const { language, setLanguage } = useContext(LanguageContext)
@@ -24,7 +23,7 @@ function AppMenu ({ setSettingsOpen }) {
   return (
     <Menu secondary size='huge' icon='labeled' style={{ padding: '1rem', paddingTop: '2rem' }}>
       <Menu.Item as={Link} to={ROUTING.BASE}>
-        <Image size='medium' src={SSBLogo} />
+        <Image size='medium' src={ssb_logo_rgb} />
       </Menu.Item>
       <Menu.Item>
         <Header size='huge' content={UI.HEADER[language]} />
