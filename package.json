@@ -1,6 +1,6 @@
 {
   "name": "user-access-admin",
-  "version": "0.3.13",
+  "version": "0.4.0",
   "description": "Administration of user access for Statistics Norway Dataplatform",
   "repository": {
     "type": "git",
@@ -49,14 +49,13 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.1.1",
-    "@testing-library/react": "^10.0.0",
+    "@testing-library/react": "^11.0.1",
     "@testing-library/user-event": "^12.0.11"
   },
   "jest": {
     "collectCoverageFrom": [
       "src/**",
       "!src/index.js",
-      "!src/ssb-logo-rgb.svg",
       "!src/**/index.js",
       "!src/configurations/**",
       "!src/enums/**",

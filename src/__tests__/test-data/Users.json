@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "userId": "user1",
+      "roles": [
+        "role1",
+        "role2"
+      ],
+      "groups": [
+        "group1",
+        "group2"
+      ]
+    },
+    {
+      "userId": "user2",
+      "roles": [
+        "role3",
+        "role4"
+      ],
+      "groups": [
+        "group3",
+        "group4"
+      ]
+    }
+  ]
+}

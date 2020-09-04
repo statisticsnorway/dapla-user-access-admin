@@ -1,17 +1,19 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
-import { render } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 
 import { UsersTable } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { AUTH_API, ROUTING, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 
+import Users from './test-data/Users.json'
+
 jest.mock('../components/user/UpdateUser', () => () => null)
 
-const { errorObject, errorString, language, returnUsers } = TEST_CONFIGURATIONS
+const { errorObject, errorString, language } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const refetch = jest.fn()
 
@@ -30,7 +32,7 @@ const setup = () => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue([{ data: returnUsers, loading: false, error: null }, refetch])
+  useAxios.mockReturnValue([{ data: Users, loading: false, error: null }, refetch])
 
   test('Renders correctly', () => {
     const { getByPlaceholderText } = setup()
@@ -43,10 +45,10 @@ describe('Common mock', () => {
 
     await userEvent.type(
       getByPlaceholderText(UI.FILTER_TABLE[language]),
-      returnUsers[AUTH_API.USERS][1][AUTH_API.USER_OBJECT.STRING]
+      Users[AUTH_API.USERS][1][AUTH_API.USER_OBJECT.STRING]
     )
 
-    expect(queryAllByText(returnUsers[AUTH_API.USERS][0][AUTH_API.USER_OBJECT.STRING])).toHaveLength(0)
+    expect(queryAllByText(Users[AUTH_API.USERS][0][AUTH_API.USER_OBJECT.STRING])).toHaveLength(0)
   })
 
   test('Sorts correctly', () => {

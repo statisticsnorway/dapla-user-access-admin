@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Link } from 'react-router-dom'
 import { Accordion, Checkbox, Divider, Grid, Header, Icon, Input } from 'semantic-ui-react'
 import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
 import { GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
-import { AUTH_API, LOCAL_STORAGE, ROUTING } from '../configurations'
+import { AUTH_API, LOCAL_STORAGE } from '../configurations'
 import { HOME, TEST_IDS, UI } from '../enums'
 
 function AppHome () {
@@ -95,16 +94,6 @@ function AppHome () {
         </Grid.Column>
         <Grid.Column textAlign='right' verticalAlign='middle'>
           <UpdateUser isNew={true} />
-          {DescriptionPopup(
-            <Link to={ROUTING.USERS}>
-              <Icon.Group size='huge' style={{ color: SSB_COLORS.BLUE, marginLeft: '1rem' }}>
-                <Icon link name='user' />
-                <Icon corner='top right' link name='table' />
-              </Icon.Group>
-            </Link>,
-            false,
-            'top right'
-          )}
         </Grid.Column>
       </Grid.Row>
       {!error && !loading && !userEdited && data !== undefined &&

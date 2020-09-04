@@ -1,22 +1,19 @@
 import React from 'react'
-import { render } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
 
 import { UpdateRole } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
-import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI } from '../enums'
+import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI, VALUATION } from '../enums'
 
-const {
-  alternativeTestRoleId,
-  emptyCatalogs,
-  emptyRole,
-  language,
-  responseObject,
-  testRole,
-  updatedTestRole
-} = TEST_CONFIGURATIONS
+import TestRole from './test-data/TestRole.json'
+import EmptyRole from './test-data/EmptyRole.json'
+import EmptyCatalogs from './test-data/EmptyCatalogs.json'
+import UpdatedTestRole from './test-data/UpdatedTestRole.json'
+
+const { alternativeTestRoleId, alternativeTestRoleDescription, language, responseObject } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const executePut = jest.fn()
 
@@ -34,7 +31,7 @@ const setup = (isNew, role) => {
 
 describe('Common mock', () => {
   useAxios.mockReturnValue(
-    [{ data: emptyCatalogs, loading: false, error: null, response: responseObject }, executePut]
+    [{ data: EmptyCatalogs, loading: false, error: null, response: responseObject }, executePut]
   )
 
   test('Renders correctly on new role', () => {
@@ -46,7 +43,7 @@ describe('Common mock', () => {
   })
 
   test('Renders correctly on update role', () => {
-    const { getByPlaceholderText, getByTestId } = setup(false, testRole)
+    const { getByPlaceholderText, getByTestId } = setup(false, TestRole)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
 
@@ -59,7 +56,7 @@ describe('Common mock', () => {
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
     userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
 
-    expect(executePut).toHaveBeenNthCalledWith(4, emptyRole)
+    expect(executePut).toHaveBeenNthCalledWith(4, EmptyRole)
   })
 
   test('Form changes works correctly', async () => {
@@ -72,6 +69,7 @@ describe('Common mock', () => {
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[2]][language]))
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
+    userEvent.click(getByText(VALUATION[AUTH_API.ENUMS.VALUATIONS[0]][language]))
     // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
     await userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[0].children[0], '/test/3')
     userEvent.click(getByText(UI.ADD[language]))
@@ -79,8 +77,14 @@ describe('Common mock', () => {
     await userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[1].children[0], '/test/4')
     userEvent.click(getByText(UI.ADD[language]))
     await userEvent.type(getByPlaceholderText(ROLE.ROLE_ID[language]), alternativeTestRoleId)
+    await userEvent.type(getByPlaceholderText(ROLE.DESCRIPTION[language]), alternativeTestRoleDescription)
     userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
 
-    expect(executePut).toHaveBeenNthCalledWith(6, updatedTestRole)
+    /*
+    There is a bug with userEvent.type in a TextArea from SemanticUI where it seems to take the first character and
+    place it last in the string. Until this is fixed, the value for description in UpdatedTestRole has to be a little
+    bit jumbled. It works fine outside testing.
+    */
+    expect(executePut).toHaveBeenNthCalledWith(6, UpdatedTestRole)
   })
 })

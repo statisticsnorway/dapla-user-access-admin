@@ -1,15 +1,17 @@
 import React from 'react'
-import { render } from '@testing-library/react'
 import useAxios from 'axios-hooks'
+import { render } from '@testing-library/react'
 
 import { GroupLookup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { TEST_CONFIGURATIONS } from '../configurations'
 
+import TestGroup from './test-data/TestGroup.json'
+
 jest.mock('../components/role/UpdateRole', () => () => null)
 jest.mock('../components/role/RoleLookup', () => () => null)
 
-const { errorObject, language, testGroup, testGroupId } = TEST_CONFIGURATIONS
+const { errorObject, language, testGroupId } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const refetch = jest.fn()
 
@@ -26,8 +28,8 @@ const setup = () => {
 }
 
 test('Renders correctly', () => {
-  useAxios.mockReturnValue([{ data: testGroup, loading: false, error: null }, refetch])
-  const { groupId, description, roles } = testGroup
+  useAxios.mockReturnValue([{ data: TestGroup, loading: false, error: null }, refetch])
+  const { groupId, description, roles } = TestGroup
   const { getByText } = setup()
 
   expect(getByText(groupId)).toBeInTheDocument()

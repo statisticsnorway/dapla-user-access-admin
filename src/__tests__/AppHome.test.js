@@ -1,20 +1,22 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
-import { render } from '@testing-library/react'
 import useAxios from 'axios-hooks'
 import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 
 import { AppHome } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 
+import User from './test-data/User.json'
+
 jest.mock('../components/role/RoleLookup', () => () => null)
 jest.mock('../components/user/UpdateUser', () => () => null)
 jest.mock('../components/group/GroupLookup', () => () => null)
 jest.mock('../components/access/UserAccess', () => () => null)
 
-const { alternativeTestUserId, language, returnUser } = TEST_CONFIGURATIONS
+const { alternativeTestUserId, language } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const refetch = jest.fn()
 
@@ -40,7 +42,7 @@ test('Renders correctly', () => {
 })
 
 test('Changing user works correctly', async () => {
-  useAxios.mockReturnValue([{ data: returnUser, loading: false, error: null }, refetch])
+  useAxios.mockReturnValue([{ data: User, loading: false, error: null }, refetch])
   const { getByPlaceholderText, getByTestId } = setup()
 
   await userEvent.type(getByPlaceholderText(UI.USER[language]), alternativeTestUserId)

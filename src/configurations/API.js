@@ -3,10 +3,6 @@ export const API = {
 }
 
 export const AUTH_API = {
-  CATALOG_ACCESS: 'catalogAccess',
-  CATALOG_ACCESS_OBJECT: {
-    STRING: ['path', 'user', 'role', 'group', 'privileges']
-  },
   ENUMS: {
     PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
     STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER', 'TEMP'],
@@ -15,7 +11,6 @@ export const AUTH_API = {
   EXCLUDES: 'excludes',
   GET_ACCESS: (path, privilege, state, maxValuation, userId) =>
     `/access/${userId}?privilege=${privilege}&path=${path}&valuation=${maxValuation}&state=${state}`,
-  GET_CATALOGACCESS: (path, valuation, state) => `/access/?path=${path}&valuation=${valuation}&state=${state}`,
   GET_GROUP: (groupId) => `/group/${groupId}`,
   GET_GROUPS: '/group',
   GET_ROLE: (roleId) => `/role/${roleId}`,
@@ -47,7 +42,6 @@ export const AUTH_API = {
 
 export const CATALOG_API = {
   CATALOGS: 'catalogs',
-  CATALOG_ACCESS: 'catalogAccess',
   CATALOG_OBJECT: {
     ENUM: ['valuation', 'state', 'type'],
     OBJECT: {

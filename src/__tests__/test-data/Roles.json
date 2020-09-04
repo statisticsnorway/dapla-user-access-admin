@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "roleId": "role1",
+      "description": "A role",
+      "states": {},
+      "maxValuation": "OPEN",
+      "privileges": {
+        "includes": [
+          "READ"
+        ]
+      },
+      "paths": {
+        "includes": [
+          "/test/1"
+        ],
+        "excludes": [
+          "/test/2"
+        ]
+      }
+    },
+    {
+      "roleId": "role2",
+      "description": "An alternative",
+      "states": {
+        "includes": "INPUT"
+      },
+      "maxValuation": "INTERNAL",
+      "privileges": {
+        "excludes": [
+          "READ",
+          "UPDATE",
+          "DELETE"
+        ]
+      },
+      "paths": {
+        "includes": [
+          "/test/2"
+        ]
+      }
+    }
+  ]
+}

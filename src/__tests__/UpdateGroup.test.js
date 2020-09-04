@@ -1,21 +1,18 @@
 import React from 'react'
-import { render } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import useAxios from 'axios-hooks'
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
 
 import { UpdateGroup } from '../components'
 import { ApiContext, LanguageContext } from '../utilities'
 import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { GROUP, TEST_IDS } from '../enums'
 
-const {
-  alternativeTestGroupId,
-  language,
-  responseObject,
-  returnRoles,
-  testGroup,
-  updatedTestGroup
-} = TEST_CONFIGURATIONS
+import Roles from './test-data/Roles.json'
+import TestGroup from './test-data/TestGroup.json'
+import UpdatedTestGroup from './test-data/UpdatedTestGroup.json'
+
+const { alternativeTestGroupDescription, alternativeTestGroupId, language, responseObject } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const execute = jest.fn()
 
@@ -33,7 +30,7 @@ const setup = (isNew, group) => {
 
 describe('Common mock', () => {
   useAxios.mockReturnValue(
-    [{ data: returnRoles, loading: false, error: null, response: responseObject }, execute]
+    [{ data: Roles, loading: false, error: null, response: responseObject }, execute]
   )
 
   test('Renders correctly on new group', () => {
@@ -45,7 +42,7 @@ describe('Common mock', () => {
   })
 
   test('Renders correctly on update group', () => {
-    const { getByPlaceholderText, getByTestId } = setup(false, testGroup)
+    const { getByPlaceholderText, getByTestId } = setup(false, TestGroup)
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_GROUP))
 
@@ -57,9 +54,15 @@ describe('Common mock', () => {
 
     userEvent.click(getByTestId(TEST_IDS.UPDATE_GROUP))
     await userEvent.type(getByPlaceholderText(GROUP.GROUP_ID[language]), alternativeTestGroupId)
-    userEvent.click(getByText(returnRoles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
+    await userEvent.type(getByPlaceholderText(GROUP.DESCRIPTION[language]), alternativeTestGroupDescription)
+    userEvent.click(getByText(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.click(getAllByText(GROUP.CREATE_GROUP[language])[1])
 
-    expect(execute).toHaveBeenNthCalledWith(4, updatedTestGroup)
+    /*
+    There is a bug with userEvent.type in a TextArea from SemanticUI where it seems to take the first character and
+    place it last in the string. Until this is fixed, the value for description in UpdatedTestGroup has to be a little
+    bit jumbled. It works fine outside testing.
+    */
+    expect(execute).toHaveBeenNthCalledWith(4, UpdatedTestGroup)
   })
 })
