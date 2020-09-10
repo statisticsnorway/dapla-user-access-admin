@@ -16,6 +16,10 @@ jest.mock('../components/user/UpdateUser', () => () => null)
 jest.mock('../components/group/GroupLookup', () => () => null)
 jest.mock('../components/access/UserAccess', () => () => null)
 
+window.localStorage.__proto__.getItem = jest.fn()
+window.localStorage.__proto__.setItem = jest.fn()
+window.localStorage.__proto__.hasOwnProperty = jest.fn()
+
 const { alternativeTestUserId, language } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const refetch = jest.fn()
@@ -49,4 +53,15 @@ test('Changing user works correctly', async () => {
   userEvent.click(getByTestId(TEST_IDS.REFRESH_USER))
 
   expect(refetch).toHaveBeenCalled()
+})
+
+test('Invokes localstorage to remember user', async () => {
+  useAxios.mockReturnValue([{ data: User, loading: false, error: null }, refetch])
+  const { getByPlaceholderText, getByText } = setup()
+
+  userEvent.click(getByText(UI.REMEMBER_ME[language]))
+  await userEvent.type(getByPlaceholderText(UI.USER[language]), '{enter}')
+
+  expect(window.localStorage.__proto__.setItem).toHaveBeenCalled()
+  expect(window.localStorage.__proto__.hasOwnProperty).toHaveBeenCalled()
 })
