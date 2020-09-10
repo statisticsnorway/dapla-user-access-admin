@@ -62,12 +62,7 @@ export const setupPathOptions = role => {
   }
 }
 
-export const sortArrayOfObjects = (array, by, direction = 'ascending') => {
-  return (array && array[1]) ? (by && by.length === 1 ? array.sort(compareObjects(by, direction)) :
-    array.sort(compareObjectsByMultipleFields(by, direction))) : []
-}
-
-function compareObjects (by, direction) {
+const compareObjects = (by, direction) => {
   return function innerSort (a, b) {
     let aObj = a
     let bObj = b
@@ -82,20 +77,6 @@ function compareObjects (by, direction) {
   }
 }
 
-function compareObjectsByMultipleFields (by, direction) {
-  return function innerSort (a, b) {
-    if (by.length === 0) {
-      return 0
-    }
-
-    const key = by[0]
-
-    if (a[key] < b[key]) {
-      return direction === 'ascending' ? -1 : 1
-    } else if (a[key] > b[key]) {
-      return direction === 'ascending' ? 1 : -1
-    } else {
-      return compareObjectsByMultipleFields(by.slice(1))(a, b)
-    }
-  }
+export const sortArrayOfObjects = (array, by, direction = 'ascending') => {
+  return array && array[1] && by && by.length === 1 ? array.sort(compareObjects(by, direction)) : array
 }
