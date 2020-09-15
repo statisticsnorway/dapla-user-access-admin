@@ -1,11 +1,18 @@
 import React, { useContext, useState } from 'react'
 import { Button, Container, Divider, Form, Grid, Header, Icon, Modal, Segment } from 'semantic-ui-react'
-import { ErrorMessage, InfoPopup, SimpleFooter, SSB_COLORS, SSB_STYLE } from '@statisticsnorway/dapla-js-utilities'
+import {
+  ErrorMessage,
+  InfoPopup,
+  InfoText,
+  SimpleFooter,
+  SSB_COLORS,
+  SSB_STYLE
+} from '@statisticsnorway/dapla-js-utilities'
 
 import { ApiContext, LanguageContext } from '../utilities'
 import { SETTINGS, TEST_IDS } from '../enums'
 
-function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen }) {
+function AppSettings ({ authError, authLoading, catalogError, catalogLoading, open, setSettingsOpen }) {
   const { language } = useContext(LanguageContext)
   const { authApi, catalogApi, setAuthApi, setCatalogApi } = useContext(ApiContext)
 
@@ -32,8 +39,8 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
 
   const setDefaults = () => {
     setSettingsEdited(true)
-    setAuthUrl(process.env.REACT_APP_API_AUTH)
-    setCatalogUrl(process.env.REACT_APP_API_CATALOG)
+    setAuthUrl(window._env.REACT_APP_API_AUTH)
+    setCatalogUrl(window._env.REACT_APP_API_CATALOG)
   }
 
   return (
@@ -42,41 +49,50 @@ function AppSettings ({ authError, catalogError, loading, open, setSettingsOpen 
         <Icon name='cog' style={{ color: SSB_COLORS.GREEN }} />
         {SETTINGS.HEADER[language]}
       </Header>
-      <Modal.Content as={Segment} basic loading={loading} style={SSB_STYLE}>
+      <Modal.Content as={Segment} basic style={SSB_STYLE}>
         <Form size='large'>
           <Form.Input
             value={authUrl}
-            disabled={loading}
+            loading={authLoading}
             label={SETTINGS.AUTH_API[language]}
             error={!!authError && !settingsEdited}
             placeholder={SETTINGS.AUTH_API[language]}
+            onKeyPress={({ key }) => key === 'Enter' && applySettings()}
             onChange={(event, { value }) => changeSettings(value, 'auth')}
+            icon={!authLoading && !settingsEdited && !authError ?
+              <Icon name='check' style={{ color: SSB_COLORS.GREEN }} /> : null
+            }
           />
         </Form>
-        {!loading && !settingsEdited && authError && <ErrorMessage error={authError} language={language} />}
+        {!authLoading && !settingsEdited && authError && <ErrorMessage error={authError} language={language} />}
         <Divider hidden />
         <Form size='large'>
           <Form.Input
-            disabled={loading}
             value={catalogUrl}
+            loading={catalogLoading}
             label={SETTINGS.CATALOG_API[language]}
             error={!!catalogError && !settingsEdited}
             placeholder={SETTINGS.CATALOG_API[language]}
+            onKeyPress={({ key }) => key === 'Enter' && applySettings()}
             onChange={(event, { value }) => changeSettings(value, 'catalog')}
+            icon={!catalogLoading && !settingsEdited && !catalogError ?
+              <Icon name='check' style={{ color: SSB_COLORS.GREEN }} /> : null
+            }
           />
         </Form>
-        {!loading && !settingsEdited && catalogError && <ErrorMessage error={catalogError} language={language} />}
+        {!catalogLoading && !settingsEdited && catalogError &&
+        <ErrorMessage error={catalogError} language={language} />
+        }
+        {!authLoading && !catalogLoading && settingsEdited &&
         <Container style={{ marginTop: '1rem' }}>
-          {settingsEdited &&
-          <>
-            <Icon name='info circle' style={{ color: SSB_COLORS.BLUE }} />
-            {SETTINGS.EDITED_VALUES[language]}
-          </>
-          }
+          <InfoText text={SETTINGS.EDITED_VALUES[language]} />
+        </Container>
+        }
+        <Container style={{ marginTop: '1rem' }}>
           <Divider hidden />
           <Grid columns='equal'>
             <Grid.Column>
-              <Button primary size='large' disabled={loading} onClick={() => applySettings()}>
+              <Button primary size='large' disabled={authLoading || catalogLoading} onClick={() => applySettings()}>
                 <Icon name='sync' style={{ paddingRight: '0.5rem' }} />
                 {SETTINGS.APPLY[language]}
               </Button>

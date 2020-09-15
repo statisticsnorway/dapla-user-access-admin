@@ -36,8 +36,8 @@ describe('Common mock', () => {
     const { getByText } = setup()
 
     expect(getByText(UI.HEADER[language])).toBeInTheDocument()
-    expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_AUTH}${API.GET_HEALTH}`, { useCache: false })
-    expect(useAxios).toHaveBeenCalledWith(`${process.env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`, { useCache: false })
+    expect(useAxios).toHaveBeenCalledWith(`${window._env.REACT_APP_API_AUTH}${API.GET_HEALTH}`, { useCache: false })
+    expect(useAxios).toHaveBeenCalledWith(`${window._env.REACT_APP_API_CATALOG}${API.GET_HEALTH}`, { useCache: false })
   })
 
   test('Change language works correctly', () => {

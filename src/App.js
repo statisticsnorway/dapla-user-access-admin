@@ -63,9 +63,10 @@ function App () {
       <AppSettings
         open={settingsOpen}
         authError={authError}
+        authLoading={authLoading}
         catalogError={catalogError}
+        catalogLoading={catalogLoading}
         setSettingsOpen={setSettingsOpen}
-        loading={authLoading || catalogLoading}
       />
     </>
   )
