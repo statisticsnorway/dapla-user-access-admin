@@ -4,7 +4,7 @@ import useAxios from 'axios-hooks'
 import { render } from '@testing-library/react'
 
 import { GroupsTable } from '../components'
-import { ApiContext, LanguageContext } from '../utilities'
+import { ApiContext, LanguageContext } from '../context/AppContext'
 import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 

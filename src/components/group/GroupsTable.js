@@ -4,7 +4,8 @@ import { Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
 import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
 import { UpdateGroup } from '../'
-import { ApiContext, LanguageContext, sortArrayOfObjects } from '../../utilities'
+import { ApiContext, LanguageContext } from '../../context/AppContext'
+import { sortArrayOfObjects } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 import { GROUP, TEST_IDS, UI } from '../../enums'
 

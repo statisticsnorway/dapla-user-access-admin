@@ -4,7 +4,8 @@ import { Accordion, Checkbox, Divider, Grid, Header, Icon, Input } from 'semanti
 import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
 import { GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
-import { ApiContext, DescriptionPopup, LanguageContext } from '../utilities'
+import { ApiContext, LanguageContext } from '../context/AppContext'
+import { DescriptionPopup } from '../utilities'
 import { AUTH_API, LOCAL_STORAGE } from '../configurations'
 import { HOME, TEST_IDS, UI } from '../enums'
 

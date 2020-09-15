@@ -3,7 +3,8 @@ import useAxios from 'axios-hooks'
 import { Accordion, Grid } from 'semantic-ui-react'
 
 import { RoleLookup, UpdateGroup } from '../'
-import { ApiContext, DescriptionPopup, LanguageContext, makeEnum } from '../../utilities'
+import { ApiContext, LanguageContext } from '../../context/AppContext'
+import { DescriptionPopup, makeEnum } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 import { GROUP } from '../../enums'
 

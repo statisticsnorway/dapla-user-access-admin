@@ -9,7 +9,7 @@ import {
   SSB_STYLE
 } from '@statisticsnorway/dapla-js-utilities'
 
-import { ApiContext, LanguageContext } from '../utilities'
+import { ApiContext, LanguageContext } from '../context/AppContext'
 import { SETTINGS, TEST_IDS } from '../enums'
 
 function AppSettings ({ authError, authLoading, catalogError, catalogLoading, open, setSettingsOpen }) {

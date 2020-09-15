@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { LANGUAGE } from '@statisticsnorway/dapla-js-utilities'
 
 import App from '../App'
-import { AppContextProvider } from '../utilities'
+import { AppContextProvider } from '../context/AppContext'
 import { API, TEST_CONFIGURATIONS } from '../configurations'
 import { SETTINGS, TEST_IDS, UI } from '../enums'
 
