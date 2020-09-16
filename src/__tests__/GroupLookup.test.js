@@ -3,7 +3,7 @@ import useAxios from 'axios-hooks'
 import { render } from '@testing-library/react'
 
 import { GroupLookup } from '../components'
-import { ApiContext, LanguageContext } from '../utilities'
+import { ApiContext, LanguageContext } from '../context/AppContext'
 import { TEST_CONFIGURATIONS } from '../configurations'
 
 import TestGroup from './test-data/TestGroup.json'

@@ -5,7 +5,7 @@ import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 
 import { AppHome } from '../components'
-import { ApiContext, LanguageContext } from '../utilities'
+import { ApiContext, LanguageContext } from '../context/AppContext'
 import { TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 

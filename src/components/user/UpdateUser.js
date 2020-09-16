@@ -3,7 +3,8 @@ import useAxios from 'axios-hooks'
 import { Button, Divider, Form, Header, Icon, Modal } from 'semantic-ui-react'
 import { SSB_COLORS, SSB_STYLE } from '@statisticsnorway/dapla-js-utilities'
 
-import { ApiContext, DescriptionPopup, LanguageContext } from '../../utilities'
+import { ApiContext, LanguageContext } from '../../context/AppContext'
+import { DescriptionPopup } from '../../utilities'
 import { AUTH_API, populatedDropdown } from '../../configurations'
 import { TEST_IDS, UI, USER } from '../../enums'
 

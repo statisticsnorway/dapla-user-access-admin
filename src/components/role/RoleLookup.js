@@ -3,7 +3,8 @@ import useAxios from 'axios-hooks'
 import { Grid } from 'semantic-ui-react'
 
 import { UpdateRole } from '../'
-import { ApiContext, DescriptionPopup, LanguageContext, makeEnum, RolesView } from '../../utilities'
+import { ApiContext, LanguageContext } from '../../context/AppContext'
+import { DescriptionPopup, makeEnum, RolesView } from '../../utilities'
 import { AUTH_API } from '../../configurations'
 import { ROLE } from '../../enums'
 

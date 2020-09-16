@@ -4,7 +4,8 @@ import { Divider, Grid, Icon, Input, List, Loader, Table } from 'semantic-ui-rea
 import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
 import { UpdateUser } from '../'
-import { ApiContext, DescriptionPopup, LanguageContext, sortArrayOfObjects } from '../../utilities'
+import { ApiContext, LanguageContext } from '../../context/AppContext'
+import { DescriptionPopup, sortArrayOfObjects } from '../../utilities'
 import { AUTH_API, LOCAL_STORAGE, ROUTING } from '../../configurations'
 import { TEST_IDS, UI, USER } from '../../enums'
 import { Link } from 'react-router-dom'

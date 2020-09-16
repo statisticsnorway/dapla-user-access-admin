@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react'
 import { LANGUAGE, SSB_COLORS, ssb_logo_rgb } from '@statisticsnorway/dapla-js-utilities'
 
-import { LanguageContext } from '../utilities'
+import { LanguageContext } from '../context/AppContext'
 import { ROUTING } from '../configurations'
 import { TEST_IDS, UI } from '../enums'
 

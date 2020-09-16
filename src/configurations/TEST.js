@@ -10,8 +10,8 @@ export const TEST_CONFIGURATIONS = {
   alternativeTestUserId: 'testUserId2',
   alternativeUrl: 'http://localhost:9999',
   apiContext: (fn) => ({
-    authApi: process.env.REACT_APP_API_AUTH,
-    catalogApi: process.env.REACT_APP_API_CATALOG,
+    authApi: window._env.REACT_APP_API_AUTH,
+    catalogApi: window._env.REACT_APP_API_CATALOG,
     setAuthApi: fn,
     setCatalogApi: fn
   }),

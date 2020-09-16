@@ -3,14 +3,8 @@ import useAxios from 'axios-hooks'
 import { Button, Divider, Form, Grid, Header, Icon, List, Modal, Segment } from 'semantic-ui-react'
 import { SSB_COLORS, SSB_STYLE } from '@statisticsnorway/dapla-js-utilities'
 
-import {
-  ApiContext,
-  convertToIncludesExcludes,
-  DescriptionPopup,
-  LanguageContext,
-  moveIncludesExcludes,
-  setupPathOptions
-} from '../../utilities'
+import { ApiContext, LanguageContext } from '../../context/AppContext'
+import { convertToIncludesExcludes, DescriptionPopup, moveIncludesExcludes, setupPathOptions } from '../../utilities'
 import { AUTH_API, CATALOG_API, populatedDropdown, VALUATION_COLORS } from '../../configurations'
 import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI, VALUATION } from '../../enums'
 

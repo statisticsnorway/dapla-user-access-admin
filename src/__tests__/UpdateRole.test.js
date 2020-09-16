@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/react'
 
 import { UpdateRole } from '../components'
-import { ApiContext, LanguageContext } from '../utilities'
+import { ApiContext, LanguageContext } from '../context/AppContext'
 import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { DATASET_STATE, PRIVILEGE, ROLE, TEST_IDS, UI, VALUATION } from '../enums'
 
