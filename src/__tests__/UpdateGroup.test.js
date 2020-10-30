@@ -29,9 +29,11 @@ const setup = (isNew, group) => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue(
-    [{ data: Roles, loading: false, error: null, response: responseObject }, execute]
-  )
+  beforeEach(() => {
+    useAxios.mockReturnValue(
+      [{ data: Roles, loading: false, error: null, response: responseObject }, execute]
+    )
+  })
 
   test('Renders correctly on new group', () => {
     const { getByPlaceholderText, getByTestId } = setup(true)
@@ -58,11 +60,6 @@ describe('Common mock', () => {
     userEvent.click(getByText(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.click(getAllByText(GROUP.CREATE_GROUP[language])[1])
 
-    /*
-    There is a bug with userEvent.type in a TextArea from SemanticUI where it seems to take the first character and
-    place it last in the string. Until this is fixed, the value for description in UpdatedTestGroup has to be a little
-    bit jumbled. It works fine outside testing.
-    */
-    expect(execute).toHaveBeenNthCalledWith(4, UpdatedTestGroup)
+    expect(execute).toHaveBeenNthCalledWith(2, UpdatedTestGroup)
   })
 })

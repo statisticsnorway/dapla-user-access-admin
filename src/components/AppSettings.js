@@ -34,6 +34,7 @@ function AppSettings ({ authError, authLoading, catalogError, catalogLoading, op
     if (api === 'catalog') {
       setCatalogUrl(value)
     }
+
     setSettingsEdited(true)
   }
 
@@ -100,7 +101,7 @@ function AppSettings ({ authError, authLoading, catalogError, catalogLoading, op
             <Grid.Column textAlign='right'>
               <InfoPopup
                 position='left center'
-                text={SETTINGS.RESET_SETTINGS[language]}
+                text={SETTINGS.RESET_VALUES[language]}
                 trigger={
                   <Icon
                     link

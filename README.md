@@ -1,5 +1,5 @@
-# user-access-admin
-[![Build Status](https://dev.azure.com/statisticsnorway/Dapla/_apis/build/status/statisticsnorway.user-access-admin?branchName=master)](https://dev.azure.com/statisticsnorway/Dapla/_build/latest?definitionId=13&branchName=master)
+# dapla-user-access-admin
+[![Build Status](https://dev.azure.com/statisticsnorway/Dapla/_apis/build/status/statisticsnorway.dapla-user-access-admin?branchName=master)](https://dev.azure.com/statisticsnorway/Dapla/_build/latest?definitionId=130&branchName=master)
 
 This application is built for in-house use in Statistics Norway and it aims to create a user interface against 
 [dapla-user-access-service](https://github.com/statisticsnorway/dataset-access), somewhat supported by 
@@ -21,9 +21,9 @@ Run `yarn start` and navigate to `http://localhost:3000/`.
 
 ### Docker locally
 * `yarn build`
-* `docker build -t user-access-admin .`
-* `docker run -p 8000:80 user-access-admin:latest`
-  * Alternatively with custom environment variables: `docker run -p 8000:80 -e REACT_APP_API_AUTH=http://localhost:20101 user-access-admin:latest`
+* `docker build -t dapla-user-access-admin .`
+* `docker run -p 8000:80 dapla-user-access-admin:latest`
+  * Alternatively with custom environment variables: `docker run -p 8000:80 -e REACT_APP_API_AUTH=http://localhost:20101 dapla-user-access-admin:latest`
 * Navigate to `http://localhost:8000`
 
 **Note** that this application requires [dapla-project localstack](https://github.com/statisticsnorway/dapla-project/blob/master/localstack/README.md)

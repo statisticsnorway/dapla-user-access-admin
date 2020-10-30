@@ -3,10 +3,6 @@ export const SETTINGS = {
     en: 'Apply',
     nb: 'Angi'
   },
-  APP_VERSION: {
-    en: 'App version',
-    nb: 'App versjon'
-  },
   AUTH_API: {
     en: 'Auth service',
     nb: 'Tilgangstjeneste'
@@ -23,7 +19,7 @@ export const SETTINGS = {
     en: 'Settings',
     nb: 'Innstillinger'
   },
-  RESET_SETTINGS: {
+  RESET_VALUES: {
     en: 'Reset to default values',
     nb: 'Tilbakestill til standardverdier'
   }

@@ -30,9 +30,11 @@ const setup = (isNew, user) => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue(
-    [{ data: { ...Roles, ...Groups }, loading: false, error: null, response: responseObject }, execute]
-  )
+  beforeEach(() => {
+    useAxios.mockReturnValue(
+      [{ data: { ...Roles, ...Groups }, loading: false, error: null, response: responseObject }, execute]
+    )
+  })
 
   test('Renders correctly on new user', () => {
     const { getByPlaceholderText, getByTestId } = setup(true)
@@ -59,6 +61,6 @@ describe('Common mock', () => {
     userEvent.click(getByText(Groups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
     userEvent.click(getAllByText(USER.CREATE_USER[language])[1])
 
-    expect(execute).toHaveBeenNthCalledWith(7, UpdatedTestUser)
+    expect(execute).toHaveBeenNthCalledWith(3, UpdatedTestUser)
   })
 })

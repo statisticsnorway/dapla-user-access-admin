@@ -30,7 +30,9 @@ const setup = () => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
+  beforeEach(() => {
+    useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
+  })
 
   test('Does not crash', () => {
     const { getByText } = setup()
