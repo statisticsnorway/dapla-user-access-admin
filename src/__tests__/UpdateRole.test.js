@@ -30,9 +30,11 @@ const setup = (isNew, role) => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue(
-    [{ data: EmptyCatalogs, loading: false, error: null, response: responseObject }, executePut]
-  )
+  beforeEach(() => {
+    useAxios.mockReturnValue(
+      [{ data: EmptyCatalogs, loading: false, error: null, response: responseObject }, executePut]
+    )
+  })
 
   test('Renders correctly on new role', () => {
     const { getByPlaceholderText, getByTestId } = setup(true)
@@ -56,7 +58,7 @@ describe('Common mock', () => {
     userEvent.click(getByTestId(TEST_IDS.UPDATE_ROLE))
     userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
 
-    expect(executePut).toHaveBeenNthCalledWith(4, EmptyRole)
+    expect(executePut).toHaveBeenNthCalledWith(2, EmptyRole)
   })
 
   test('Form changes works correctly', async () => {
@@ -80,11 +82,6 @@ describe('Common mock', () => {
     await userEvent.type(getByPlaceholderText(ROLE.DESCRIPTION[language]), alternativeTestRoleDescription)
     userEvent.click(getAllByText(ROLE.CREATE_ROLE[language])[1])
 
-    /*
-    There is a bug with userEvent.type in a TextArea from SemanticUI where it seems to take the first character and
-    place it last in the string. Until this is fixed, the value for description in UpdatedTestRole has to be a little
-    bit jumbled. It works fine outside testing.
-    */
-    expect(executePut).toHaveBeenNthCalledWith(6, UpdatedTestRole)
+    expect(executePut).toHaveBeenNthCalledWith(2, UpdatedTestRole)
   })
 })

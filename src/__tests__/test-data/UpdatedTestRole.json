@@ -1,7 +1,7 @@
 {
   "data": {
     "roleId": "testRoleId2",
-    "description": " new role descriptionA",
+    "description": "A new role description",
     "states": {
       "includes": [
         "PROCESSED"

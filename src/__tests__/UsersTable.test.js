@@ -32,7 +32,9 @@ const setup = () => {
 }
 
 describe('Common mock', () => {
-  useAxios.mockReturnValue([{ data: Users, loading: false, error: null }, refetch])
+  beforeEach(() => {
+    useAxios.mockReturnValue([{ data: Users, loading: false, error: null }, refetch])
+  })
 
   test('Renders correctly', () => {
     const { getByPlaceholderText } = setup()

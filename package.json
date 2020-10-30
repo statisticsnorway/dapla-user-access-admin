@@ -1,10 +1,10 @@
 {
-  "name": "user-access-admin",
-  "version": "0.4.2",
+  "name": "dapla-user-access-admin",
+  "version": "0.5.0",
   "description": "Administration of user access for Statistics Norway Dataplatform",
   "repository": {
     "type": "git",
-    "url": "https://github.com/statisticsnorway/user-access-admin"
+    "url": "https://github.com/statisticsnorway/dapla-user-access-admin"
   },
   "author": "Statistics Norway",
   "license": "Apache-2.0",
@@ -15,23 +15,22 @@
     }
   ],
   "dependencies": {
-    "@statisticsnorway/dapla-js-utilities": "^0.1.1",
-    "axios": "^0.20.0",
+    "@statisticsnorway/dapla-js-utilities": "^0.2.0",
+    "axios": "^0.21.0",
     "axios-hooks": "^2.1.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
+    "react-scripts": "4.0.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^1.1.0"
+    "semantic-ui-react": "^2.0.1"
   },
   "scripts": {
     "prestart": "react-env --dest ./public",
     "start": "react-scripts start",
     "build": "react-scripts build && react-env --dest ./build",
     "test": "react-scripts test",
-    "coverage": "react-scripts test --coverage --watchAll=false",
-    "eject": "react-scripts eject"
+    "coverage": "react-scripts test --coverage --watchAll=false"
   },
   "eslintConfig": {
     "extends": "react-app"

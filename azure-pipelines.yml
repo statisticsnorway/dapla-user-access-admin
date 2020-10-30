@@ -18,7 +18,7 @@ pool:
 variables:
   - group: Hemmeligheter
   - name: 'appName'
-    value: 'user-access-admin'
+    value: 'dapla-user-access-admin'
   - name: 'imageTag'
     value: '$(Build.SourceBranchName)-$(Build.SourceVersion)'
 
