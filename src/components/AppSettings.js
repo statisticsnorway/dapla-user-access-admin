@@ -118,13 +118,12 @@ function AppSettings ({ authError, authLoading, catalogError, catalogLoading, op
           </Grid>
         </Container>
       </Modal.Content>
-      <Segment basic>
-        <SimpleFooter
-          language={language}
-          appVersion={process.env.REACT_APP_VERSION}
-          sourceUrl={process.env.REACT_APP_SOURCE_URL}
-        />
-      </Segment>
+      <SimpleFooter
+        language={language}
+        showScrollToTop={false}
+        appVersion={process.env.REACT_APP_VERSION}
+        sourceUrl={process.env.REACT_APP_SOURCE_URL}
+      />
     </Modal>
   )
 }
