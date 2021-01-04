@@ -16,6 +16,13 @@ body {
 
 .ui.table thead tr:first-child > th {
   position: sticky !important;
-  top: 3.5rem;
+  top: 0;
   z-index: 2;
+}
+
+.ui.table thead tr:nth-child(2) > th {
+  position: sticky !important;
+  top: 3.4rem;
+  z-index: 2;
+  background: #f9fafb;
 }

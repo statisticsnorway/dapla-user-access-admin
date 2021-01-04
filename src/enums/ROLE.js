@@ -17,7 +17,7 @@ export const ROLE = {
   },
   PATHS_INCLUDE: {
     en: 'Included paths',
-    nb: 'Inkluderte ttier'
+    nb: 'Inkluderte stier'
   },
   PATHS_EXCLUDE: {
     en: 'Excluded paths',
