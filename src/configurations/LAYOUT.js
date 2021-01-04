@@ -10,6 +10,7 @@ export const populatedDropdown = (label, loading, refetch, error, errorTitle) =>
     {DescriptionPopup(
       <Icon
         link
+        fitted
         loading={loading}
         name='sync alternate'
         onClick={() => refetch()}
