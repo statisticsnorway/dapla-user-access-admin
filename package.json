@@ -1,6 +1,6 @@
 {
   "name": "dapla-user-access-admin",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Administration of user access for Statistics Norway Dataplatform",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "4.0.1",
+    "react-scripts": "4.0.3",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.1"
   },
