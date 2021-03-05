@@ -1,6 +1,6 @@
 {
   "name": "dapla-user-access-admin",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "Administration of user access for Statistics Norway Dataplatform",
   "repository": {
     "type": "git",
@@ -48,7 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@beam-australia/react-env": "^2.1.2",
+    "@beam-australia/react-env": "^3.0.8",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^11.0.1",
     "@testing-library/user-event": "^12.0.11"
