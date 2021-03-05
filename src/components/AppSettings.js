@@ -40,8 +40,8 @@ function AppSettings ({ authError, authLoading, catalogError, catalogLoading, op
 
   const setDefaults = () => {
     setSettingsEdited(true)
-    setAuthUrl(window._env.REACT_APP_API_AUTH)
-    setCatalogUrl(window._env.REACT_APP_API_CATALOG)
+    setAuthUrl(window.__ENV.REACT_APP_API_AUTH)
+    setCatalogUrl(window.__ENV.REACT_APP_API_CATALOG)
   }
 
   return (
