@@ -1,7 +1,7 @@
 {
   "name": "dapla-user-access-admin",
   "version": "0.5.9",
-  "description": "Administration of user access for Statistics Norway Dataplatform",
+  "description": "Administration of user access for Statistics Norway Data Platform",
   "repository": {
     "type": "git",
     "url": "https://github.com/statisticsnorway/dapla-user-access-admin"
