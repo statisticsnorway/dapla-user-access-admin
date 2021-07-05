@@ -58,7 +58,7 @@ function GroupsTable () {
           <ErrorMessage error={error} language={language} />
         </>
         :
-        <Table celled sortable compact='very' size='large'>
+        <Table celled sortable selectable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>

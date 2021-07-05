@@ -19,10 +19,6 @@ export const UI = {
     en: 'User access admin',
     nb: 'Tilgangsstyring'
   },
-  REMEMBER_ME: {
-    en: 'Remember me',
-    nb: 'Husk meg'
-  },
   ROLES: {
     en: 'Roles',
     nb: 'Roller'

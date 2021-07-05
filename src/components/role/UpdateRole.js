@@ -89,7 +89,7 @@ function UpdateRole ({ isNew, refetch, role }) {
         refetch()
       }}
       trigger={DescriptionPopup(
-        <Icon.Group size={isNew ? 'huge' : 'big'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+        <Icon.Group size={isNew ? 'huge' : 'large'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon link name='address card' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_ROLE} />
           <Icon corner='top right' link name={isNew ? 'plus' : 'pencil'} onClick={() => setModalOpen(true)} />
         </Icon.Group>,
@@ -100,7 +100,7 @@ function UpdateRole ({ isNew, refetch, role }) {
       <Header size='large' style={SSB_STYLE}>
         <Icon.Group size='large' style={{ marginRight: '0.25rem', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon name='address card' />
-          <Icon corner name={isNew ? 'plus' : 'edit'} />
+          <Icon corner='top right' name={isNew ? 'plus' : 'pencil'} />
         </Icon.Group>
         {isNew ? ROLE.CREATE_ROLE[language] : ROLE.UPDATE_ROLE[language]}
       </Header>
@@ -276,8 +276,9 @@ function UpdateRole ({ isNew, refetch, role }) {
         </Form>
         <Divider hidden />
         <Button
-          primary
+          primary={!isNew}
           disabled={loading}
+          style={isNew ? { backgroundColor: SSB_COLORS.GREEN, color: '#fff' } : null}
           onClick={() => executePut({
             data: {
               [AUTH_API.ROLE_OBJECT.LIST]: {

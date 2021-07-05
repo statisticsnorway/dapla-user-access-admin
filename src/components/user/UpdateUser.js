@@ -52,7 +52,7 @@ function UpdateUser ({ isNew, refetch, user }) {
         }
       }}
       trigger={DescriptionPopup(
-        <Icon.Group size={isNew ? 'huge' : 'big'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+        <Icon.Group size={isNew ? 'huge' : 'large'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon link name='user' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_USER} />
           <Icon corner='top right' link name={isNew ? 'plus' : 'pencil'} onClick={() => setModalOpen(true)} />
         </Icon.Group>,
@@ -63,7 +63,7 @@ function UpdateUser ({ isNew, refetch, user }) {
       <Header size='large' style={SSB_STYLE}>
         <Icon.Group size='large' style={{ marginRight: '0.2rem', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon name='user' />
-          <Icon corner name={isNew ? 'plus' : 'edit'} />
+          <Icon corner='top right' name={isNew ? 'plus' : 'pencil'} />
         </Icon.Group>
         {isNew ? USER.CREATE_USER[language] : USER.UPDATE_USER[language]}
       </Header>
@@ -120,8 +120,9 @@ function UpdateUser ({ isNew, refetch, user }) {
         </Form>
         <Divider hidden />
         <Button
-          primary
+          primary={!isNew}
           disabled={putLoading}
+          style={isNew ? { backgroundColor: SSB_COLORS.GREEN, color: '#fff' } : null}
           onClick={() => executePut({
             data: {
               [AUTH_API.USER_OBJECT.STRING]: updatedUserId,

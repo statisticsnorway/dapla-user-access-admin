@@ -2,66 +2,81 @@ import React from 'react'
 import useAxios from 'axios-hooks'
 import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AppHome } from '../components'
 import { ApiContext, LanguageContext } from '../context/AppContext'
-import { TEST_CONFIGURATIONS } from '../configurations'
-import { TEST_IDS, UI } from '../enums'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../enums'
 
-import User from './test-data/User.json'
+import Catalogs from './test-data/Catalogs.json'
+import EmptyCatalogs from './test-data/EmptyCatalogs.json'
 
-jest.mock('../components/role/RoleLookup', () => () => null)
-jest.mock('../components/user/UpdateUser', () => () => null)
-jest.mock('../components/group/GroupLookup', () => () => null)
-jest.mock('../components/access/UserAccess', () => () => null)
-
-window.localStorage.__proto__.getItem = jest.fn()
-window.localStorage.__proto__.setItem = jest.fn()
-window.localStorage.__proto__.hasOwnProperty = jest.fn()
-
-const { alternativeTestUserId, language } = TEST_CONFIGURATIONS
+const { language, testUserId } = TEST_CONFIGURATIONS
 const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn())
 const refetch = jest.fn()
 
 const setup = () => {
-  const { getByPlaceholderText, getByTestId, getByText } = render(
+  const { getAllByText, getByTestId, getByText, getByPlaceholderText } = render(
     <ApiContext.Provider value={apiContext}>
       <LanguageContext.Provider value={{ language: language }}>
-        <MemoryRouter initialEntries={['/']}>
-          <AppHome />
-        </MemoryRouter>
+        <AppHome />
       </LanguageContext.Provider>
     </ApiContext.Provider>
   )
 
-  return { getByPlaceholderText, getByTestId, getByText }
+  return { getAllByText, getByTestId, getByText, getByPlaceholderText }
 }
 
 test('Renders correctly', () => {
-  useAxios.mockReturnValue([{ data: undefined, loading: false, error: null }, refetch])
+  useAxios.mockReturnValue([{ data: EmptyCatalogs, loading: false, error: null, response: null }, refetch])
   const { getByText } = setup()
 
-  expect(getByText(UI.USER[language])).toBeInTheDocument()
+  expect(getByText(USER_ACCESS.GUIDE[0][language])).toBeInTheDocument()
 })
 
-test('Changing user works correctly', async () => {
-  useAxios.mockReturnValue([{ data: User, loading: false, error: null }, refetch])
-  const { getByPlaceholderText, getByTestId } = setup()
+test('Functions correctly on good response', async () => {
+  useAxios.mockReturnValue([{
+    data: EmptyCatalogs,
+    loading: false,
+    error: null,
+    response: { response: { statusText: USER_ACCESS.VERDICTS.OK } }
+  }, refetch])
+  const { getByText , getByPlaceholderText} = setup()
 
-  await userEvent.type(getByPlaceholderText(UI.USER[language]), alternativeTestUserId)
-  userEvent.click(getByTestId(TEST_IDS.REFRESH_USER))
+  await userEvent.type(getByPlaceholderText(UI.USER[language]), testUserId)
+  userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[2]][language]))
+  userEvent.click(getByText(USER_ACCESS.CHECK[language]))
 
   expect(refetch).toHaveBeenCalled()
 })
 
-test('Invokes localstorage to remember user', async () => {
-  useAxios.mockReturnValue([{ data: User, loading: false, error: null }, refetch])
-  const { getByPlaceholderText, getByText } = setup()
+test('Functions correctly on bad response', async () => {
+  useAxios.mockReturnValue([{
+    data: EmptyCatalogs,
+    loading: false,
+    error: { response: { statusText: USER_ACCESS.VERDICTS.FORBIDDEN } },
+    response: null
+  }, refetch])
+  const { getByText, getByPlaceholderText } = setup()
 
-  userEvent.click(getByText(UI.REMEMBER_ME[language]))
-  await userEvent.type(getByPlaceholderText(UI.USER[language]), '{enter}')
+  await userEvent.type(getByPlaceholderText(UI.USER[language]), testUserId)
+  userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[2]][language]))
+  userEvent.click(getByText(VALUATION[AUTH_API.ENUMS.VALUATIONS[2]][language]))
+  userEvent.click(getByText(USER_ACCESS.CHECK[language]))
 
-  expect(window.localStorage.__proto__.setItem).toHaveBeenCalled()
-  expect(window.localStorage.__proto__.hasOwnProperty).toHaveBeenCalled()
+  expect(refetch).toHaveBeenCalled()
+})
+
+test('Adding paths works correctly', async () => {
+  useAxios.mockReturnValue([{ data: Catalogs, loading: false, error: null, response: null }, refetch])
+  const { getAllByText, getByTestId } = setup()
+
+  // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
+  await userEvent.type(getByTestId(TEST_IDS.SEARCH_DROPDOWN).children[0], '/test/3')
+  userEvent.click(getAllByText(UI.ADD[language])[1])
+})
+
+test('Loads', () => {
+  useAxios.mockReturnValue([{ data: undefined, loading: true, error: null, response: null }, refetch])
+  setup()
 })

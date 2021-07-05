@@ -46,7 +46,7 @@ function UpdateGroup ({ group, isNew, refetch }) {
       }}
       trigger={
         DescriptionPopup(
-          <Icon.Group size={isNew ? 'huge' : 'big'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
+          <Icon.Group size={isNew ? 'huge' : 'large'} style={{ color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
             <Icon link name='users' onClick={() => setModalOpen(true)} data-testid={TEST_IDS.UPDATE_GROUP} />
             <Icon corner='top right' link name={isNew ? 'plus' : 'pencil'} onClick={() => setModalOpen(true)} />
           </Icon.Group>,
@@ -58,7 +58,7 @@ function UpdateGroup ({ group, isNew, refetch }) {
       <Header size='large' style={SSB_STYLE}>
         <Icon.Group size='large' style={{ marginRight: '0.25rem', color: SSB_COLORS[isNew ? 'GREEN' : 'BLUE'] }}>
           <Icon name='users' />
-          <Icon corner name={isNew ? 'plus' : 'edit'} />
+          <Icon corner='top right' name={isNew ? 'plus' : 'pencil'} />
         </Icon.Group>
         {isNew ? GROUP.CREATE_GROUP[language] : GROUP.UPDATE_GROUP[language]}
       </Header>
@@ -108,8 +108,9 @@ function UpdateGroup ({ group, isNew, refetch }) {
         </Form>
         <Divider hidden />
         <Button
-          primary
+          primary={!isNew}
           disabled={putLoading}
+          style={isNew ? { backgroundColor: SSB_COLORS.GREEN, color: '#fff' } : null}
           onClick={() => executePut({
             data: {
               [AUTH_API.GROUP_OBJECT.LIST]: updatedRoles,
