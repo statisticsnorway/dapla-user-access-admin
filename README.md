@@ -9,9 +9,6 @@ Functionality includes:
 * Creating, editing and listing users, groups and roles
 * Checking different access rights on datasets (catalogs) for any given user with any given group/role
 
-The project makes limited use of the [Component library for SSB](https://github.com/statisticsnorway/ssb-component-library)
-and is based upon [react-reference-app](https://github.com/statisticsnorway/fe-react-reference-app).
-
 ### Try this application locally
 The first time you clone the repository, remember to run `yarn` or `yarn install`.
 

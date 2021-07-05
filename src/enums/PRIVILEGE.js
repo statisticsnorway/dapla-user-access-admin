@@ -14,5 +14,9 @@ export const PRIVILEGE = {
   UPDATE: {
     en: 'Update',
     nb: 'Oppdater'
+  },
+  DEPSEUDO: {
+    en: 'Depseudo',
+    nb: 'Depseudo'
   }
 }

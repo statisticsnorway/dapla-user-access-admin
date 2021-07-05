@@ -4,18 +4,16 @@ export const API = {
 
 export const AUTH_API = {
   ENUMS: {
-    PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
+    PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'DEPSEUDO'],
     STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER', 'TEMP'],
     VALUATIONS: ['OPEN', 'INTERNAL', 'SHIELDED', 'SENSITIVE']
   },
   EXCLUDES: 'excludes',
   GET_ACCESS: (path, privilege, state, maxValuation, userId) =>
     `/access/${userId}?privilege=${privilege}&path=${path}&valuation=${maxValuation}&state=${state}`,
-  GET_GROUP: (groupId) => `/group/${groupId}`,
   GET_GROUPS: '/group',
   GET_ROLE: (roleId) => `/role/${roleId}`,
   GET_ROLES: '/role',
-  GET_USER: (userId) => `/user/${userId}`,
   GROUP_OBJECT: {
     LIST: 'roles',
     STRING: ['groupId', 'description']
@@ -73,9 +71,4 @@ export const checkAccess = (data, value) => {
   }
 
   return positive
-}
-
-export const LOCAL_STORAGE = {
-  REMEMBER: 'rememberUser',
-  USER_ID: 'userId'
 }

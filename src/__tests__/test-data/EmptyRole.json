@@ -25,7 +25,8 @@
         "READ",
         "CREATE",
         "UPDATE",
-        "DELETE"
+        "DELETE",
+        "DEPSEUDO"
       ]
     }
   }

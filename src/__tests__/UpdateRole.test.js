@@ -69,8 +69,8 @@ describe('Common mock', () => {
     userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[6]][language]))
     userEvent.click(getByText(DATASET_STATE[AUTH_API.ENUMS.STATES[6]][language]))
     userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[2]][language]))
-    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
-    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[3]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[4]][language]))
+    userEvent.click(getByText(PRIVILEGE[AUTH_API.ENUMS.PRIVILEGES[4]][language]))
     userEvent.click(getByText(VALUATION[AUTH_API.ENUMS.VALUATIONS[0]][language]))
     // https://dev.to/jacobwicks/testing-a-semantic-ui-react-input-with-react-testing-library-5d75
     await userEvent.type(getAllByTestId(TEST_IDS.SEARCH_DROPDOWN)[0].children[0], '/test/3')

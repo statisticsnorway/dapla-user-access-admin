@@ -23,7 +23,8 @@
       "excludes": [
         "READ",
         "CREATE",
-        "DELETE"
+        "DELETE",
+        "DEPSEUDO"
       ]
     },
     "paths": {

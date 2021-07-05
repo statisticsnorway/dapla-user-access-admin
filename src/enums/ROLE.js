@@ -8,12 +8,12 @@ export const ROLE = {
     nb: 'Beskrivelse'
   },
   MAX_VALUATION: {
-    en: 'Max valuation',
-    nb: 'Maksimum verdivurdering'
+    en: 'Valuation',
+    nb: 'Verdivurdering'
   },
   PATHS: {
-    en: 'Paths (has access to)',
-    nb: 'Stier (har tilgang til)'
+    en: 'Paths',
+    nb: 'Stier'
   },
   PATHS_INCLUDE: {
     en: 'Included paths',

@@ -20,7 +20,5 @@ export const TEST_CONFIGURATIONS = {
   language: LANGUAGE.LANGUAGES.NORWEGIAN.languageCode,
   otherLanguage: LANGUAGE.LANGUAGES.ENGLISH.languageCode,
   responseObject: { data: { statusCode: 200 } },
-  testGroupId: 'testGroupId',
-  testRoleId: 'testRoleId',
   testUserId: 'testUserId'
 }

@@ -14,5 +14,9 @@ export const VALUATION = {
   SHIELDED: {
     en: 'Shielded',
     nb: 'Skjermet'
+  },
+  UNRECOGNIZED: {
+    en: 'Unrecognized',
+    nb: 'Ukjent'
   }
 }

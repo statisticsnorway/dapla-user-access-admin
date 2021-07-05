@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Divider, Grid, Icon, Input, List, Loader, Table } from 'semantic-ui-react'
-import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
+import { Divider, Grid, Input, List, Loader, Table } from 'semantic-ui-react'
+import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
 import { UpdateUser } from '../'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
-import { DescriptionPopup, sortArrayOfObjects } from '../../utilities'
-import { AUTH_API, LOCAL_STORAGE, ROUTING } from '../../configurations'
+import { sortArrayOfObjects } from '../../utilities'
+import { AUTH_API } from '../../configurations'
 import { TEST_IDS, UI, USER } from '../../enums'
-import { Link } from 'react-router-dom'
 
 function UsersTable () {
   const { authApi } = useContext(ApiContext)
@@ -56,10 +55,9 @@ function UsersTable () {
           <ErrorMessage error={error} language={language} />
         </>
         :
-        <Table celled sortable compact='very' size='large'>
+        <Table celled sortable selectable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell />
               <Table.HeaderCell sorted={direction} onClick={() => handleSort()} data-testid={TEST_IDS.TABLE_SORT}>
                 {USER.USER_ID[language]}
               </Table.HeaderCell>
@@ -71,24 +69,6 @@ function UsersTable () {
           <Table.Body>
             {users.map(({ groups, roles, userId }, index) =>
               <Table.Row key={userId}>
-                <Table.Cell textAlign='center'>
-                  <Link to={ROUTING.BASE}>
-                    {DescriptionPopup(
-                      <Icon
-                        link
-                        fitted
-                        name='eye'
-                        size='large'
-                        style={{ color: SSB_COLORS.BLUE }}
-                        onClick={() => {
-                          localStorage.setItem(LOCAL_STORAGE.REMEMBER, 'true')
-                          localStorage.setItem(LOCAL_STORAGE.USER_ID, userId)
-                        }}
-                      />,
-                      USER.SET_USER[language]
-                    )}
-                  </Link>
-                </Table.Cell>
                 <Table.Cell style={{ fontWeight: 'bold' }}>{userId}</Table.Cell>
                 <Table.Cell textAlign='center'>
                   <UpdateUser isNew={false} refetch={refetch} user={users[index]} />

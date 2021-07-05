@@ -13,8 +13,12 @@ export const USER_ACCESS = {
   },
   GUIDE: [
     {
-      en: 'Check my',
-      nb: 'Sjekk mine'
+      en: 'Check',
+      nb: 'Sjekk'
+    },
+    {
+      en: '\'s',
+      nb: 'sine'
     },
     {
       en: 'rights on dataset',
@@ -29,10 +33,6 @@ export const USER_ACCESS = {
       nb: 'med maksimum verdivurdering'
     }
   ],
-  HEADER: {
-    en: 'Your access to datasets',
-    nb: 'Dine tilganger på datasett'
-  },
   VERDICTS: {
     FORBIDDEN: 403,
     OK: 200,

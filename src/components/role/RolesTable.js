@@ -68,11 +68,11 @@ function RolesTable () {
           <ErrorMessage error={error} language={language} />
         </>
         :
-        <Table celled sortable compact='very' size='large'>
+        <Table celled sortable selectable compact='very' size='large'>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell colSpan={2} />
-              {DescriptionPopup(<Table.HeaderCell colSpan={4}>{ROLE.PRIVILEGES[language]}</Table.HeaderCell>)}
+              {DescriptionPopup(<Table.HeaderCell colSpan={5}>{ROLE.PRIVILEGES[language]}</Table.HeaderCell>)}
               <Table.HeaderCell colSpan={2} />
               {DescriptionPopup(<Table.HeaderCell colSpan={7}>{ROLE.STATES[language]}</Table.HeaderCell>)}
             </Table.Row>
@@ -120,7 +120,8 @@ function RolesTable () {
                     1, (AUTH_API.ENUMS.VALUATIONS.length - 1)).includes(maxValuation
                   )}
                 >
-                  {VALUATION[maxValuation][language]}
+                  {VALUATION[maxValuation] !== undefined ?
+                    VALUATION[maxValuation][language] : VALUATION.UNRECOGNIZED[language]}
                 </Table.Cell>
                 {AUTH_API.ENUMS.STATES.map(state => <CheckedCell key={state} list={states} entry={state} />)}
               </Table.Row>

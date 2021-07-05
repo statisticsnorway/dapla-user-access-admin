@@ -1,141 +1,152 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
-import { Accordion, Checkbox, Divider, Grid, Header, Icon, Input } from 'semantic-ui-react'
-import { ErrorMessage, SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
+import { Button, Divider, Dropdown, Icon, Input } from 'semantic-ui-react'
+import { SSB_COLORS } from '@statisticsnorway/dapla-js-utilities'
 
-import { GroupLookup, RoleLookup, UpdateUser, UserAccess } from './'
 import { ApiContext, LanguageContext } from '../context/AppContext'
-import { DescriptionPopup } from '../utilities'
-import { AUTH_API, LOCAL_STORAGE } from '../configurations'
-import { HOME, TEST_IDS, UI } from '../enums'
+import { AUTH_API, CATALOG_API } from '../configurations'
+import { DATASET_STATE, PRIVILEGE, TEST_IDS, UI, USER_ACCESS, VALUATION } from '../enums'
 
 function AppHome () {
-  const { authApi } = useContext(ApiContext)
+  const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
-  const [userId, setUserId] = useState(
-    localStorage.hasOwnProperty(LOCAL_STORAGE.USER_ID) &&
-    localStorage.hasOwnProperty(LOCAL_STORAGE.REMEMBER) &&
-    localStorage.getItem(LOCAL_STORAGE.REMEMBER) === 'true' ?
-      localStorage.getItem(LOCAL_STORAGE.USER_ID) : ''
-  )
-  const [rememberUser, setRememberUser] = useState(
-    localStorage.hasOwnProperty(LOCAL_STORAGE.REMEMBER) ? localStorage.getItem(LOCAL_STORAGE.REMEMBER) : 'false'
-  )
-  const [userEdited, setUserEdited] = useState(false)
+  const [path, setPath] = useState('')
+  const [userId, setUserId] = useState('')
+  const [state, setState] = useState(AUTH_API.ENUMS.STATES[0])
+  const [pathOptions, setPathOptions] = useState([])
+  const [verdict, setVerdict] = useState(USER_ACCESS.VERDICTS.UNKOWN)
+  const [privilege, setPrivilege] = useState(AUTH_API.ENUMS.PRIVILEGES[0])
+  const [maxValuation, setMaxValuation] = useState(AUTH_API.ENUMS.VALUATIONS[0])
 
-  const [{ data, loading, error }, refetch] =
-    useAxios(`${authApi}${AUTH_API.GET_USER(userId)}`, { manual: true })
+  const [{ data: getData, loading: getLoading, error: getError }] =
+    useAxios(`${catalogApi}${CATALOG_API.GET_CATALOGS}`)
+  const [{ loading, error, response }, refetch] = useAxios(
+    `${authApi}${AUTH_API.GET_ACCESS(path, privilege, state, maxValuation, userId)}`, { manual: true }
+  )
 
   useEffect(() => {
-    if (userId !== '') {
-      refetch()
+    if (!getLoading && !getError && getData !== undefined) {
+      try {
+        setPathOptions(getData[CATALOG_API.CATALOGS].map(catalog => {
+          const catalogPath = catalog[CATALOG_API.CATALOG_OBJECT.OBJECT.NAME][CATALOG_API.CATALOG_OBJECT.OBJECT.STRING[0]]
+
+          return {
+            key: catalogPath,
+            text: catalogPath,
+            value: catalogPath
+          }
+        }))
+      } catch (e) {
+        console.log(e)
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [getLoading, getError, getData])
+
+  useEffect(() => {
+    if (!loading && !error && response) {
+      console.log(response)
+      setVerdict(response.status)
+    }
+
+    if (!loading && error) {
+      console.log(error.response)
+      setVerdict(error.response.status)
+    }
+  }, [error, loading, response])
 
   return (
-    <Grid columns='equal'>
-      <Grid.Row>
-        <Grid.Column>
-          <Header size='large' content={UI.USER[language]} />
-          <Input
-            size='big'
-            value={userId}
-            error={!!error && !userEdited}
-            disabled={loading}
-            placeholder={UI.USER[language]}
-            onKeyPress={({ key }) => {
-              if (key === 'Enter') {
-                refetch()
-                setUserEdited(false)
-                if (rememberUser === 'true') {
-                  localStorage.setItem(LOCAL_STORAGE.USER_ID, userId)
-                }
-              }
-            }}
-            onChange={(event, { value }) => {
-              setUserId(value)
-              setUserEdited(true)
+    <>
+      {`${USER_ACCESS.GUIDE[0][language]} `}
+      <Input
+        value={userId}
+        placeholder={UI.USER[language]}
+        onChange={(event, { value }) => {
+          setUserId(value)
+          setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
+        }}
+      />
+      {` ${USER_ACCESS.GUIDE[1][language]} `}
+      <Dropdown
+        inline
+        value={privilege}
+        options={AUTH_API.ENUMS.PRIVILEGES.map(option =>
+          ({ key: option, text: PRIVILEGE[option][language], value: option })
+        )}
+        onChange={(event, { value }) => {
+          setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
+          setPrivilege(value)
+        }}
+      />
+      {` ${USER_ACCESS.GUIDE[2][language]} `}
+      <Dropdown
+        search
+        selection
+        value={path}
+        allowAdditions
+        options={pathOptions}
+        data-testid={TEST_IDS.SEARCH_DROPDOWN}
+        additionLabel={`${UI.ADD[language]} `}
+        placeholder={USER_ACCESS.DATASETS[language]}
+        noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
+        onChange={(event, { value }) => {
+          setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
+          setPath(value)
+        }}
+        onAddItem={(event, { value }) => setPathOptions(
+          [{ key: value, text: value, value: value }, ...pathOptions]
+        )}
+      />
+      {` ${USER_ACCESS.GUIDE[3][language]} `}
+      <Dropdown
+        inline
+        value={state}
+        options={AUTH_API.ENUMS.STATES.map(option =>
+          ({ key: option, text: DATASET_STATE[option][language], value: option })
+        )}
+        onChange={(event, { value }) => {
+          setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
+          setState(value)
+        }}
+      />
+      {` ${USER_ACCESS.GUIDE[4][language]} `}
+      <Dropdown
+        inline
+        value={maxValuation}
+        options={AUTH_API.ENUMS.VALUATIONS.map(valuation =>
+          ({ key: valuation, text: VALUATION[valuation][language], value: valuation })
+        )}
+        onChange={(event, { value }) => {
+          setVerdict(USER_ACCESS.VERDICTS.UNKOWN)
+          setMaxValuation(value)
+        }}
+      />
+      <Divider hidden />
+      {`${USER_ACCESS.ACCESS[language]}: `}
+      {loading ? <Icon loading size='large' name='sync alternate' style={{ color: SSB_COLORS.BLUE }} /> :
+        <>
+          <Icon
+            size='large'
+            name={
+              verdict === USER_ACCESS.VERDICTS.UNKOWN ?
+                'question' : verdict === USER_ACCESS.VERDICTS.OK ?
+                'check' : verdict === USER_ACCESS.VERDICTS.FORBIDDEN ?
+                  'ban' : 'exclamation triangle'
+            }
+            style={{
+              color:
+                verdict === USER_ACCESS.VERDICTS.UNKOWN ?
+                  SSB_COLORS.BLUE : verdict === USER_ACCESS.VERDICTS.OK ?
+                  SSB_COLORS.GREEN : verdict === USER_ACCESS.VERDICTS.FORBIDDEN ?
+                    SSB_COLORS.RED : SSB_COLORS.YELLOW
             }}
           />
-          {DescriptionPopup(
-            <Icon
-              link
-              size='big'
-              loading={loading}
-              name='sync alternate'
-              disabled={userId === ''}
-              data-testid={TEST_IDS.REFRESH_USER}
-              style={{ color: SSB_COLORS.BLUE, marginBottom: '0.25rem', marginLeft: '0.5rem', marginRight: '0.5rem' }}
-              onClick={() => {
-                refetch()
-                setUserEdited(false)
-                if (rememberUser === 'true') {
-                  localStorage.setItem(LOCAL_STORAGE.USER_ID, userId)
-                }
-              }}
-            />,
-            false,
-            'right center'
-          )}
-          <Checkbox
-            label={UI.REMEMBER_ME[language]}
-            checked={rememberUser === 'true'}
-            onChange={() => {
-              localStorage.setItem(LOCAL_STORAGE.REMEMBER, rememberUser === 'true' ? 'false' : 'true')
-              setRememberUser(rememberUser === 'true' ? 'false' : 'true')
-            }}
-          />
-          <Divider fitted hidden style={{ marginTop: '1rem' }} />
-          {!loading && !userEdited && error && <ErrorMessage error={error} language={language} />}
-          {!error && !loading && !userEdited && data !== undefined &&
-          <UpdateUser isNew={false} refetch={refetch} user={data} />
-          }
-        </Grid.Column>
-        <Grid.Column textAlign='right' verticalAlign='middle'>
-          <UpdateUser isNew={true} />
-        </Grid.Column>
-      </Grid.Row>
-      {!error && !loading && !userEdited && data !== undefined &&
-      <>
-        <Grid.Row>
-          <Grid.Column>
-            <Header size='medium' content={HOME.GROUPS[language]} />
-            <Accordion
-              fluid
-              styled
-              defaultActiveIndex={-1}
-              panels={data.hasOwnProperty(AUTH_API.GROUPS) ? data[AUTH_API.GROUPS].map(groupId => ({
-                key: groupId,
-                title: { content: (<b>{groupId}</b>) },
-                content: { content: (<GroupLookup groupId={groupId} />) }
-              })) : []}
-            />
-          </Grid.Column>
-          <Grid.Column>
-            <Header size='medium' content={HOME.ROLES[language]} />
-            <Accordion
-              fluid
-              styled
-              defaultActiveIndex={-1}
-              panels={data.hasOwnProperty(AUTH_API.ROLES) ? data[AUTH_API.ROLES].map(roleId => ({
-                key: roleId,
-                title: { content: (<b>{roleId}</b>) },
-                content: { content: (<RoleLookup roleId={roleId} />) }
-              })) : []}
-            />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column>
-            <UserAccess userId={userId} />
-          </Grid.Column>
-          <Grid.Column />
-        </Grid.Row>
-      </>
+          {`(${verdict})`}
+        </>
       }
-    </Grid>
+      <Divider hidden />
+      <Button primary disabled={loading} onClick={() => refetch()}>{USER_ACCESS.CHECK[language]}</Button>
+    </>
   )
 }
 
