@@ -1,6 +1,6 @@
 {
   "name": "dapla-user-access-admin",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Administration of user access for Statistics Norway Data Platform",
   "repository": {
     "type": "git",
@@ -15,15 +15,15 @@
     }
   ],
   "dependencies": {
-    "@statisticsnorway/dapla-js-utilities": "^0.2.0",
-    "axios": "^0.21.0",
-    "axios-hooks": "^2.1.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-router-dom": "^5.1.2",
+    "@statisticsnorway/dapla-js-utilities": "^0.3.0",
+    "axios": "^0.21.1",
+    "axios-hooks": "^2.6.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.1"
+    "semantic-ui-react": "^2.0.3"
   },
   "scripts": {
     "prestart": "react-env --dest ./public",
@@ -33,7 +33,10 @@
     "coverage": "react-scripts test --coverage --watchAll=false"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -48,10 +51,10 @@
     ]
   },
   "devDependencies": {
-    "@beam-australia/react-env": "^3.0.8",
-    "@testing-library/jest-dom": "^5.1.1",
+    "@beam-australia/react-env": "^3.1.1",
+    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.1.8"
+    "@testing-library/user-event": "^13.1.9"
   },
   "jest": {
     "collectCoverageFrom": [

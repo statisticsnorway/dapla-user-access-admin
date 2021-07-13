@@ -1,38 +1,43 @@
-import React, { useContext, useState } from 'react'
+import useAxios from 'axios-hooks'
+import { useContext, useEffect, useState } from 'react'
 import { Button, Container, Divider, Form, Grid, Header, Icon, Modal, Segment } from 'semantic-ui-react'
-import {
-  ErrorMessage,
-  InfoPopup,
-  InfoText,
-  SimpleFooter,
-  SSB_COLORS,
-  SSB_STYLE
-} from '@statisticsnorway/dapla-js-utilities'
+import { ErrorMessage, InfoPopup, InfoText, SimpleFooter } from '@statisticsnorway/dapla-js-utilities'
 
 import { ApiContext, LanguageContext } from '../context/AppContext'
+import { API } from '../configurations'
 import { SETTINGS, TEST_IDS } from '../enums'
 
-function AppSettings ({ authError, authLoading, catalogError, catalogLoading, open, setSettingsOpen }) {
+function AppSettings ({ open, setOpen }) {
   const { language } = useContext(LanguageContext)
-  const { authApi, catalogApi, setAuthApi, setCatalogApi } = useContext(ApiContext)
+  const { authApi, catalogApi, setAuthApi, setCatalogApi, setDevToken } = useContext(ApiContext)
 
-  const [authUrl, setAuthUrl] = useState(authApi)
-  const [catalogUrl, setCatalogUrl] = useState(catalogApi)
+  const [authApiUrl, setAuthApiUrl] = useState(authApi)
+  const [catalogApiUrl, setCatalogApiUrl] = useState(catalogApi)
   const [settingsEdited, setSettingsEdited] = useState(false)
 
+  const [{ loading: authLoading, error: authError }, executeAuthApi] =
+    useAxios(`${authApi}${API.GET_HEALTH}`, { manual: true, useCache: false })
+  const [{ loading: catalogLoading, error: catalogError }, executeCatalogApi] =
+    useAxios(`${catalogApi}${API.GET_HEALTH}`, { manual: true, useCache: false })
+
   const applySettings = () => {
-    setAuthApi(authUrl)
-    setCatalogApi(catalogUrl)
+    setAuthApi(authApiUrl)
+    setCatalogApi(catalogApiUrl)
     setSettingsEdited(false)
+
+    if (!settingsEdited) {
+      executeAuthApi()
+      executeCatalogApi()
+    }
   }
 
   const changeSettings = (value, api) => {
-    if (api === 'auth') {
-      setAuthUrl(value)
+    if (api === API.AUTH) {
+      setAuthApiUrl(value)
     }
 
-    if (api === 'catalog') {
-      setCatalogUrl(value)
+    if (api === API.CATALOG) {
+      setCatalogApiUrl(value)
     }
 
     setSettingsEdited(true)
@@ -40,77 +45,98 @@ function AppSettings ({ authError, authLoading, catalogError, catalogLoading, op
 
   const setDefaults = () => {
     setSettingsEdited(true)
-    setAuthUrl(window.__ENV.REACT_APP_API_AUTH)
-    setCatalogUrl(window.__ENV.REACT_APP_API_CATALOG)
+    setAuthApiUrl(window.__ENV.REACT_APP_API_AUTH)
+    setCatalogApiUrl(window.__ENV.REACT_APP_API_CATALOG)
   }
 
+  useEffect(() => {
+    if (open && !settingsEdited) {
+      executeAuthApi()
+      executeCatalogApi()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, settingsEdited])
+
   return (
-    <Modal open={open} onClose={() => setSettingsOpen(false)} style={SSB_STYLE}>
-      <Header size='large' style={SSB_STYLE}>
-        <Icon name='cog' style={{ color: SSB_COLORS.GREEN }} />
+    <Modal open={open} onClose={() => setOpen(false)}>
+      <Header size="large">
+        <Icon name="cog" color="blue" />
         {SETTINGS.HEADER[language]}
       </Header>
-      <Modal.Content as={Segment} basic style={SSB_STYLE}>
-        <Form size='large'>
+      <Modal.Content as={Segment} basic>
+        <Form size="large">
           <Form.Input
-            value={authUrl}
+            value={authApiUrl}
             loading={authLoading}
             label={SETTINGS.AUTH_API[language]}
             error={!!authError && !settingsEdited}
             placeholder={SETTINGS.AUTH_API[language]}
             onKeyPress={({ key }) => key === 'Enter' && applySettings()}
-            onChange={(event, { value }) => changeSettings(value, 'auth')}
+            onChange={(e, { value }) => changeSettings(value, API.AUTH)}
             icon={!authLoading && !settingsEdited && !authError ?
-              <Icon name='check' style={{ color: SSB_COLORS.GREEN }} /> : null
+              <Icon name="check" color="green" /> : null
             }
           />
-        </Form>
-        {!authLoading && !settingsEdited && authError && <ErrorMessage error={authError} language={language} />}
-        <Divider hidden />
-        <Form size='large'>
           <Form.Input
-            value={catalogUrl}
+            value={catalogApiUrl}
             loading={catalogLoading}
             label={SETTINGS.CATALOG_API[language]}
             error={!!catalogError && !settingsEdited}
             placeholder={SETTINGS.CATALOG_API[language]}
             onKeyPress={({ key }) => key === 'Enter' && applySettings()}
-            onChange={(event, { value }) => changeSettings(value, 'catalog')}
+            onChange={(e, { value }) => changeSettings(value, API.CATALOG)}
             icon={!catalogLoading && !settingsEdited && !catalogError ?
-              <Icon name='check' style={{ color: SSB_COLORS.GREEN }} /> : null
+              <Icon name="check" color="green" /> : null
             }
           />
+          {['development', 'test'].includes(process.env.NODE_ENV) &&
+          <Form.TextArea
+            rows={6}
+            placeholder="Just paste token and close settings"
+            onChange={(e, { value }) => {
+              setDevToken(value)
+              localStorage.setItem('devToken', value)
+            }}
+            label="dev-token (./bin/generate-test-jwt.sh -u test@junit)"
+          />
+          }
         </Form>
+        {!authLoading && !settingsEdited && authError &&
+        <ErrorMessage error={authError} language={language} />
+        }
         {!catalogLoading && !settingsEdited && catalogError &&
         <ErrorMessage error={catalogError} language={language} />
         }
         {!authLoading && !catalogLoading && settingsEdited &&
-        <Container style={{ marginTop: '1rem' }}>
+        <Container style={{ marginTop: '0.5rem' }}>
           <InfoText text={SETTINGS.EDITED_VALUES[language]} />
         </Container>
         }
         <Container style={{ marginTop: '1rem' }}>
           <Divider hidden />
-          <Grid columns='equal'>
+          <Grid columns="equal">
             <Grid.Column>
-              <Button primary size='large' disabled={authLoading || catalogLoading} onClick={() => applySettings()}>
-                <Icon name='sync' style={{ paddingRight: '0.5rem' }} />
-                {SETTINGS.APPLY[language]}
-              </Button>
+              <Button
+                primary
+                size="large"
+                onClick={() => applySettings()}
+                content={SETTINGS.APPLY[language]}
+                disabled={authLoading || catalogLoading}
+              />
             </Grid.Column>
-            <Grid.Column textAlign='right'>
+            <Grid.Column textAlign="right">
               <InfoPopup
-                position='left center'
+                position="left center"
                 text={SETTINGS.RESET_VALUES[language]}
                 trigger={
                   <Icon
                     link
                     fitted
-                    name='undo'
-                    size='large'
+                    name="undo"
+                    size="large"
+                    color="blue"
                     onClick={() => setDefaults()}
-                    style={{ color: SSB_COLORS.BLUE }}
-                    data-testid={TEST_IDS.DEFAULT_SETTINGS_BUTTON}
+                    data-testid={TEST_IDS.DEFAULT_SETTINGS_VALUES_BUTTON}
                   />
                 }
               />

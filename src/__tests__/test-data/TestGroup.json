@@ -1,6 +1,6 @@
 {
   "groupId": "testGroupId",
-  "description": "A test group",
+  "description": "testGroupDescription",
   "roles": [
     "role1",
     "role2"

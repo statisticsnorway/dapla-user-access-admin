@@ -1,76 +1,60 @@
-import React, { useContext, useEffect, useState } from 'react'
-import useAxios from 'axios-hooks'
-import { Route, Switch } from 'react-router-dom'
-import { Divider, Loader, Segment } from 'semantic-ui-react'
-import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
+import { useContext, useRef, useState } from 'react'
+import { Link, Route, Switch, useLocation } from 'react-router-dom'
+import { Divider, Icon, Ref, Segment, Step } from 'semantic-ui-react'
 
-import { AppHome, AppMenu, AppSettings, GroupsTable, RolesTable, UsersTable } from './components'
-import { ApiContext, LanguageContext } from './context/AppContext'
-import { API, ROUTING } from './configurations'
-import { UI } from './enums'
+import { AppGroups, AppMenu, AppRoles, AppSettings, AppUsers, UpdateGroup, UpdateRole, UpdateUser } from './components'
+import { LanguageContext } from './context/AppContext'
+import { APP } from './configurations'
 
 function App () {
-  const { authApi, catalogApi } = useContext(ApiContext)
+  const appRefArea = useRef()
+
   const { language } = useContext(LanguageContext)
 
-  const [authReady, setAuthReady] = useState(false)
-  const [catalogReady, setCatalogReady] = useState(false)
+  let location = useLocation()
+
   const [settingsOpen, setSettingsOpen] = useState(false)
-
-  const [{ loading: authLoading, error: authError }] = useAxios(`${authApi}${API.GET_HEALTH}`, { useCache: false })
-  const [{
-    loading: catalogLoading,
-    error: catalogError
-  }] = useAxios(`${catalogApi}${API.GET_HEALTH}`, { useCache: false })
-
-  useEffect(() => {
-    if (!authLoading && !authError) {
-      setAuthReady(true)
-    } else {
-      setAuthReady(false)
-    }
-  }, [authError, authLoading])
-
-  useEffect(() => {
-    if (!catalogLoading && !catalogError) {
-      setCatalogReady(true)
-    } else {
-      setCatalogReady(false)
-    }
-  }, [catalogError, catalogLoading])
 
   return (
     <>
-      <AppMenu setSettingsOpen={setSettingsOpen} />
-      <Divider />
-      <Segment basic>
-        {authLoading || catalogLoading ?
-          <Loader active inline='centered' /> : authError || catalogError ?
-            <ErrorMessage error={UI.API_ERROR_MESSAGE[language]} language={language} /> : authReady && catalogReady &&
-            <Switch>
-              <Route path={ROUTING.USERS}>
-                <UsersTable />
-              </Route>
-              <Route path={ROUTING.GROUPS}>
-                <GroupsTable />
-              </Route>
-              <Route path={ROUTING.ROLES}>
-                <RolesTable />
-              </Route>
-              <Route path={ROUTING.BASE}>
-                <AppHome />
-              </Route>
-            </Switch>
-        }
-      </Segment>
-      <AppSettings
-        open={settingsOpen}
-        authError={authError}
-        authLoading={authLoading}
-        catalogError={catalogError}
-        catalogLoading={catalogLoading}
-        setSettingsOpen={setSettingsOpen}
-      />
+      <AppMenu setSettingsOpen={setSettingsOpen} context={appRefArea} />
+      <Ref innerRef={appRefArea}>
+        <Segment basic style={{ paddingBottom: '5rem', marginTop: 0 }}>
+          <Step.Group size="large" widths={APP.length}>
+            {APP.map(step =>
+              <Step key={step.id} active={location.pathname.startsWith(step.route)} as={Link} to={`${step.route}/list`}>
+                <Icon name={step.icon} />
+                <Step.Content>
+                  <Step.Title>{step.title[language]}</Step.Title>
+                  <Step.Description>{step.description[language]}</Step.Description>
+                </Step.Content>
+              </Step>
+            )}
+          </Step.Group>
+          <Divider hidden />
+          <Switch>
+            <Route path={`${APP[0].route}/list`}>
+              <AppUsers />
+            </Route>
+            <Route path={`${APP[0].route}/update`}>
+              <UpdateUser />
+            </Route>
+            <Route path={`${APP[1].route}/list`}>
+              <AppGroups />
+            </Route>
+            <Route path={`${APP[1].route}/update`}>
+              <UpdateGroup />
+            </Route>
+            <Route path={`${APP[2].route}/list`}>
+              <AppRoles />
+            </Route>
+            <Route path={`${APP[2].route}/update`}>
+              <UpdateRole />
+            </Route>
+          </Switch>
+        </Segment>
+      </Ref>
+      <AppSettings open={settingsOpen} setOpen={setSettingsOpen} />
     </>
   )
 }

@@ -1,42 +1,47 @@
 {
   "roles": [
     {
-      "roleId": "role1",
-      "description": "A role",
-      "states": {},
-      "maxValuation": "OPEN",
-      "privileges": {
-        "includes": [
-          "READ"
-        ]
-      },
+      "roleId": "roleId1",
+      "description": "role1Description",
       "paths": {
-        "includes": [
-          "/test/1"
-        ],
-        "excludes": [
-          "/test/2"
-        ]
-      }
+        "includes": ["/test/1"],
+        "excludes": ["/test/2"]
+      },
+      "privileges": {
+        "includes": ["CREATE", "DELETE", "READ", "UPDATE"],
+        "excludes": ["DEPSEUDO"]
+      },
+      "states": {
+        "includes": ["INPUT", "OTHER", "OUTPUT", "PROCESSED", "PRODUCT"],
+        "excludes": ["RAW", "TEMP"]
+      },
+      "maxValuation": "OPEN"
     },
     {
-      "roleId": "role2",
-      "description": "An alternative",
-      "states": {
-        "includes": "INPUT"
-      },
-      "maxValuation": "INTERNAL",
-      "privileges": {
-        "excludes": [
-          "READ",
-          "UPDATE",
-          "DELETE"
-        ]
-      },
+      "roleId": "roleId2",
       "paths": {
-        "includes": [
-          "/test/2"
-        ]
+        "includes": ["/test/2"],
+        "excludes": ["/test/1"]
+      },
+      "privileges": {
+        "excludes": ["DEPSEUDO"]
+      },
+      "states": {
+        "excludes": ["RAW", "TEMP"]
+      },
+      "maxValuation": "SENSITIVE"
+    },
+    {
+      "roleId": "user.user1.roleId",
+      "description": "role3Description",
+      "paths": {
+        "includes": ["/test/3"]
+      },
+      "privileges": {
+        "includes": ["CREATE", "DELETE", "READ", "UPDATE"]
+      },
+      "states": {
+        "includes": ["INPUT", "OTHER", "OUTPUT", "PROCESSED", "PRODUCT"]
       }
     }
   ]

@@ -1,74 +1,55 @@
 export const API = {
-  GET_HEALTH: '/health'
+  AUTH: 'auth',
+  CATALOG: 'catalog',
+  GET_HEALTH: '/health',
+  HANDLE_PUT: (env, data, url, token) => {
+    if (env === 'development') {
+      return ({
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: data,
+        url: url
+      })
+    } else {
+      return ({
+        data: data,
+        url: url
+      })
+    }
+  }
 }
 
 export const AUTH_API = {
-  ENUMS: {
-    PRIVILEGES: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'DEPSEUDO'],
-    STATES: ['RAW', 'INPUT', 'PROCESSED', 'OUTPUT', 'PRODUCT', 'OTHER', 'TEMP'],
-    VALUATIONS: ['OPEN', 'INTERNAL', 'SHIELDED', 'SENSITIVE']
-  },
-  EXCLUDES: 'excludes',
-  GET_ACCESS: (path, privilege, state, maxValuation, userId) =>
-    `/access/${userId}?privilege=${privilege}&path=${path}&valuation=${maxValuation}&state=${state}`,
-  GET_GROUPS: '/group',
-  GET_ROLE: (roleId) => `/role/${roleId}`,
-  GET_ROLES: '/role',
-  GROUP_OBJECT: {
-    LIST: 'roles',
-    STRING: ['groupId', 'description']
-  },
   GET_USERS: '/user',
-  GROUPS: 'groups',
-  INCLUDES: 'includes',
-  PUT_GROUP: (groupId) => `/group/${groupId}`,
-  PUT_ROLE: (roleId) => `/role/${roleId}`,
-  PUT_USER: (userId) => `/user/${userId}`,
-  ROLE_OBJECT: {
-    ARRAY: ['privileges', 'states'],
-    ENUM: 'maxValuation',
-    LIST: 'paths',
-    STRING: ['roleId', 'description']
-  },
-  ROLES: 'roles',
+  PUT_USER: (userId) => `${AUTH_API.GET_USERS}/${userId}`,
+  GET_GROUPS: '/group',
+  PUT_GROUP: (groupId) => `${AUTH_API.GET_GROUPS}/${groupId}`,
+  GET_ROLES: '/role',
+  PUT_ROLE: (roleId) => `${AUTH_API.GET_ROLES}/${roleId}`,
+  USERS: 'users',
   USER_OBJECT: {
     ARRAY: ['groups', 'roles'],
     STRING: 'userId'
   },
-  USERS: 'users'
+  GROUPS: 'groups',
+  GROUP_OBJECT: {
+    ARRAY: 'roles',
+    STRING: ['groupId', 'description']
+  },
+  ROLE_OBJECT: {
+    ARRAY: ['paths', 'privileges', 'states'],
+    ENUM: 'maxValuation',
+    STRING: ['roleId', 'description']
+  },
+  ROLES: 'roles',
+  NO_GROUP: 'NO_GROUP',
+  NO_ROLE: 'NO_ROLE',
+  INCLUDES: 'includes',
+  EXCLUDES: 'excludes'
 }
 
 export const CATALOG_API = {
   CATALOGS: 'catalogs',
-  CATALOG_OBJECT: {
-    ENUM: ['valuation', 'state', 'type'],
-    OBJECT: {
-      NAME: 'id',
-      STRING: ['path', 'timestamp']
-    },
-    STRING: ['parentUri']
-  },
-  GET_CATALOGS: '/catalog'
-}
-
-export const checkAccess = (data, value) => {
-  let positive = false
-
-  try {
-    if (data && (data.hasOwnProperty(AUTH_API.INCLUDES) || data.hasOwnProperty(AUTH_API.EXCLUDES))) {
-      if (data.hasOwnProperty(AUTH_API.INCLUDES)) {
-        positive = data[AUTH_API.INCLUDES].includes(value)
-      }
-
-      if (data.hasOwnProperty(AUTH_API.EXCLUDES)) {
-        positive = !data[AUTH_API.EXCLUDES].includes(value)
-      }
-    } else {
-      positive = true
-    }
-  } catch (error) {
-    console.log(error)
-  }
-
-  return positive
+  GET_PATHS: '/catalog'
 }

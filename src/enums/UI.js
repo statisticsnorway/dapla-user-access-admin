@@ -3,25 +3,17 @@ export const UI = {
     en: 'Add',
     nb: 'Legg til'
   },
-  API_ERROR_MESSAGE: {
-    en: 'Something went wrong, check settings',
-    nb: 'Noe gikk galt, sjekk innstillingene'
+  HEADER: {
+    en: 'Access control',
+    nb: 'Tilgangsstyring'
+  },
+  ADVANCED_USER: {
+    en: 'Advanced user?',
+    nb: 'Avansert bruker?'
   },
   FILTER_TABLE: {
     en: 'Filter table',
     nb: 'Filtrere tabellen'
-  },
-  GROUPS: {
-    en: 'Groups',
-    nb: 'Grupper'
-  },
-  HEADER: {
-    en: 'User access admin',
-    nb: 'Tilgangsstyring'
-  },
-  ROLES: {
-    en: 'Roles',
-    nb: 'Roller'
   },
   SEARCH_NO_RESULTS: {
     en: 'No results found',
@@ -30,13 +22,5 @@ export const UI = {
   SEARCH_NO_RESULTS_CAN_ADD: {
     en: 'No results found but you can add values',
     nb: 'Fant ingen resultater men du kan legge til'
-  },
-  USER: {
-    en: 'User',
-    nb: 'Bruker'
-  },
-  USERS: {
-    en: 'Users',
-    nb: 'Brukere'
   }
 }

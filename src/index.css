@@ -1,5 +1,5 @@
 body {
-  background: #f0f8f9
+  background: #fff
 }
 
 .ui.loading.segment:before {
@@ -16,16 +16,20 @@ body {
 
 .ui.table thead tr:first-child > th {
   position: sticky !important;
-  top: 0;
-  z-index: 2;
-}
-
-.ui.table thead tr:nth-child(2) > th {
-  position: sticky !important;
-  top: 3.4rem;
+  top: 4.3rem;
   z-index: 2;
 }
 
 .ui.sortable.table thead th.sorted {
+  background: #f9fafb;
+}
+
+.ui.sortable.table thead th:hover {
+  opacity: 1;
+  background: #f9fafb;
+}
+
+.ui.sortable.table thead th.sorted:hover {
+  opacity: 1;
   background: #f9fafb;
 }

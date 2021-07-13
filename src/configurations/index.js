@@ -1,5 +1,15 @@
-export { API, AUTH_API, CATALOG_API, checkAccess } from './API'
-export { populatedDropdown } from './LAYOUT'
-export { ROUTING } from './ROUTING'
-export { VALUATION_COLORS } from './STYLING'
+export { API, AUTH_API, CATALOG_API } from './API'
+export { APP } from './APP'
+export {
+  populatedDropdown, renderLabelDropdownSelection, renderTooltipLabelDropdownSelection, includesExcludesTableLayout, includesExcludesFormLayout
+} from './LAYOUT'
+export {
+  checkIncludesExcludes,
+  moveIncludesExcludes,
+  emptyIncludesExcludes,
+  setupPathOptions,
+  setupPathValues,
+  setupIncludesExcludes
+} from './SETUP'
 export { TEST_CONFIGURATIONS } from './TEST'
+export { validateUser, validateGroup, validateRole } from './VALIDATION'
