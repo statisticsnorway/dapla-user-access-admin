@@ -1,2 +1,1 @@
-export { convertToIncludesExcludes, moveIncludesExcludes, setupPathOptions, sortArrayOfObjects } from './ObjectHandling'
-export { DescriptionPopup } from './ObjectViews'
+export { sortArrayOfObjects, arrayReduceBy } from './ObjectHandling'

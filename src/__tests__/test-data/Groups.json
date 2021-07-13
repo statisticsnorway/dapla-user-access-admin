@@ -2,17 +2,34 @@
   "groups": [
     {
       "groupId": "group1",
-      "description": "A group",
+      "description": "group1Description",
       "roles": [
         "role1"
       ]
     },
     {
       "groupId": "group2",
-      "description": "An alternative group",
+      "description": "group2Description",
       "roles": [
+        "role1",
         "role2"
       ]
+    },
+    {
+      "groupId": "group3",
+      "description": "group3Description",
+      "roles": [
+        "role2",
+        "role3"
+      ]
+    },
+    {
+      "groupId": "group4",
+      "description": "",
+      "roles": []
+    },
+    {
+      "groupId": "group5"
     }
   ]
 }

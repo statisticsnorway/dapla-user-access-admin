@@ -1,9 +1,10 @@
 export const TEST_IDS = {
-  ACCESS_SETTINGS_BUTTON: 'settingsCog',
-  DEFAULT_SETTINGS_BUTTON: 'setDefaultSettings',
-  SEARCH_DROPDOWN: 'searchDropdownBox',
   TABLE_SORT: 'tableSortHeader',
-  UPDATE_GROUP: 'updateGroupIcon',
-  UPDATE_ROLE: 'updateRoleIcon',
-  UPDATE_USER: 'updateUserIcon'
+  TABLE_REFRESH: 'tableRefreshButton',
+  SEARCH_DROPDOWN: 'searchDropdownBox',
+  SETTINGS_BUTTON: 'toggleSettingsButton',
+  ADVANCED_USER_TOGGLE: 'toggleAdvancedUser',
+  SIMPLE_ROLES_VIEW_TOGGLE: 'toggleSimpleRolesView',
+  DEFAULT_SETTINGS_VALUES_BUTTON: 'setDefaultSettingsValues',
+  TABLE_FILTER_USER_ROLES_TOGGLE: 'toggleTableFilterUserRoles'
 }

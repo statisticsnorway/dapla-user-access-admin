@@ -2,25 +2,40 @@
   "users": [
     {
       "userId": "user1",
-      "roles": [
-        "role1",
-        "role2"
-      ],
       "groups": [
-        "group1",
-        "group2"
+        "group1"
+      ],
+      "roles": [
+        "role1"
       ]
     },
     {
       "userId": "user2",
-      "roles": [
-        "role3",
-        "role4"
-      ],
       "groups": [
-        "group3",
-        "group4"
+        "group1",
+        "group2"
+      ],
+      "roles": [
+        "role1",
+        "user.user2.role"
       ]
+    },
+    {
+      "userId": "user3",
+      "groups": [
+        "group2"
+      ],
+      "roles": [
+        "role2"
+      ]
+    },
+    {
+      "userId": "user4",
+      "groups": [],
+      "roles": []
+    },
+    {
+      "userId": "user5"
     }
   ]
 }

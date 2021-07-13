@@ -1,15 +1,15 @@
 export const SETTINGS = {
+  AUTH_API: {
+    en: 'dapla-user-access',
+    nb: 'dapla-user-access'
+  },
+  CATALOG_API: {
+    en: 'dapla-catalog',
+    nb: 'dapla-catalog'
+  },
   APPLY: {
     en: 'Apply',
     nb: 'Angi'
-  },
-  AUTH_API: {
-    en: 'Auth service',
-    nb: 'Tilgangstjeneste'
-  },
-  CATALOG_API: {
-    en: 'Catalog service',
-    nb: 'Katalogtjeneste'
   },
   EDITED_VALUES: {
     en: 'Edited values are not used until you hit the "Apply" button',

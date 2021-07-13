@@ -1,24 +1,17 @@
 {
   "roleId": "testRoleId",
-  "description": "A test role",
-  "states": {
-    "includes": [
-      "INPUT"
-    ]
-  },
-  "maxValuation": "INTERNAL",
-  "privileges": {
-    "includes": [
-      "CREATE"
-    ]
-  },
+  "description": "testRoleDescription",
   "paths": {
-    "includes": [
-      "/test/1",
-      "/test/2"
-    ],
-    "excludes": [
-      "/test/3"
-    ]
-  }
+    "includes": ["/test/1"],
+    "excludes": ["/test/2"]
+  },
+  "privileges": {
+    "includes": ["CREATE", "DELETE", "READ", "UPDATE"],
+    "excludes": ["DEPSEUDO"]
+  },
+  "states": {
+    "includes": ["INPUT", "OTHER", "OUTPUT", "PROCESSED", "PRODUCT"],
+    "excludes": ["RAW", "TEMP"]
+  },
+  "maxValuation": "OPEN"
 }

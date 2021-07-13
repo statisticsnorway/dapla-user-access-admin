@@ -1,53 +1,86 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import { Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react'
-import { dapla_long_rgb, LANGUAGE, SSB_COLORS, ssb_logo_rgb } from '@statisticsnorway/dapla-js-utilities'
+import { useContext, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { Checkbox, Dropdown, Header, Image, Menu, Sticky } from 'semantic-ui-react'
+import {
+  dapla_long_rgb,
+  dapla_short_rgb,
+  LANGUAGE,
+  ssb_logo_no_text_rgb,
+  ssb_logo_rgb
+} from '@statisticsnorway/dapla-js-utilities'
 
-import { LanguageContext } from '../context/AppContext'
-import { ROUTING } from '../configurations'
+import { ApiContext, LanguageContext } from '../context/AppContext'
 import { TEST_IDS, UI } from '../enums'
 
-const routeIcons = ['user', 'users', 'address card']
-
-function AppMenu ({ setSettingsOpen }) {
+function AppMenu ({ setSettingsOpen, context }) {
   const { language, setLanguage } = useContext(LanguageContext)
+  const { advancedUser, setAdvancedUser } = useContext(ApiContext)
 
-  const dropdownItems = Object.keys(LANGUAGE.LANGUAGES).map(languageName =>
-    <Dropdown.Item
-      key={languageName}
-      content={LANGUAGE[languageName][language]}
-      onClick={() => setLanguage(LANGUAGE.LANGUAGES[languageName].languageCode)}
-    />
-  )
+  let history = useHistory()
+
+  const [menuIsStuck, setMenuIsStuck] = useState(false)
+
+  const handleAdvancedUserChange = () => {
+    if (advancedUser) {
+      history.push({ pathname: '/' })
+    }
+
+    localStorage.setItem('advancedUser', !advancedUser ? 'true' : 'false')
+    setAdvancedUser(!advancedUser)
+  }
 
   return (
-    <Menu secondary size='huge' icon='labeled' style={{ padding: '1rem', paddingTop: '2rem' }}>
-      <Menu.Item as={Link} to={ROUTING.BASE}>
-        <Image size='medium' src={ssb_logo_rgb} />
-      </Menu.Item>
-      <Menu.Item>
-        <Image size='tiny' src={dapla_long_rgb} />
-      </Menu.Item>
-      <Menu.Item>
-        <Header size='huge' content={UI.HEADER[language]} />
-      </Menu.Item>
-      <Menu.Menu position='right'>
-        {Object.entries(ROUTING).filter(([route]) => route !== 'BASE').map(([route, path], index) =>
-          <Menu.Item key={path} as={Link} to={path}>
-            <Icon link fitted name={routeIcons[index]} size='big' style={{ color: SSB_COLORS.BLUE }} />
-            {UI[route][language]}
+    <Sticky onUnstick={() => setMenuIsStuck(false)} onStick={() => setMenuIsStuck(true)} context={context}>
+      <Menu
+        secondary
+        size={menuIsStuck ? 'large' : 'huge'}
+        style={{
+          backgroundColor: '#fff',
+          padding: menuIsStuck ? 0 : '1rem',
+          border: '1px solid rgba(34,36,38,.15)',
+          boxShadow: '0 1px 2px 0 rgba(34,36,38,.15)'
+        }}
+      >
+        <Menu.Item as={Link} to="/">
+          <Image size={menuIsStuck ? 'mini' : 'medium'} src={menuIsStuck ? ssb_logo_no_text_rgb : ssb_logo_rgb} />
+        </Menu.Item>
+        <Menu.Item>
+          <Image size={menuIsStuck ? 'mini' : 'tiny'} src={menuIsStuck ? dapla_short_rgb : dapla_long_rgb} />
+        </Menu.Item>
+        <Menu.Item>
+          <Header size={menuIsStuck ? 'medium' : 'huge'} content={UI.HEADER[language]} />
+        </Menu.Item>
+        <Menu.Menu position="right">
+          <Menu.Item>
+            <Checkbox
+              toggle
+              checked={advancedUser}
+              label={UI.ADVANCED_USER[language]}
+              data-testid={TEST_IDS.ADVANCED_USER_TOGGLE}
+              onChange={() => handleAdvancedUserChange()}
+            />
           </Menu.Item>
-        )}
-        <Menu.Item
-          onClick={() => setSettingsOpen(true)}
-          icon={{ name: 'setting', size: 'big', 'data-testid': TEST_IDS.ACCESS_SETTINGS_BUTTON }}
-          style={{ color: SSB_COLORS.GREEN }}
-        />
-        <Dropdown item text={`${LANGUAGE.LANGUAGE[language]} (${LANGUAGE.LANGUAGE_CHOICE[language]})`}>
-          <Dropdown.Menu>{dropdownItems}</Dropdown.Menu>
-        </Dropdown>
-      </Menu.Menu>
-    </Menu>
+          {advancedUser &&
+          <Menu.Item
+            onClick={() => setSettingsOpen(true)}
+            data-testid={TEST_IDS.SETTINGS_BUTTON}
+            icon={{ name: 'cog', color: 'blue', size: menuIsStuck ? 'large' : 'big' }}
+          />
+          }
+          <Dropdown item text={`${LANGUAGE.LANGUAGE[language]} (${LANGUAGE.LANGUAGE_CHOICE[language]})`}>
+            <Dropdown.Menu>
+              {Object.keys(LANGUAGE.LANGUAGES).map(languageName =>
+                <Dropdown.Item
+                  key={languageName}
+                  content={LANGUAGE[languageName][language]}
+                  onClick={() => setLanguage(LANGUAGE.LANGUAGES[languageName].languageCode)}
+                />
+              )}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Menu>
+      </Menu>
+    </Sticky>
   )
 }
 

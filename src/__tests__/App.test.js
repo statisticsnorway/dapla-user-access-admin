@@ -1,24 +1,23 @@
-import React from 'react'
-import useAxios from 'axios-hooks'
-import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { LANGUAGE } from '@statisticsnorway/dapla-js-utilities'
 
 import App from '../App'
 import { AppContextProvider } from '../context/AppContext'
-import { API, TEST_CONFIGURATIONS } from '../configurations'
-import { SETTINGS, TEST_IDS, UI } from '../enums'
+import { APP, TEST_CONFIGURATIONS } from '../configurations'
 
-jest.mock('../components/AppHome', () => () => null)
-jest.mock('../components/role/RolesTable', () => () => null)
-jest.mock('../components/user/UsersTable', () => () => null)
-jest.mock('../components/group/GroupsTable', () => () => null)
+jest.mock('../components/AppMenu', () => () => null)
+jest.mock('../components/AppSettings', () => () => null)
+jest.mock('../components/roles/AppRoles', () => () => null)
+jest.mock('../components/users/AppUsers', () => () => null)
+jest.mock('../components/roles/UpdateRole', () => () => null)
+jest.mock('../components/users/UpdateUser', () => () => null)
+jest.mock('../components/groups/AppGroups', () => () => null)
+jest.mock('../components/groups/UpdateGroup', () => () => null)
 
-const { errorObject, language, otherLanguage } = TEST_CONFIGURATIONS
+const { language } = TEST_CONFIGURATIONS
 
 const setup = () => {
-  const { getByTestId, getByText } = render(
+  const { getByText } = render(
     <AppContextProvider>
       <MemoryRouter initialEntries={['/']}>
         <App />
@@ -26,47 +25,14 @@ const setup = () => {
     </AppContextProvider>
   )
 
-  return { getByTestId, getByText }
+  return { getByText }
 }
 
-describe('Common mock', () => {
-  beforeEach(() => {
-    useAxios.mockReturnValue([{ loading: false, error: null, response: null }])
-  })
-
-  test('Does not crash', () => {
-    const { getByText } = setup()
-
-    expect(getByText(UI.HEADER[language])).toBeInTheDocument()
-    expect(useAxios).toHaveBeenCalledWith(`${window.__ENV.REACT_APP_API_AUTH}${API.GET_HEALTH}`, { useCache: false })
-    expect(useAxios).toHaveBeenCalledWith(`${window.__ENV.REACT_APP_API_CATALOG}${API.GET_HEALTH}`, { useCache: false })
-  })
-
-  test('Change language works correctly', () => {
-    const { getByText } = setup()
-
-    userEvent.click(getByText(LANGUAGE.ENGLISH[language]))
-
-    expect(getByText(UI.HEADER[otherLanguage])).toBeInTheDocument()
-  })
-
-  test('Opens settings', () => {
-    const { getByTestId, getByText } = setup()
-
-    userEvent.click(getByTestId(TEST_IDS.ACCESS_SETTINGS_BUTTON))
-
-    expect(getByText(SETTINGS.HEADER[language])).toBeInTheDocument()
-  })
-})
-
-test('Loads', () => {
-  useAxios.mockReturnValue([{ loading: true, error: null, response: null }])
-  setup()
-})
-
-test('Renders error when api call returns error', () => {
-  useAxios.mockReturnValue([{ loading: false, error: errorObject, response: null }])
+test('Does not crash', () => {
   const { getByText } = setup()
 
-  expect(getByText(UI.API_ERROR_MESSAGE[language])).toBeInTheDocument()
+  APP.forEach(step => {
+    expect(getByText(step.title[language])).toBeInTheDocument()
+    expect(getByText(step.description[language])).toBeInTheDocument()
+  })
 })

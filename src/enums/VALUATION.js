@@ -16,7 +16,7 @@ export const VALUATION = {
     nb: 'Skjermet'
   },
   UNRECOGNIZED: {
-    en: 'Unrecognized',
-    nb: 'Ukjent'
+    en: '—',
+    nb: '—'
   }
 }
