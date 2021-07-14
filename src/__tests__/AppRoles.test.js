@@ -47,39 +47,39 @@ describe('Common mock', () => {
   test('Filter function works correctly', () => {
     const { getByText, getByPlaceholderText, queryByText } = setup()
 
-    expect(getByText('roleId1')).toBeInTheDocument()
+    expect(getByText(Roles.roles[0].roleId)).toBeInTheDocument()
 
-    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), 'roleId2')
+    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), Roles.roles[1].roleId)
 
-    expect(queryByText('roleId1')).toBeNull()
+    expect(queryByText(Roles.roles[0].roleId)).toBeNull()
   })
 
   test('Filter pure user roles works correctly', () => {
     const { getByText, getByTestId, queryByText } = setup()
 
-    expect(getByText('user.user1.roleId')).toBeInTheDocument()
+    expect(getByText(Roles.roles[3].roleId)).toBeInTheDocument()
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_FILTER_USER_ROLES_TOGGLE))
 
-    expect(queryByText('user.user1.roleId')).toBeNull()
+    expect(queryByText(Roles.roles[3].roleId)).toBeNull()
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_FILTER_USER_ROLES_TOGGLE))
 
-    expect(getByText('user.user1.roleId')).toBeInTheDocument()
+    expect(getByText(Roles.roles[3].roleId)).toBeInTheDocument()
   })
 
   test('Sort function works correctly', () => {
     const { getAllByText, getByTestId } = setup()
 
-    expect(getAllByText('role', { exact: false })[1]).toHaveTextContent('roleId1')
+    expect(getAllByText('role', { exact: false })[2]).toHaveTextContent(Roles.roles[0].roleId)
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
 
-    expect(getAllByText('role', { exact: false })[1]).toHaveTextContent('user.user1.roleId')
+    expect(getAllByText('role', { exact: false })[2]).toHaveTextContent(Roles.roles[3].roleId)
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
 
-    expect(getAllByText('role', { exact: false })[1]).toHaveTextContent('roleId1')
+    expect(getAllByText('role', { exact: false })[2]).toHaveTextContent(Roles.roles[0].roleId)
   })
 
   test('Toggle simple roles view works correctly', () => {

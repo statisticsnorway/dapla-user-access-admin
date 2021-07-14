@@ -3,7 +3,7 @@ import { Divider, Grid, Icon, List, Message, Popup, Table } from 'semantic-ui-re
 import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
 import { AUTH_API } from './API'
-import { DATASET_STATE, ROLES, VALUATION } from '../enums'
+import { DATASET_STATE, ROLES, TEST_IDS, VALUATION } from '../enums'
 
 export const populatedDropdown = (label, loading, refetch, error, errorTitle) =>
   <label>
@@ -15,6 +15,7 @@ export const populatedDropdown = (label, loading, refetch, error, errorTitle) =>
       loading={loading}
       name="sync alternate"
       onClick={() => refetch()}
+      data-testid={TEST_IDS.DROPDOWN_REFRESH}
     />
     {error &&
     <Popup
@@ -35,11 +36,14 @@ export const renderLabelDropdownSelection = label => ({
 
 export const renderTooltipLabelDropdownSelection = (label, pathOptions, language) => {
   const thisPath = pathOptions.filter(({ value }) => value === label.text)
-  const state = thisPath[0] === undefined ? '-' : DATASET_STATE[thisPath[0].state][language]
-  const valuation = thisPath[0] === undefined ? '-' : VALUATION[thisPath[0].valuation][language]
+  const state = thisPath[0] === undefined ? '—' : DATASET_STATE[thisPath[0].state][language]
+  const valuation = thisPath[0] === undefined ? '—' : VALUATION[thisPath[0].valuation][language]
 
   return ({
     size: 'large',
+    color: label.incatalog !== 'true' ? 'red' : null,
+    icon: label.incatalog !== 'true' ? 'exclamation' : null,
+    style: { fontSize: '1rem', marginTop: '0.35rem' },
     content: (
       <Popup
         flowing
@@ -48,11 +52,16 @@ export const renderTooltipLabelDropdownSelection = (label, pathOptions, language
           <>
             <p>{`${ROLES.STATE[language]}: `}<b>{state}</b></p>
             <p>{`${ROLES.MAX_VALUATION[language]}: `}<b>{valuation}</b></p>
+            {label.incatalog !== 'true' &&
+            <p>
+              <Icon name="exclamation" color="red" />
+              {ROLES.PATH_NOT_FOUND_IN_CATALOG[language]}
+            </p>
+            }
           </>
         }
       />
-    ),
-    style: { fontSize: '1rem', marginTop: '0.35rem' }
+    )
   })
 }
 

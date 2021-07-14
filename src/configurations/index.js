@@ -1,7 +1,11 @@
 export { API, AUTH_API, CATALOG_API } from './API'
 export { APP } from './APP'
 export {
-  populatedDropdown, renderLabelDropdownSelection, renderTooltipLabelDropdownSelection, includesExcludesTableLayout, includesExcludesFormLayout
+  populatedDropdown,
+  renderLabelDropdownSelection,
+  renderTooltipLabelDropdownSelection,
+  includesExcludesTableLayout,
+  includesExcludesFormLayout
 } from './LAYOUT'
 export {
   checkIncludesExcludes,

@@ -7,34 +7,32 @@ export const checkIncludesExcludes = (list, property) => {
   let excludes = 0
 
   for (const element in property) {
-    if (property.hasOwnProperty(element)) {
-      let decision = false
+    let decision = false
 
-      if (list === undefined) {
+    if (list === undefined) {
+      decision = true
+      returnList.list[element] = true
+    } else {
+      if (!list.hasOwnProperty(AUTH_API.INCLUDES)) {
         decision = true
         returnList.list[element] = true
       } else {
-        if (!list.hasOwnProperty(AUTH_API.INCLUDES)) {
+        if (list[AUTH_API.INCLUDES].includes(element)) {
           decision = true
           returnList.list[element] = true
         } else {
-          if (list[AUTH_API.INCLUDES].includes(element)) {
-            decision = true
-            returnList.list[element] = true
-          } else {
-            returnList.list[element] = false
-          }
-        }
-
-        if (list.hasOwnProperty(AUTH_API.EXCLUDES)) {
-          if (list[AUTH_API.EXCLUDES].includes(element)) {
-            returnList.list[element] = false
-          }
+          returnList.list[element] = false
         }
       }
 
-      decision ? includes++ : excludes++
+      if (list.hasOwnProperty(AUTH_API.EXCLUDES)) {
+        if (list[AUTH_API.EXCLUDES].includes(element)) {
+          returnList.list[element] = false
+        }
+      }
     }
+
+    decision ? includes++ : excludes++
   }
 
   if (includes < excludes) {
@@ -69,13 +67,12 @@ export const moveIncludesExcludes = (includes, excludes, value, to) => {
   return { [AUTH_API.INCLUDES]: returnIncludes, [AUTH_API.EXCLUDES]: returnExcludes }
 }
 
-
-export const emptyIncludesExcludes = (type = false) => ({
+export const emptyIncludesExcludes = (type) => ({
   [AUTH_API.INCLUDES]: [],
-  [AUTH_API.EXCLUDES]: type ? Object.keys(type) : []
+  [AUTH_API.EXCLUDES]: Object.keys(type)
 })
 
-export const setupPathOptions = role => {
+export const setupPathOptions = (role, fetchedPaths) => {
   let includes = []
   let excludes = []
 
@@ -84,7 +81,10 @@ export const setupPathOptions = role => {
       includes = role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.INCLUDES].map(path => ({
         key: path,
         text: path,
-        value: path
+        value: path,
+        state: '—',
+        valuation: '—',
+        incatalog: 'false'
       }))
     }
 
@@ -92,11 +92,20 @@ export const setupPathOptions = role => {
       excludes = role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.EXCLUDES].map(path => ({
         key: path,
         text: path,
-        value: path
+        value: path,
+        state: '—',
+        valuation: '—',
+        incatalog: 'false'
       }))
     }
 
-    return includes.concat(excludes)
+    let rolePaths = includes.concat(excludes)
+
+    fetchedPaths.forEach(path => {
+      rolePaths = rolePaths.filter(rolePath => path.id.path !== rolePath.value)
+    })
+
+    return rolePaths
   } else {
     return []
   }
@@ -127,12 +136,10 @@ export const setupIncludesExcludes = (role, property, field) => {
   const returnSetup = ({ [AUTH_API.INCLUDES]: [], [AUTH_API.EXCLUDES]: [] })
 
   for (const element in property) {
-    if (property.hasOwnProperty(element)) {
-      list[element] = !(role[field].hasOwnProperty(AUTH_API.INCLUDES) && !role[field][AUTH_API.INCLUDES].includes(element))
+    list[element] = !(role[field].hasOwnProperty(AUTH_API.INCLUDES) && !role[field][AUTH_API.INCLUDES].includes(element))
 
-      if (role[field].hasOwnProperty(AUTH_API.EXCLUDES) && role[field][AUTH_API.EXCLUDES].includes(element)) {
-        list[element] = false
-      }
+    if (role[field].hasOwnProperty(AUTH_API.EXCLUDES) && role[field][AUTH_API.EXCLUDES].includes(element)) {
+      list[element] = false
     }
   }
 

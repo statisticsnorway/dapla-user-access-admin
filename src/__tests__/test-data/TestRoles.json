@@ -1,0 +1,56 @@
+{
+  "testRoles": [
+    {
+      "roleId": "testRole1Id",
+      "description": "testRoleDescription",
+      "paths": {
+        "includes": [
+          "/test/1"
+        ],
+        "excludes": [
+          "/test/2"
+        ]
+      },
+      "privileges": {
+        "includes": [
+          "CREATE",
+          "DELETE",
+          "READ",
+          "UPDATE"
+        ],
+        "excludes": [
+          "DEPSEUDO"
+        ]
+      },
+      "states": {
+        "includes": [
+          "INPUT",
+          "OTHER",
+          "OUTPUT",
+          "PROCESSED",
+          "PRODUCT"
+        ],
+        "excludes": [
+          "RAW",
+          "TEMP"
+        ]
+      },
+      "maxValuation": "OPEN"
+    },
+    {
+      "roleId": "testRole2Id",
+      "description": "testRole2Description",
+      "states": {},
+      "privileges": {},
+      "maxValuation": "OPEN"
+    },
+    {
+      "roleId": "testRole3Id",
+      "description": "testRole3Description",
+      "paths": {},
+      "states": {},
+      "privileges": {},
+      "maxValuation": "OPEN"
+    }
+  ]
+}

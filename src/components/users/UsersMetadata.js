@@ -3,7 +3,7 @@ import { Accordion, List, Message } from 'semantic-ui-react'
 
 import { LanguageContext } from '../../context/AppContext'
 import { AUTH_API } from '../../configurations'
-import { USERS } from '../../enums'
+import { UI, USERS } from '../../enums'
 
 function UsersMetadata ({ users, filter, groups, roles }) {
   const { language } = useContext(LanguageContext)
@@ -11,7 +11,7 @@ function UsersMetadata ({ users, filter, groups, roles }) {
   return (
     <Message size="large">
       <p>{`${USERS.NO_OF_USERS[language]}: `}
-        <b>{`${users}${users === filter ? '' : ` (${filter})`}`}</b>
+        <b>{users}{users !== filter && ` (${filter} ${UI.AFTER_FILTER[language]})`}</b>
       </p>
       {groups[AUTH_API.NO_GROUP] !== undefined && groups[AUTH_API.NO_GROUP].length !== 0 &&
       <>

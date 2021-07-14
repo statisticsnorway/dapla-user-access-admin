@@ -1,23 +1,48 @@
 import useAxios from 'axios-hooks'
 import { useLocation } from 'react-router-dom'
-import { useContext, useState } from 'react'
-import { Button, Divider, Form, Grid, Header, Icon, Segment } from 'semantic-ui-react'
-import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
+import { useContext, useReducer } from 'react'
+import { Divider, Form, Grid, Header, Icon, Segment } from 'semantic-ui-react'
 
+import { ResponseColumn, SaveUpdateButton } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
-import { API, AUTH_API, populatedDropdown, renderLabelDropdownSelection, validateUser } from '../../configurations'
+import { AUTH_API, populatedDropdown, renderLabelDropdownSelection, validateUser } from '../../configurations'
 import { UI, USERS } from '../../enums'
 
+const VALIDATED = 'validated'
+
+const initialState = state => ({
+  [VALIDATED]: false,
+  [AUTH_API.USER_OBJECT.STRING]: state.isNew ? '' : state.user[AUTH_API.USER_OBJECT.STRING],
+  [AUTH_API.USER_OBJECT.ARRAY[0]]: state.isNew ? [] : state.user[AUTH_API.USER_OBJECT.ARRAY[0]],
+  [AUTH_API.USER_OBJECT.ARRAY[1]]: state.isNew ? [] : state.user[AUTH_API.USER_OBJECT.ARRAY[1]]
+})
+
+const stateReducer = (state, action) => {
+  switch (action.type) {
+    case VALIDATED:
+      return { ...state, [VALIDATED]: action.payload }
+
+    case AUTH_API.USER_OBJECT.STRING:
+      return { ...state, [AUTH_API.USER_OBJECT.STRING]: action.payload }
+
+    case AUTH_API.USER_OBJECT.ARRAY[0]:
+      return { ...state, [AUTH_API.USER_OBJECT.ARRAY[0]]: action.payload }
+
+    case AUTH_API.USER_OBJECT.ARRAY[1]:
+      return { ...state, [AUTH_API.USER_OBJECT.ARRAY[1]]: action.payload }
+
+    default:
+      return state
+  }
+}
+
 function UpdateUser () {
-  const { authApi, devToken } = useContext(ApiContext)
+  const { authApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   let { state } = useLocation()
 
-  const [isValidUser, setIsValidUser] = useState(false)
-  const [updatedUserId, setUpdatedUserId] = useState(state.isNew ? '' : state.user[AUTH_API.USER_OBJECT.STRING])
-  const [updatedRoles, setUpdatedRoles] = useState(state.isNew ? [] : state.user[AUTH_API.USER_OBJECT.ARRAY[1]])
-  const [updatedGroups, setUpdatedGroups] = useState(state.isNew ? [] : state.user[AUTH_API.USER_OBJECT.ARRAY[0]])
+  const [currentState, dispatchState] = useReducer(stateReducer, state, initialState)
 
   const [{ data: getRolesData, loading: getRolesLoading, error: getRolesError }, refetchRolesGet] =
     useAxios(`${authApi}${AUTH_API.GET_ROLES}`, { useCache: false })
@@ -28,21 +53,19 @@ function UpdateUser () {
 
   const handleUpdateUser = () => {
     const putUser = {
-      [AUTH_API.USER_OBJECT.STRING]: updatedUserId,
-      [AUTH_API.USER_OBJECT.ARRAY[1]]: updatedRoles,
-      [AUTH_API.USER_OBJECT.ARRAY[0]]: updatedGroups
+      [AUTH_API.USER_OBJECT.STRING]: currentState[AUTH_API.USER_OBJECT.STRING],
+      [AUTH_API.USER_OBJECT.ARRAY[0]]: currentState[AUTH_API.USER_OBJECT.ARRAY[0]],
+      [AUTH_API.USER_OBJECT.ARRAY[1]]: currentState[AUTH_API.USER_OBJECT.ARRAY[1]]
     }
     const isValid = validateUser(putUser, language)
 
     if (isValid.isValid) {
-      executePut(API.HANDLE_PUT(
-        process.env.NODE_ENV,
-        putUser,
-        `${authApi}${AUTH_API.PUT_USER(updatedUserId)}`,
-        devToken
-      ))
+      executePut({
+        data: putUser,
+        url: `${authApi}${AUTH_API.PUT_USER(currentState[AUTH_API.USER_OBJECT.STRING])}`,
+      })
     } else {
-      setIsValidUser(isValid)
+      dispatchState({ type: VALIDATED, payload: isValid })
     }
   }
 
@@ -54,7 +77,7 @@ function UpdateUser () {
           <Icon corner="top right" name={state.isNew ? 'plus' : 'pencil'} color={state.isNew ? 'green' : 'blue'} />
         </Icon.Group>
         <Header.Content>
-          {state.isNew ? USERS.CREATE_USER[language] : updatedUserId}
+          {state.isNew ? USERS.CREATE_USER[language] : currentState[AUTH_API.USER_OBJECT.STRING]}
           {!state.isNew &&
           <Header.Subheader>{USERS.UPDATE_USER[language]}</Header.Subheader>
           }
@@ -67,16 +90,17 @@ function UpdateUser () {
             <Form.Input
               required
               width={8}
-              value={updatedUserId}
               disabled={!state.isNew}
               label={USERS.USER_ID[language]}
               placeholder={USERS.USER_ID[language]}
-              error={isValidUser && isValidUser.reason[AUTH_API.USER_OBJECT.STRING] !== undefined && {
-                content: isValidUser.reason[AUTH_API.USER_OBJECT.STRING], pointing: 'below'
-              }}
+              value={currentState[AUTH_API.USER_OBJECT.STRING]}
+              error={
+                currentState[VALIDATED] && currentState[VALIDATED].reason[AUTH_API.USER_OBJECT.STRING] !== undefined &&
+                { content: currentState[VALIDATED].reason[AUTH_API.USER_OBJECT.STRING], pointing: 'below' }
+              }
               onChange={(e, { value }) => {
-                setIsValidUser(false)
-                setUpdatedUserId(value)
+                dispatchState({ type: VALIDATED, payload: false })
+                dispatchState({ type: AUTH_API.USER_OBJECT.STRING, payload: value })
               }}
             />
             <Form.Dropdown
@@ -84,16 +108,19 @@ function UpdateUser () {
               multiple
               required
               selection
-              value={updatedGroups}
+              loading={getGroupsLoading}
+              disabled={getGroupsLoading}
               placeholder={USERS.GROUPS[language]}
               renderLabel={renderLabelDropdownSelection}
               noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
-              error={isValidUser && isValidUser.reason[AUTH_API.USER_OBJECT.ARRAY[0]] !== undefined && {
-                content: isValidUser.reason[AUTH_API.USER_OBJECT.ARRAY[0]], pointing: 'below'
-              }}
+              value={currentState[AUTH_API.USER_OBJECT.ARRAY[0]]}
+              error={
+                currentState[VALIDATED] && currentState[VALIDATED].reason[AUTH_API.USER_OBJECT.ARRAY[0]] !== undefined &&
+                { content: currentState[VALIDATED].reason[AUTH_API.USER_OBJECT.ARRAY[0]], pointing: 'below' }
+              }
               onChange={(e, { value }) => {
-                setIsValidUser(false)
-                setUpdatedGroups(value)
+                dispatchState({ type: VALIDATED, payload: false })
+                dispatchState({ type: AUTH_API.USER_OBJECT.ARRAY[0], payload: value })
               }}
               label={populatedDropdown(
                 USERS.GROUPS[language],
@@ -116,16 +143,19 @@ function UpdateUser () {
               multiple
               required
               selection
-              value={updatedRoles}
+              loading={getRolesLoading}
+              disabled={getRolesLoading}
               placeholder={USERS.ROLES[language]}
               renderLabel={renderLabelDropdownSelection}
               noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
-              error={isValidUser && isValidUser.reason[AUTH_API.USER_OBJECT.ARRAY[1]] !== undefined && {
-                content: isValidUser.reason[AUTH_API.USER_OBJECT.ARRAY[1]], pointing: 'below'
-              }}
+              value={currentState[AUTH_API.USER_OBJECT.ARRAY[1]]}
+              error={
+                currentState[VALIDATED] && currentState[VALIDATED].reason[AUTH_API.USER_OBJECT.ARRAY[1]] !== undefined &&
+                { content: currentState[VALIDATED].reason[AUTH_API.USER_OBJECT.ARRAY[1]], pointing: 'below' }
+              }
               onChange={(e, { value }) => {
-                setIsValidUser(false)
-                setUpdatedRoles(value)
+                dispatchState({ type: VALIDATED, payload: false })
+                dispatchState({ type: AUTH_API.USER_OBJECT.ARRAY[1], payload: value })
               }}
               label={populatedDropdown(
                 USERS.ROLES[language],
@@ -145,28 +175,15 @@ function UpdateUser () {
             />
           </Form>
           <Divider hidden />
-          <Button
-            animated
-            size="large"
-            primary={!state.isNew}
-            positive={state.isNew}
-            disabled={putLoading}
-            onClick={() => handleUpdateUser()}
-          >
-            <Button.Content visible>
-              {state.isNew ? USERS.CREATE_USER[language] : USERS.UPDATE_USER[language]}
-            </Button.Content>
-            <Button.Content hidden>
-              <Icon name={state.isNew ? 'plus' : 'save'} />
-            </Button.Content>
-          </Button>
+          <SaveUpdateButton
+            isNew={state.isNew}
+            loading={putLoading}
+            create={USERS.CREATE_USER}
+            update={USERS.UPDATE_USER}
+            handleUpdate={handleUpdateUser}
+          />
         </Grid.Column>
-        <Grid.Column>
-          {!putLoading && putError &&
-          <ErrorMessage error={putError.response.statusText} title={putError.response.status} language={language} />
-          }
-          {!putLoading && putResponse && <pre>{JSON.stringify(putResponse, null, 2)}</pre>}
-        </Grid.Column>
+        <ResponseColumn response={putResponse} loading={putLoading} error={putError} />
       </Grid>
     </Segment>
   )

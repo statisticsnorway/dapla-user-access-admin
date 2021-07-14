@@ -1,12 +1,11 @@
 import useAxios from 'axios-hooks'
 import { useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Button, Divider, Form, Grid, Header, Icon, Item, Label, Segment } from 'semantic-ui-react'
-import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
+import { Divider, Form, Grid, Header, Icon, Item, Label, Segment } from 'semantic-ui-react'
 
+import { ResponseColumn, SaveUpdateButton } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
 import {
-  API,
   AUTH_API,
   CATALOG_API,
   emptyIncludesExcludes,
@@ -22,14 +21,14 @@ import {
 import { DATASET_STATE, PRIVILEGE, ROLES, TEST_IDS, UI, VALUATION } from '../../enums'
 
 function UpdateRole () {
-  const { authApi, catalogApi, devToken } = useContext(ApiContext)
+  const { authApi, catalogApi } = useContext(ApiContext)
   const { language } = useContext(LanguageContext)
 
   let { state } = useLocation()
 
+  const [pathOptions, setPathOptions] = useState([])
   const [isValidRole, setIsValidRole] = useState(false)
   const [fetchedPathOptions, setFetchedPathOptions] = useState([])
-  const [pathOptions, setPathOptions] = useState(state.isNew ? [] : setupPathOptions(state.role))
   const [updatedRoleId, setUpdatedRoleId] = useState(state.isNew ? '' : state.role[AUTH_API.ROLE_OBJECT.STRING[0]])
   const [updatedMaxValuation, setUpdatedMaxValuation] = useState(state.isNew ? '' : state.role[AUTH_API.ROLE_OBJECT.ENUM])
   const [updatedDescription, setUpdatedDescription] = useState(state.isNew ? '' : state.role[AUTH_API.ROLE_OBJECT.STRING[1]])
@@ -50,10 +49,10 @@ function UpdateRole () {
     )
   }
 
-  const moveState = (state, to) => {
+  const moveState = (stateToMove, to) => {
     setIsValidRole(false)
     setUpdatedStates(
-      moveIncludesExcludes(updatedStates[AUTH_API.INCLUDES], updatedStates[AUTH_API.EXCLUDES], state, to)
+      moveIncludesExcludes(updatedStates[AUTH_API.INCLUDES], updatedStates[AUTH_API.EXCLUDES], stateToMove, to)
     )
   }
 
@@ -72,12 +71,10 @@ function UpdateRole () {
     const isValid = validateRole(putRole, getPathsData[CATALOG_API.CATALOGS], language)
 
     if (isValid.isValid) {
-      executePut(API.HANDLE_PUT(
-        process.env.NODE_ENV,
-        putRole,
-        `${authApi}${AUTH_API.PUT_ROLE(updatedRoleId)}`,
-        devToken
-      ))
+      executePut({
+        data: putRole,
+        url: `${authApi}${AUTH_API.PUT_ROLE(updatedRoleId)}`,
+      })
     } else {
       setIsValidRole(isValid)
     }
@@ -91,6 +88,7 @@ function UpdateRole () {
         value: id.path,
         state: state,
         valuation: valuation,
+        incatalog: 'true',
         content: (
           <Item.Group>
             <Item>
@@ -105,8 +103,12 @@ function UpdateRole () {
           </Item.Group>
         )
       })))
+
+      if (!state.isNew) {
+        setPathOptions(setupPathOptions(state.role, getPathsData[CATALOG_API.CATALOGS]))
+      }
     }
-  }, [getPathsLoading, getPathsError, getPathsData, language])
+  }, [getPathsLoading, getPathsError, getPathsData, language, state.isNew, state.role])
 
   return (
     <Segment basic>
@@ -213,6 +215,8 @@ function UpdateRole () {
               required
               selection
               allowAdditions
+              loading={getPathsLoading}
+              disabled={getPathsLoading}
               value={updatedPathsInclude}
               data-testid={TEST_IDS.SEARCH_DROPDOWN}
               additionLabel={`${UI.ADD[language]} `}
@@ -221,7 +225,14 @@ function UpdateRole () {
               noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
               onChange={(e, { value }) => setUpdatedPathsInclude(value)}
               renderLabel={(label) => renderTooltipLabelDropdownSelection(label, fetchedPathOptions, language)}
-              onAddItem={(e, { value }) => setPathOptions([{ key: value, text: value, value: value }, ...pathOptions])}
+              onAddItem={(e, { value }) => setPathOptions([{
+                key: value,
+                text: value,
+                value: value,
+                state: '—',
+                valuation: '—',
+                incatalog: 'false'
+              }, ...pathOptions])}
               error={isValidRole && isValidRole.reason[AUTH_API.ROLE_OBJECT.ARRAY[0]] !== undefined && {
                 content: isValidRole.reason[AUTH_API.ROLE_OBJECT.ARRAY[0]], pointing: 'below'
               }}
@@ -238,6 +249,8 @@ function UpdateRole () {
               multiple
               selection
               allowAdditions
+              loading={getPathsLoading}
+              disabled={getPathsLoading}
               value={updatedPathsExclude}
               data-testid={TEST_IDS.SEARCH_DROPDOWN}
               additionLabel={`${UI.ADD[language]} `}
@@ -246,7 +259,14 @@ function UpdateRole () {
               noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
               onChange={(e, { value }) => setUpdatedPathsExclude(value)}
               renderLabel={(label) => renderTooltipLabelDropdownSelection(label, fetchedPathOptions, language)}
-              onAddItem={(e, { value }) => setPathOptions([{ key: value, text: value, value: value }, ...pathOptions])}
+              onAddItem={(e, { value }) => setPathOptions([{
+                key: value,
+                text: value,
+                value: value,
+                state: '—',
+                valuation: '—',
+                incatalog: 'false'
+              }, ...pathOptions])}
               label={populatedDropdown(
                 ROLES.PATHS_EXCLUDE[language],
                 getPathsLoading,
@@ -257,28 +277,15 @@ function UpdateRole () {
             />
           </Form>
           <Divider hidden />
-          <Button
-            animated
-            size="large"
-            primary={!state.isNew}
-            positive={state.isNew}
-            disabled={putLoading}
-            onClick={() => handleUpdateRole()}
-          >
-            <Button.Content visible>
-              {state.isNew ? ROLES.CREATE_ROLE[language] : ROLES.UPDATE_ROLE[language]}
-            </Button.Content>
-            <Button.Content hidden>
-              <Icon name={state.isNew ? 'plus' : 'save'} />
-            </Button.Content>
-          </Button>
+          <SaveUpdateButton
+            isNew={state.isNew}
+            loading={putLoading}
+            create={ROLES.CREATE_ROLE}
+            update={ROLES.UPDATE_ROLE}
+            handleUpdate={handleUpdateRole}
+          />
         </Grid.Column>
-        <Grid.Column>
-          {!putLoading && putError &&
-          <ErrorMessage error={putError.response.statusText} title={putError.response.status} language={language} />
-          }
-          {!putLoading && putResponse && <pre>{JSON.stringify(putResponse, null, 2)}</pre>}
-        </Grid.Column>
+        <ResponseColumn response={putResponse} loading={putLoading} error={putError} />
       </Grid>
     </Segment>
   )

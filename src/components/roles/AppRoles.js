@@ -1,15 +1,16 @@
 import useAxios from 'axios-hooks'
 import { Link } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
-import { Button, Checkbox, Divider, Grid, Icon, Input, Segment } from 'semantic-ui-react'
+import { Button, Checkbox, Divider, Grid, Icon, Segment } from 'semantic-ui-react'
 import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
 import RolesMetadata from './RolesMetadata'
 import RolesTable from './RolesTable'
+import { FilterRefreshRow } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
 import { APP, AUTH_API } from '../../configurations'
 import { sortArrayOfObjects } from '../../utilities'
-import { ROLES, TEST_IDS, UI } from '../../enums'
+import { ROLES, TEST_IDS } from '../../enums'
 
 function AppRoles () {
   const { authApi, simpleRoleView, setSimpleRoleView } = useContext(ApiContext)
@@ -69,8 +70,6 @@ function AppRoles () {
     if (!loading && !error && data !== undefined) {
       const allRoles = sortArrayOfObjects(JSON.parse((JSON.stringify(data[AUTH_API.ROLES]))), [AUTH_API.ROLE_OBJECT.STRING[0]])
 
-      console.log(allRoles)
-
       setRoles(allRoles)
       setFilterUserRoles(false)
       setFilteredRoles(allRoles)
@@ -86,26 +85,7 @@ function AppRoles () {
       {!loading && error && <ErrorMessage error={error} language={language} />}
       {!loading && !error &&
       <Grid columns="equal">
-        <Grid.Row>
-          <Grid.Column>
-            <Input
-              size="large"
-              icon="filter"
-              placeholder={UI.FILTER_TABLE[language]}
-              onChange={(e, { value }) => handleFilter(value)}
-            />
-          </Grid.Column>
-          <Grid.Column textAlign="right" verticalAlign="middle">
-            <Icon
-              link
-              size="large"
-              color="blue"
-              name="sync alternate"
-              onClick={() => refetch()}
-              data-testid={TEST_IDS.TABLE_REFRESH}
-            />
-          </Grid.Column>
-        </Grid.Row>
+        <FilterRefreshRow handleFilter={handleFilter} refetch={refetch} />
         <Grid.Row>
           <Grid.Column>
             <RolesMetadata roles={roles.length} filter={filteredRoles.length} noDescription={noDescription} />

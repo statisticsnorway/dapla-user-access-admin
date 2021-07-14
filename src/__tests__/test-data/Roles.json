@@ -4,44 +4,104 @@
       "roleId": "roleId1",
       "description": "role1Description",
       "paths": {
-        "includes": ["/test/1"],
-        "excludes": ["/test/2"]
+        "includes": [
+          "/test/1"
+        ],
+        "excludes": [
+          "/test/2"
+        ]
       },
       "privileges": {
-        "includes": ["CREATE", "DELETE", "READ", "UPDATE"],
-        "excludes": ["DEPSEUDO"]
+        "includes": [
+          "CREATE",
+          "DELETE",
+          "READ",
+          "UPDATE"
+        ],
+        "excludes": [
+          "DEPSEUDO"
+        ]
       },
       "states": {
-        "includes": ["INPUT", "OTHER", "OUTPUT", "PROCESSED", "PRODUCT"],
-        "excludes": ["RAW", "TEMP"]
+        "includes": [
+          "INPUT",
+          "OTHER",
+          "OUTPUT",
+          "PROCESSED",
+          "PRODUCT"
+        ],
+        "excludes": [
+          "RAW",
+          "TEMP"
+        ]
       },
       "maxValuation": "OPEN"
     },
     {
       "roleId": "roleId2",
       "paths": {
-        "includes": ["/test/2"],
-        "excludes": ["/test/1"]
+        "includes": [
+          "/test/2"
+        ],
+        "excludes": [
+          "/test/1"
+        ]
       },
       "privileges": {
-        "excludes": ["DEPSEUDO"]
+        "excludes": [
+          "DEPSEUDO"
+        ]
       },
       "states": {
-        "excludes": ["RAW", "TEMP"]
+        "includes": [
+          "INPUT"
+        ],
+        "excludes": [
+          "RAW",
+          "TEMP"
+        ]
       },
       "maxValuation": "SENSITIVE"
     },
     {
-      "roleId": "user.user1.roleId",
-      "description": "role3Description",
+      "roleId": "roleId3",
       "paths": {
-        "includes": ["/test/3"]
-      },
-      "privileges": {
-        "includes": ["CREATE", "DELETE", "READ", "UPDATE"]
+        "includes": [
+          "/test/3"
+        ],
+        "excludes": [
+          "/test/4"
+        ]
       },
       "states": {
-        "includes": ["INPUT", "OTHER", "OUTPUT", "PROCESSED", "PRODUCT"]
+        "includes": []
+      },
+      "maxValuation": "SHIELDED"
+    },
+    {
+      "roleId": "user.user1.roleId",
+      "description": "role4Description",
+      "paths": {
+        "includes": [
+          "/test/3"
+        ]
+      },
+      "privileges": {
+        "includes": [
+          "CREATE",
+          "DELETE",
+          "READ",
+          "UPDATE"
+        ]
+      },
+      "states": {
+        "includes": [
+          "INPUT",
+          "OTHER",
+          "OUTPUT",
+          "PROCESSED",
+          "PRODUCT"
+        ]
       }
     }
   ]

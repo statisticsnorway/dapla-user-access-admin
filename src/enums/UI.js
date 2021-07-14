@@ -22,5 +22,9 @@ export const UI = {
   SEARCH_NO_RESULTS_CAN_ADD: {
     en: 'No results found but you can add values',
     nb: 'Fant ingen resultater men du kan legge til'
+  },
+  AFTER_FILTER: {
+    en: 'after filter',
+    nb: 'etter filter'
   }
 }

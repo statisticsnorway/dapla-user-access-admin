@@ -65,6 +65,10 @@ export const ROLES = {
     en: 'Remove pure user roles from table?',
     nb: 'Fjern rene brukerroller fra tabellen?'
   },
+  PATH_NOT_FOUND_IN_CATALOG: {
+    en: 'Path not found in dapla-catalog',
+    nb: 'Sti ikke funnet i dapla-catalog'
+  },
   INVALID: (property, language) => {
     switch (property) {
       case AUTH_API.ROLE_OBJECT.STRING[0]:
