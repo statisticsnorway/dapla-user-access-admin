@@ -1,4 +1,5 @@
 import { getNestedObject } from '@statisticsnorway/dapla-js-utilities'
+import { ASC } from '../configurations'
 
 const COMMON_API = {
   ERROR_PATH: ['response', 'data'],
@@ -15,10 +16,10 @@ const compareObjects = (by, direction) => (a, b) => {
     bObj = bObj[byArray[idx]]
   }
 
-  return direction === 'ascending' ? aObj.localeCompare(bObj) : bObj.localeCompare(aObj)
+  return direction === ASC ? aObj.localeCompare(bObj) : bObj.localeCompare(aObj)
 }
 
-export const sortArrayOfObjects = (array, by, direction = 'ascending') =>
+export const sortArrayOfObjects = (array, by, direction = ASC) =>
   array && array[1] && by && by.length === 1 ? array.sort(compareObjects(by, direction)) : array
 
 export const arrayReduceBy = (array, by, to, id, noName) => array.reduce((acc, obj) => {

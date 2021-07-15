@@ -80,7 +80,7 @@
     },
     {
       "roleId": "user.user1.roleId",
-      "description": "role4Description",
+      "description": "user.user1.roleDescription",
       "paths": {
         "includes": [
           "/test/3"

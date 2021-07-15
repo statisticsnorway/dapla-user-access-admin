@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { AppUsers } from '../components'
 import { AppContextProvider } from '../context/AppContext'
-import { TEST_CONFIGURATIONS } from '../configurations'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { TEST_IDS, UI, USERS } from '../enums'
 
 import Users from './test-data/Users.json'
@@ -47,25 +47,29 @@ describe('Common mock', () => {
   test('Filter function works correctly', () => {
     const { getByText, getByPlaceholderText, queryByText } = setup()
 
-    expect(getByText('user1')).toBeInTheDocument()
+    expect(getByText(Users[AUTH_API.USERS][0][AUTH_API.USER_OBJECT.STRING])).toBeInTheDocument()
 
-    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), 'user2')
+    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), Users[AUTH_API.USERS][1][AUTH_API.USER_OBJECT.STRING])
 
-    expect(queryByText('user1')).toBeNull()
+    expect(queryByText(Users[AUTH_API.USERS][0][AUTH_API.USER_OBJECT.STRING])).toBeNull()
   })
 
   test('Sort function works correctly', () => {
     const { getAllByText, getByTestId } = setup()
+    const searchText = 'user'
 
-    expect(getAllByText('user', { exact: false })[0]).toHaveTextContent('user1')
-
-    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
-
-    expect(getAllByText('user', { exact: false })[0]).toHaveTextContent('user5')
+    expect(getAllByText(searchText, { exact: false })[0])
+      .toHaveTextContent(Users[AUTH_API.USERS][0][AUTH_API.USER_OBJECT.STRING])
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
 
-    expect(getAllByText('user', { exact: false })[0]).toHaveTextContent('user1')
+    expect(getAllByText(searchText, { exact: false })[0])
+      .toHaveTextContent(Users[AUTH_API.USERS][4][AUTH_API.USER_OBJECT.STRING])
+
+    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
+
+    expect(getAllByText(searchText, { exact: false })[0])
+      .toHaveTextContent(Users[AUTH_API.USERS][0][AUTH_API.USER_OBJECT.STRING])
   })
 })
 

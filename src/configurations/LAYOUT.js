@@ -5,7 +5,7 @@ import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 import { AUTH_API } from './API'
 import { DATASET_STATE, ROLES, TEST_IDS, VALUATION } from '../enums'
 
-export const populatedDropdown = (label, loading, refetch, error, errorTitle) =>
+export const populatedDropdown = (label, loading, refetch, error, errorTitle, length) =>
   <label>
     {`${label} `}
     <Icon
@@ -17,6 +17,7 @@ export const populatedDropdown = (label, loading, refetch, error, errorTitle) =>
       onClick={() => refetch()}
       data-testid={TEST_IDS.DROPDOWN_REFRESH}
     />
+    <span style={{ fontSize: 'smaller', fontWeight: 'normal' }}>{` (${length}) `}</span>
     {error &&
     <Popup
       basic
@@ -42,8 +43,7 @@ export const renderTooltipLabelDropdownSelection = (label, pathOptions, language
 
   return ({
     size: 'large',
-    color: label.incatalog !== 'true' ? 'red' : null,
-    icon: label.incatalog !== 'true' ? 'exclamation' : null,
+    icon: label.incatalog !== 'true' ? 'folder open' : 'file',
     style: { fontSize: '1rem', marginTop: '0.35rem' },
     content: (
       <Popup
@@ -54,12 +54,6 @@ export const renderTooltipLabelDropdownSelection = (label, pathOptions, language
             <p>{`${ROLES.STATE[language]}: `}<b>{state}</b></p>
             <p>{`${ROLES.MAX_VALUATION[language]}: `}<b>{valuation}</b></p>
             <p>{`${ROLES.DATASET_DATE[language]}: `}<b>{date}</b></p>
-            {label.incatalog !== 'true' &&
-            <p>
-              <Icon name="exclamation" color="red" />
-              {ROLES.PATH_NOT_FOUND_IN_CATALOG[language]}
-            </p>
-            }
           </>
         }
       />
@@ -161,10 +155,10 @@ export const renderFetchedPathOptionsItems = (paths, language) => paths.map(({ i
             <Item.Header as={Header} size="tiny">{id.path}</Item.Header>
             <Item.Extra>
               {`
-                    ${ROLES.STATE[language]}: ${DATASET_STATE[state][language]},
-                    ${ROLES.MAX_VALUATION[language]}: ${VALUATION[valuation][language]},
-                    ${ROLES.DATASET_DATE[language]}: ${dateLocalized}
-                    `}
+              ${ROLES.STATE[language]}: ${DATASET_STATE[state][language]},
+              ${ROLES.MAX_VALUATION[language]}: ${VALUATION[valuation][language]},
+              ${ROLES.DATASET_DATE[language]}: ${dateLocalized}
+              `}
             </Item.Extra>
           </Item.Content>
         </Item>

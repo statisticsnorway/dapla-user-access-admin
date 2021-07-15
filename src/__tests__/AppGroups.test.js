@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { AppGroups } from '../components'
 import { AppContextProvider } from '../context/AppContext'
-import { TEST_CONFIGURATIONS } from '../configurations'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { GROUPS, TEST_IDS, UI } from '../enums'
 
 import Groups from './test-data/Groups.json'
@@ -47,25 +47,29 @@ describe('Common mock', () => {
   test('Filter function works correctly', () => {
     const { getByText, getByPlaceholderText, queryByText } = setup()
 
-    expect(getByText('group1')).toBeInTheDocument()
+    expect(getByText(Groups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]])).toBeInTheDocument()
 
-    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), 'group2')
+    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), Groups[AUTH_API.GROUPS][1][AUTH_API.GROUP_OBJECT.STRING[0]])
 
-    expect(queryByText('group1')).toBeNull()
+    expect(queryByText(Groups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]])).toBeNull()
   })
 
   test('Sort function works correctly', () => {
     const { getAllByText, getByTestId } = setup()
+    const searchText = 'group'
 
-    expect(getAllByText('group', { exact: false })[0]).toHaveTextContent('group1')
-
-    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
-
-    expect(getAllByText('group', { exact: false })[0]).toHaveTextContent('group5')
+    expect(getAllByText(searchText, { exact: false })[0])
+      .toHaveTextContent(Groups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]])
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
 
-    expect(getAllByText('group', { exact: false })[0]).toHaveTextContent('group1')
+    expect(getAllByText(searchText, { exact: false })[0])
+      .toHaveTextContent(Groups[AUTH_API.GROUPS][4][AUTH_API.GROUP_OBJECT.STRING[0]])
+
+    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
+
+    expect(getAllByText(searchText, { exact: false })[0])
+      .toHaveTextContent(Groups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]])
   })
 })
 

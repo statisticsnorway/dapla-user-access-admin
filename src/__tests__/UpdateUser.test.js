@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { UpdateUser } from '../components'
 import { AppContextProvider } from '../context/AppContext'
-import { APP, AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import { APP, AUTH_API, TEST_CONFIGURATIONS, UPDATE } from '../configurations'
 import { USERS } from '../enums'
 
 import Roles from './test-data/Roles.json'
@@ -18,7 +18,7 @@ const executePut = jest.fn()
 const setup = (isNew, user = undefined) => {
   const { getAllByText, getByTestId, getByText, getByPlaceholderText, queryByText } = render(
     <AppContextProvider>
-      <MemoryRouter initialEntries={[{ pathname: `${APP[0].route}/update`, state: { isNew: isNew, user: user } }]}>
+      <MemoryRouter initialEntries={[{ pathname: `${APP[0].route}${UPDATE}`, state: { isNew: isNew, user: user } }]}>
         <UpdateUser />
       </MemoryRouter>
     </AppContextProvider>
@@ -49,18 +49,18 @@ describe('Common mock', () => {
   test('Handles creating new user correctly', () => {
     const { getAllByText, getByText, getByPlaceholderText } = setup(true)
 
-    userEvent.type(getByPlaceholderText(USERS.USER_ID[language]), 'testUser2')
+    userEvent.type(getByPlaceholderText(USERS.USER_ID[language]), 'testUser')
     userEvent.click(getByText(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.click(getByText(Groups[AUTH_API.GROUPS][0][AUTH_API.GROUP_OBJECT.STRING[0]]))
     userEvent.click(getAllByText(USERS.CREATE_USER[language])[1])
 
     expect(executePut).toHaveBeenCalledWith({
       data: {
-        userId: 'testUser2',
+        userId: 'testUser',
         groups: ['group1'],
         roles: ['roleId1']
       },
-      url: `${window.__ENV.REACT_APP_API_AUTH}${AUTH_API.PUT_USER('testUser2')}`
+      url: `${window.__ENV.REACT_APP_API_AUTH}${AUTH_API.PUT_USER('testUser')}`
     })
   })
 })

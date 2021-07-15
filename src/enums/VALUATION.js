@@ -1,3 +1,5 @@
+export const UNRECOGNIZED = 'UNRECOGNIZED'
+
 export const VALUATION = {
   INTERNAL: {
     en: 'Internal',
@@ -15,7 +17,7 @@ export const VALUATION = {
     en: 'Shielded',
     nb: 'Skjermet'
   },
-  UNRECOGNIZED: {
+  [UNRECOGNIZED]: {
     en: '—',
     nb: '—'
   }

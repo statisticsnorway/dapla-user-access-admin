@@ -8,7 +8,7 @@ import RolesMetadata from './RolesMetadata'
 import RolesTable from './RolesTable'
 import { FilterRefreshRow } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
-import { APP, AUTH_API } from '../../configurations'
+import { APP, ASC, AUTH_API, DESC, UPDATE } from '../../configurations'
 import { sortArrayOfObjects } from '../../utilities'
 import { ROLES, TEST_IDS } from '../../enums'
 
@@ -20,7 +20,7 @@ function AppRoles () {
   const [filterUserRoles, setFilterUserRoles] = useState(false)
   const [filteredRoles, setFilteredRoles] = useState([])
   const [noDescription, setNoDescription] = useState([])
-  const [direction, setDirection] = useState('ascending')
+  const [direction, setDirection] = useState(ASC)
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_ROLES}`, { useCache: false })
 
@@ -58,7 +58,7 @@ function AppRoles () {
   }
 
   const handleSort = () => {
-    const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
+    const newDirection = direction === ASC ? DESC : ASC
 
     setDirection(newDirection)
     setRoles(sortArrayOfObjects(roles, [AUTH_API.ROLE_OBJECT.STRING[0]], newDirection))
@@ -96,7 +96,7 @@ function AppRoles () {
               animated
               as={Link}
               size="large"
-              to={{ pathname: `${APP[2].route}/update`, state: { isNew: true } }}
+              to={{ pathname: `${APP[2].route}${UPDATE}`, state: { isNew: true } }}
             >
               <Button.Content visible>
                 {ROLES.CREATE_ROLE[language]}

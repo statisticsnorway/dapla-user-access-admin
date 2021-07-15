@@ -9,7 +9,7 @@ import GroupsMetadata from './GroupsMetadata'
 import { FilterRefreshRow } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
 import { arrayReduceBy, sortArrayOfObjects } from '../../utilities'
-import { APP, AUTH_API } from '../../configurations'
+import { APP, ASC, AUTH_API, DESC, UPDATE } from '../../configurations'
 import { GROUPS } from '../../enums'
 
 function AppGroups () {
@@ -19,13 +19,13 @@ function AppGroups () {
   const [roles, setRoles] = useState({})
   const [groups, setGroups] = useState([])
   const [noDescription, setNoDescription] = useState([])
-  const [direction, setDirection] = useState('ascending')
+  const [direction, setDirection] = useState(ASC)
   const [filteredGroups, setFilteredGroups] = useState([])
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_GROUPS}`, { useCache: false })
 
   const handleSort = () => {
-    const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
+    const newDirection = direction === ASC ? DESC : ASC
 
     setDirection(newDirection)
     setGroups(sortArrayOfObjects(groups, [AUTH_API.GROUP_OBJECT.STRING[0]], newDirection))
@@ -75,7 +75,7 @@ function AppGroups () {
               animated
               as={Link}
               size="large"
-              to={{ pathname: `${APP[1].route}/update`, state: { isNew: true } }}
+              to={{ pathname: `${APP[1].route}${UPDATE}`, state: { isNew: true } }}
             >
               <Button.Content visible>
                 {GROUPS.CREATE_GROUP[language]}

@@ -1,5 +1,5 @@
 import { AUTH_API } from './API'
-import { GROUPS, ROLES, USERS, VALUATION } from '../enums'
+import { GROUPS, ROLES, TOO_LOW_STATES, TOO_LOW_VALUATION, UNRECOGNIZED, USERS, VALUATION } from '../enums'
 
 export const validateUser = (user, language) => {
   const isValid = { isValid: true, reason: {} }
@@ -77,14 +77,14 @@ export const validateRole = (role, catalogOptions, language) => {
   }
 
   const pathValuations = catalogOptions.filter(({ id }) => role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.INCLUDES].includes(id.path)).map(({ valuation }) => valuation)
-  const catalogScore = Object.keys(VALUATION).filter(element => element !== 'UNRECOGNIZED').reduce((acc, cur, curi) => {
+  const catalogScore = Object.keys(VALUATION).filter(element => element !== UNRECOGNIZED).reduce((acc, cur, curi) => {
     if (pathValuations.includes(cur)) {
       acc = curi
     }
 
     return acc
   }, 0)
-  const valuationScore = Object.keys(VALUATION).filter(element => element !== 'UNRECOGNIZED').reduce((acc, cur, curi) => {
+  const valuationScore = Object.keys(VALUATION).filter(element => element !== UNRECOGNIZED).reduce((acc, cur, curi) => {
     if (role[AUTH_API.ROLE_OBJECT.ENUM] === cur) {
       acc = curi
     }
@@ -94,7 +94,7 @@ export const validateRole = (role, catalogOptions, language) => {
 
   if (valuationScore < catalogScore) {
     isValid.isValid = false
-    isValid.reason[AUTH_API.ROLE_OBJECT.ENUM] = ROLES.INVALID('tooLowValuationScore', language)
+    isValid.reason[AUTH_API.ROLE_OBJECT.ENUM] = ROLES.INVALID(TOO_LOW_VALUATION, language)
   }
 
   const pathStates = catalogOptions.filter(({ id }) => role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.INCLUDES].includes(id.path)).map(({ state }) => state)
@@ -102,7 +102,7 @@ export const validateRole = (role, catalogOptions, language) => {
 
   if (statesScore.length !== 0) {
     isValid.isValid = false
-    isValid.reason[AUTH_API.ROLE_OBJECT.ARRAY[2]] = ROLES.INVALID('tooLowStatesScore', language)
+    isValid.reason[AUTH_API.ROLE_OBJECT.ARRAY[2]] = ROLES.INVALID(TOO_LOW_STATES, language)
   }
 
   return isValid

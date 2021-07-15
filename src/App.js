@@ -4,7 +4,7 @@ import { Divider, Icon, Ref, Segment, Step } from 'semantic-ui-react'
 
 import { AppGroups, AppMenu, AppRoles, AppSettings, AppUsers, UpdateGroup, UpdateRole, UpdateUser } from './components'
 import { LanguageContext } from './context/AppContext'
-import { APP } from './configurations'
+import { APP, LIST, UPDATE } from './configurations'
 
 function App () {
   const appRefArea = useRef()
@@ -22,7 +22,8 @@ function App () {
         <Segment basic style={{ paddingBottom: '5rem', marginTop: 0 }}>
           <Step.Group size="large" widths={APP.length}>
             {APP.map(step =>
-              <Step key={step.id} active={location.pathname.startsWith(step.route)} as={Link} to={`${step.route}/list`}>
+              <Step key={step.id} active={location.pathname.startsWith(step.route)} as={Link}
+                    to={`${step.route}${LIST}`}>
                 <Icon name={step.icon} />
                 <Step.Content>
                   <Step.Title>{step.title[language]}</Step.Title>
@@ -33,22 +34,22 @@ function App () {
           </Step.Group>
           <Divider hidden />
           <Switch>
-            <Route path={`${APP[0].route}/list`}>
+            <Route path={`${APP[0].route}${LIST}`}>
               <AppUsers />
             </Route>
-            <Route path={`${APP[0].route}/update`}>
+            <Route path={`${APP[0].route}${UPDATE}`}>
               <UpdateUser />
             </Route>
-            <Route path={`${APP[1].route}/list`}>
+            <Route path={`${APP[1].route}${LIST}`}>
               <AppGroups />
             </Route>
-            <Route path={`${APP[1].route}/update`}>
+            <Route path={`${APP[1].route}${UPDATE}`}>
               <UpdateGroup />
             </Route>
-            <Route path={`${APP[2].route}/list`}>
+            <Route path={`${APP[2].route}${LIST}`}>
               <AppRoles />
             </Route>
-            <Route path={`${APP[2].route}/update`}>
+            <Route path={`${APP[2].route}${UPDATE}`}>
               <UpdateRole />
             </Route>
           </Switch>
