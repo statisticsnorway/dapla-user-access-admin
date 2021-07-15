@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useContext } from 'react'
-import { Icon, List, Table } from 'semantic-ui-react'
+import { Icon, Table } from 'semantic-ui-react'
 
+import { ListArrayTableCell } from '../common'
 import { LanguageContext } from '../../context/AppContext'
 import { APP, AUTH_API } from '../../configurations'
 import { GROUPS, TEST_IDS } from '../../enums'
@@ -43,13 +44,7 @@ function GroupsTable ({ direction, handleSort, filteredGroups }) {
               <Table.Cell error={description === undefined || description === ''}>
                 {description}
               </Table.Cell>
-              <Table.Cell error={!Array.isArray(roles) || (Array.isArray(roles) && roles.length === 0)}>
-                {Array.isArray(roles) &&
-                <List>
-                  {roles.map(role => <List.Item key={role}>{role}</List.Item>)}
-                </List>
-                }
-              </Table.Cell>
+              <ListArrayTableCell array={roles} />
             </Table.Row>
           )
         })}

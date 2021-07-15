@@ -1,1 +1,1 @@
-export { sortArrayOfObjects, arrayReduceBy } from './ObjectHandling'
+export { sortArrayOfObjects, arrayReduceBy, resolveErrorObject } from './ObjectHandling'

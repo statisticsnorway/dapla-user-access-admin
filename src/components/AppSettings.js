@@ -1,15 +1,16 @@
 import useAxios from 'axios-hooks'
 import { useContext, useEffect, useState } from 'react'
 import { Button, Container, Divider, Form, Grid, Header, Icon, Modal, Segment } from 'semantic-ui-react'
-import { ErrorMessage, InfoPopup, InfoText, SimpleFooter } from '@statisticsnorway/dapla-js-utilities'
+import { InfoPopup, InfoText, SimpleFooter } from '@statisticsnorway/dapla-js-utilities'
 
 import { ApiContext, LanguageContext } from '../context/AppContext'
 import { API } from '../configurations'
 import { SETTINGS, TEST_IDS } from '../enums'
+import { resolveErrorObject } from '../utilities'
 
 function AppSettings ({ open, setOpen }) {
   const { language } = useContext(LanguageContext)
-  const { authApi, catalogApi, setAuthApi, setCatalogApi, setDevToken } = useContext(ApiContext)
+  const { authApi, catalogApi, setAuthApi, setCatalogApi } = useContext(ApiContext)
 
   const [authApiUrl, setAuthApiUrl] = useState(authApi)
   const [catalogApiUrl, setCatalogApiUrl] = useState(catalogApi)
@@ -24,23 +25,6 @@ function AppSettings ({ open, setOpen }) {
     setAuthApi(authApiUrl)
     setCatalogApi(catalogApiUrl)
     setSettingsEdited(false)
-
-    if (!settingsEdited) {
-      executeAuthApi()
-      executeCatalogApi()
-    }
-  }
-
-  const changeSettings = (value, api) => {
-    if (api === API.AUTH) {
-      setAuthApiUrl(value)
-    }
-
-    if (api === API.CATALOG) {
-      setCatalogApiUrl(value)
-    }
-
-    setSettingsEdited(true)
   }
 
   const setDefaults = () => {
@@ -69,46 +53,35 @@ function AppSettings ({ open, setOpen }) {
             value={authApiUrl}
             loading={authLoading}
             label={SETTINGS.AUTH_API[language]}
-            error={!!authError && !settingsEdited}
             placeholder={SETTINGS.AUTH_API[language]}
             onKeyPress={({ key }) => key === 'Enter' && applySettings()}
-            onChange={(e, { value }) => changeSettings(value, API.AUTH)}
-            icon={!authLoading && !settingsEdited && !authError ?
-              <Icon name="check" color="green" /> : null
-            }
+            icon={!authLoading && !settingsEdited && !authError && <Icon name="check" color="green" />}
+            error={!authLoading && !settingsEdited && authError && {
+              content: resolveErrorObject(authError), pointing: 'below'
+            }}
+            onChange={(e, { value }) => {
+              setAuthApiUrl(value)
+              setSettingsEdited(true)
+            }}
           />
           <Form.Input
             value={catalogApiUrl}
             loading={catalogLoading}
             label={SETTINGS.CATALOG_API[language]}
-            error={!!catalogError && !settingsEdited}
             placeholder={SETTINGS.CATALOG_API[language]}
             onKeyPress={({ key }) => key === 'Enter' && applySettings()}
-            onChange={(e, { value }) => changeSettings(value, API.CATALOG)}
-            icon={!catalogLoading && !settingsEdited && !catalogError ?
-              <Icon name="check" color="green" /> : null
-            }
-          />
-          {['development', 'test'].includes(process.env.NODE_ENV) &&
-          <Form.TextArea
-            rows={6}
-            placeholder="Just paste token and close settings"
-            onChange={(e, { value }) => {
-              setDevToken(value)
-              localStorage.setItem('devToken', value)
+            icon={!catalogLoading && !settingsEdited && !catalogError && <Icon name="check" color="green" />}
+            error={!catalogLoading && !settingsEdited && catalogError && {
+              content: resolveErrorObject(catalogError), pointing: 'below'
             }}
-            label="dev-token (./bin/generate-test-jwt.sh -u test@junit)"
+            onChange={(e, { value }) => {
+              setCatalogApiUrl(value)
+              setSettingsEdited(true)
+            }}
           />
-          }
         </Form>
-        {!authLoading && !settingsEdited && authError &&
-        <ErrorMessage error={authError} language={language} />
-        }
-        {!catalogLoading && !settingsEdited && catalogError &&
-        <ErrorMessage error={catalogError} language={language} />
-        }
         {!authLoading && !catalogLoading && settingsEdited &&
-        <Container style={{ marginTop: '0.5rem' }}>
+        <Container style={{ marginTop: '2rem' }}>
           <InfoText text={SETTINGS.EDITED_VALUES[language]} />
         </Container>
         }

@@ -1,23 +1,7 @@
 export const API = {
   AUTH: 'auth',
   CATALOG: 'catalog',
-  GET_HEALTH: '/health',
-  HANDLE_PUT: (env, data, url, token) => {
-    if (env === 'development') {
-      return ({
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        data: data,
-        url: url
-      })
-    } else {
-      return ({
-        data: data,
-        url: url
-      })
-    }
-  }
+  GET_HEALTH: '/health'
 }
 
 export const AUTH_API = {

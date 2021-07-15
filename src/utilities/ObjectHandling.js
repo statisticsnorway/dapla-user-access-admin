@@ -1,3 +1,10 @@
+import { getNestedObject } from '@statisticsnorway/dapla-js-utilities'
+
+const COMMON_API = {
+  ERROR_PATH: ['response', 'data'],
+  ERROR_STATUS_PATH: ['response', 'statusText']
+}
+
 const compareObjects = (by, direction) => (a, b) => {
   let aObj = a
   let bObj = b
@@ -33,3 +40,19 @@ export const arrayReduceBy = (array, by, to, id, noName) => array.reduce((acc, o
 
   return acc
 }, {})
+
+export const resolveErrorObject = error => {
+  const resolveError = getNestedObject(error, COMMON_API.ERROR_PATH)
+
+  if (resolveError !== undefined) {
+    return resolveError
+  }
+
+  const alternateResolveError = getNestedObject(error, COMMON_API.ERROR_STATUS_PATH)
+
+  if (alternateResolveError !== undefined) {
+    return alternateResolveError
+  }
+
+  return error.toString()
+}

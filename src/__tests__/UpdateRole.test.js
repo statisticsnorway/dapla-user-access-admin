@@ -9,7 +9,7 @@ import { APP, AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { DATASET_STATE, PRIVILEGE, ROLES, TEST_IDS, UI, VALUATION } from '../enums'
 
 import Catalogs from './test-data/Catalogs.json'
-import TestRole from './test-data/TestRole.json'
+import TestRoles from './test-data/TestRoles.json'
 
 const { language, errorResponse, responseObject } = TEST_CONFIGURATIONS
 const executePut = jest.fn()
@@ -40,7 +40,19 @@ describe('Common mock', () => {
   })
 
   test('Renders correctly on update role', () => {
-    const { getByPlaceholderText } = setup(false, TestRole)
+    const { getByPlaceholderText } = setup(false, TestRoles.testRoles[0])
+
+    expect(getByPlaceholderText(ROLES.ROLE_ID[language])).toBeDisabled()
+  })
+
+  test('Renders correctly on update role with missing values', () => {
+    const { getByPlaceholderText } = setup(false, TestRoles.testRoles[1])
+
+    expect(getByPlaceholderText(ROLES.ROLE_ID[language])).toBeDisabled()
+  })
+
+  test('Renders correctly on update role with some missing values', () => {
+    const { getByPlaceholderText } = setup(false, TestRoles.testRoles[2])
 
     expect(getByPlaceholderText(ROLES.ROLE_ID[language])).toBeDisabled()
   })
@@ -48,8 +60,10 @@ describe('Common mock', () => {
   test('Handles creating new role correctly', () => {
     const { getAllByText, getByText, getByPlaceholderText, getAllByTestId } = setup(true)
 
-    userEvent.type(getByPlaceholderText(ROLES.ROLE_ID[language]), 'testRole2')
-    userEvent.type(getByPlaceholderText(ROLES.DESCRIPTION[language]), 'testRole2Description')
+    userEvent.type(getByPlaceholderText(ROLES.ROLE_ID[language]), 'testRole')
+    userEvent.type(getByPlaceholderText(ROLES.DESCRIPTION[language]), 'testRoleDescription')
+    userEvent.click(getByText(PRIVILEGE.DELETE[language]))
+    userEvent.click(getByText(PRIVILEGE.DELETE[language]))
     userEvent.click(getByText(PRIVILEGE.CREATE[language]))
     userEvent.click(getByText(DATASET_STATE.INPUT[language]))
     userEvent.click(getByText(VALUATION.OPEN[language]))
@@ -63,15 +77,15 @@ describe('Common mock', () => {
 
     expect(executePut).toHaveBeenCalledWith({
       data: {
-        roleId: 'testRole2',
-        description: 'testRole2Description',
+        roleId: 'testRole',
+        description: 'testRoleDescription',
         paths: {
           includes: ['/test/3'],
           excludes: ['/test/4']
         },
         privileges: {
           includes: ['CREATE'],
-          excludes: ['DELETE', 'READ', 'UPDATE', 'DEPSEUDO']
+          excludes: ['READ', 'UPDATE', 'DEPSEUDO', 'DELETE']
         },
         states: {
           includes: ['INPUT'],
@@ -79,7 +93,7 @@ describe('Common mock', () => {
         },
         maxValuation: 'OPEN'
       },
-      url: `${window.__ENV.REACT_APP_API_AUTH}${AUTH_API.PUT_ROLE('testRole2')}`
+      url: `${window.__ENV.REACT_APP_API_AUTH}${AUTH_API.PUT_ROLE('testRole')}`
     })
   })
 })
@@ -100,6 +114,23 @@ test('Handles errors when creating/updating a role', () => {
   expect(getByText(ROLES.INVALID(AUTH_API.ROLE_OBJECT.ARRAY[1], language))).toBeInTheDocument()
   expect(getByText(ROLES.INVALID(AUTH_API.ROLE_OBJECT.ARRAY[2], language))).toBeInTheDocument()
   expect(getByText(ROLES.INVALID(AUTH_API.ROLE_OBJECT.ENUM, language))).toBeInTheDocument()
+})
+
+test('Handles complex errors when creating/updating a role', () => {
+  useAxios.mockReturnValue(
+    [{ data: Catalogs, loading: false, error: undefined, response: undefined }, executePut]
+  )
+
+  const { getAllByText, getByText } = setup(true)
+
+  userEvent.click(getByText(DATASET_STATE.INPUT[language]))
+  userEvent.click(getByText(VALUATION.INTERNAL[language]))
+  userEvent.click(getAllByText('/test/1')[0])
+  userEvent.click(getAllByText(ROLES.CREATE_ROLE[language])[1])
+
+  expect(executePut).not.toHaveBeenCalled()
+  expect(getByText(ROLES.INVALID('tooLowValuationScore', language))).toBeInTheDocument()
+  expect(getByText(ROLES.INVALID('tooLowStatesScore', language))).toBeInTheDocument()
 })
 
 test('Handles unable to fetch catalogs', () => {

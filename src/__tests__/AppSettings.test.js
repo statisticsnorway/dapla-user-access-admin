@@ -10,9 +10,8 @@ import { SETTINGS, TEST_IDS } from '../enums'
 window.localStorage.__proto__.getItem = jest.fn()
 window.localStorage.__proto__.setItem = jest.fn()
 
-const { alternativeApi, errorString, language } = TEST_CONFIGURATIONS
-const setDevToken = jest.fn()
-const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn(), jest.fn(), jest.fn(), setDevToken, jest.fn())
+const { alternativeApi, errorString, errorResponse, errorObject, language } = TEST_CONFIGURATIONS
+const apiContext = TEST_CONFIGURATIONS.apiContext(jest.fn(), jest.fn(), jest.fn(), jest.fn())
 const execute = jest.fn()
 
 const setup = () => {
@@ -69,20 +68,28 @@ describe('Common mock', () => {
 
     expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(apiContext.authApi)
   })
-
-  test('Paste devToken', () => {
-    const { getByPlaceholderText } = setup()
-
-    userEvent.type(getByPlaceholderText('Just paste token and close settings'), 'devToken')
-
-    expect(setDevToken).toHaveBeenCalled()
-  })
 })
 
-test('Shows error when there is a problem with the API', () => {
+test('Shows error when there is a problem', () => {
   useAxios.mockReturnValue([{ error: errorString, loading: false }, execute])
 
   const { getAllByText } = setup()
 
   expect(getAllByText(errorString)).toHaveLength(2)
+})
+
+test('Shows error when there is a problem with the API', () => {
+  useAxios.mockReturnValue([{ error: errorResponse, loading: false }, execute])
+
+  const { getAllByText } = setup()
+
+  expect(getAllByText(errorResponse.response.data)).toHaveLength(2)
+})
+
+test('Shows error when there is a problem with the API call', () => {
+  useAxios.mockReturnValue([{ error: errorObject, loading: false }, execute])
+
+  const { getAllByText } = setup()
+
+  expect(getAllByText(errorObject.response.statusText)).toHaveLength(2)
 })

@@ -2,7 +2,6 @@ import { createContext, useState } from 'react'
 import { LANGUAGE } from '@statisticsnorway/dapla-js-utilities'
 
 export const ApiContext = createContext({
-  devToken: '',
   advancedUser: false,
   simpleRoleView: true,
   authApi: window.__ENV.REACT_APP_API_AUTH,
@@ -15,7 +14,6 @@ export const AppContextProvider = (props) => {
   const [authApi, setAuthApi] = useState(window.__ENV.REACT_APP_API_AUTH)
   const [catalogApi, setCatalogApi] = useState(window.__ENV.REACT_APP_API_CATALOG)
   const [language, setLanguage] = useState(LANGUAGE.LANGUAGES.NORWEGIAN.languageCode)
-  const [devToken, setDevToken] = useState(localStorage.getItem('devToken') || '')
   const [advancedUser, setAdvancedUser] = useState(
     localStorage.getItem('advancedUser') !== null ?
       localStorage.getItem('advancedUser') === 'true' : false
@@ -32,8 +30,6 @@ export const AppContextProvider = (props) => {
         catalogApi,
         setAuthApi,
         setCatalogApi,
-        devToken,
-        setDevToken,
         advancedUser,
         setAdvancedUser,
         simpleRoleView,

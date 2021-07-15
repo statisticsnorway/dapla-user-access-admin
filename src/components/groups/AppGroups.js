@@ -1,15 +1,16 @@
 import useAxios from 'axios-hooks'
 import { Link } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
-import { Button, Grid, Icon, Input, Segment } from 'semantic-ui-react'
+import { Button, Grid, Icon, Segment } from 'semantic-ui-react'
 import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
 import GroupsTable from './GroupsTable'
 import GroupsMetadata from './GroupsMetadata'
+import { FilterRefreshRow } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
 import { arrayReduceBy, sortArrayOfObjects } from '../../utilities'
 import { APP, AUTH_API } from '../../configurations'
-import { GROUPS, TEST_IDS, UI } from '../../enums'
+import { GROUPS } from '../../enums'
 
 function AppGroups () {
   const { authApi } = useContext(ApiContext)
@@ -57,26 +58,7 @@ function AppGroups () {
       {!loading && error && <ErrorMessage error={error} language={language} />}
       {!loading && !error &&
       <Grid columns="equal">
-        <Grid.Row>
-          <Grid.Column>
-            <Input
-              size="large"
-              icon="filter"
-              placeholder={UI.FILTER_TABLE[language]}
-              onChange={(e, { value }) => handleFilter(value)}
-            />
-          </Grid.Column>
-          <Grid.Column textAlign="right" verticalAlign="middle">
-            <Icon
-              link
-              size="large"
-              color="blue"
-              name="sync alternate"
-              onClick={() => refetch()}
-              data-testid={TEST_IDS.TABLE_REFRESH}
-            />
-          </Grid.Column>
-        </Grid.Row>
+        <FilterRefreshRow handleFilter={handleFilter} refetch={refetch} />
         <Grid.Row>
           <Grid.Column>
             <GroupsTable direction={direction} handleSort={handleSort} filteredGroups={filteredGroups} />

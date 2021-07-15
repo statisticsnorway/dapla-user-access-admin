@@ -3,6 +3,7 @@ export const TEST_IDS = {
   TABLE_REFRESH: 'tableRefreshButton',
   SEARCH_DROPDOWN: 'searchDropdownBox',
   SETTINGS_BUTTON: 'toggleSettingsButton',
+  DROPDOWN_REFRESH: 'searchDropdownRefresh',
   ADVANCED_USER_TOGGLE: 'toggleAdvancedUser',
   SIMPLE_ROLES_VIEW_TOGGLE: 'toggleSimpleRolesView',
   DEFAULT_SETTINGS_VALUES_BUTTON: 'setDefaultSettingsValues',

@@ -3,7 +3,7 @@ import { Accordion, List, Message } from 'semantic-ui-react'
 
 import { LanguageContext } from '../../context/AppContext'
 import { AUTH_API } from '../../configurations'
-import { GROUPS } from '../../enums'
+import { GROUPS, UI } from '../../enums'
 
 function GroupsMetadata ({ groups, filter, noDescription, roles }) {
   const { language } = useContext(LanguageContext)
@@ -11,7 +11,7 @@ function GroupsMetadata ({ groups, filter, noDescription, roles }) {
   return (
     <Message size="large">
       <p>{`${GROUPS.NO_OF_GROUPS[language]}: `}
-        <b>{`${groups}${groups === filter ? '' : ` (${filter})`}`}</b>
+        <b>{groups}{groups !== filter && ` (${filter} ${UI.AFTER_FILTER[language]})`}</b>
       </p>
       {noDescription.length !== 0 &&
       <>
