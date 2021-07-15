@@ -4,7 +4,7 @@ export const API = {
 
 export const CATALOG_API = {
   CATALOGS: 'catalogs',
-  GET_PATHS: '/catalog?limit=2000'
+  GET_PATHS: '/catalog?limit=3000'
 }
 
 export const AUTH_API = {

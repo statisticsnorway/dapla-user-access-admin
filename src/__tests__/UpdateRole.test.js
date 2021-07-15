@@ -57,6 +57,12 @@ describe('Common mock', () => {
     expect(getByPlaceholderText(ROLES.ROLE_ID[language])).toBeDisabled()
   })
 
+  test('Renders correctly on update role with missing properties', () => {
+    const { getByPlaceholderText } = setup(false, TestRoles.testRoles[3])
+
+    expect(getByPlaceholderText(ROLES.ROLE_ID[language])).toBeDisabled()
+  })
+
   test('Handles creating new role correctly', () => {
     const { getAllByText, getByText, getByPlaceholderText, getAllByTestId } = setup(true)
 

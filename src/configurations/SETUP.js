@@ -132,10 +132,14 @@ export const setupIncludesExcludes = (role, property, field) => {
   const returnSetup = ({ [AUTH_API.INCLUDES]: [], [AUTH_API.EXCLUDES]: [] })
 
   for (const element in property) {
-    list[element] = !(role[field].hasOwnProperty(AUTH_API.INCLUDES) && !role[field][AUTH_API.INCLUDES].includes(element))
+    if (role[field] !== undefined) {
+      list[element] = !(role[field].hasOwnProperty(AUTH_API.INCLUDES) && !role[field][AUTH_API.INCLUDES].includes(element))
 
-    if (role[field].hasOwnProperty(AUTH_API.EXCLUDES) && role[field][AUTH_API.EXCLUDES].includes(element)) {
-      list[element] = false
+      if (role[field].hasOwnProperty(AUTH_API.EXCLUDES) && role[field][AUTH_API.EXCLUDES].includes(element)) {
+        list[element] = false
+      }
+    } else {
+      list[element] = true
     }
   }
 

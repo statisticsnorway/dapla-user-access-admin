@@ -51,6 +51,11 @@
       "states": {},
       "privileges": {},
       "maxValuation": "OPEN"
+    },
+    {
+      "roleId": "testRoleId4",
+      "description": "testRole4Description",
+      "maxValuation": "OPEN"
     }
   ]
 }

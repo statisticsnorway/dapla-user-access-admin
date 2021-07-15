@@ -53,7 +53,7 @@ function RolesTable ({ direction, simpleView, handleSort, filteredRoles }) {
           return (
             <Table.Row key={roleId}>
               <Table.Cell style={{ fontWeight: 'bold', fontSize: 'small' }} selectable>
-                <Link to={{ pathname: `${APP[2].route}${UPDATE}e`, state: { isNew: false, role: role } }}>
+                <Link to={{ pathname: `${APP[2].route}${UPDATE}`, state: { isNew: false, role: role } }}>
                   {roleId}
                 </Link>
               </Table.Cell>
