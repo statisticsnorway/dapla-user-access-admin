@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Grid, Icon, List, Message, Popup, Table } from 'semantic-ui-react'
+import { Divider, Grid, Header, Icon, Item, List, Message, Popup, Table } from 'semantic-ui-react'
 import { ErrorMessage } from '@statisticsnorway/dapla-js-utilities'
 
 import { AUTH_API } from './API'
@@ -38,6 +38,7 @@ export const renderTooltipLabelDropdownSelection = (label, pathOptions, language
   const thisPath = pathOptions.filter(({ value }) => value === label.text)
   const state = thisPath[0] === undefined ? '—' : DATASET_STATE[thisPath[0].state][language]
   const valuation = thisPath[0] === undefined ? '—' : VALUATION[thisPath[0].valuation][language]
+  const date = thisPath[0] === undefined ? '—' : label.date
 
   return ({
     size: 'large',
@@ -52,6 +53,7 @@ export const renderTooltipLabelDropdownSelection = (label, pathOptions, language
           <>
             <p>{`${ROLES.STATE[language]}: `}<b>{state}</b></p>
             <p>{`${ROLES.MAX_VALUATION[language]}: `}<b>{valuation}</b></p>
+            <p>{`${ROLES.DATASET_DATE[language]}: `}<b>{date}</b></p>
             {label.incatalog !== 'true' &&
             <p>
               <Icon name="exclamation" color="red" />
@@ -139,3 +141,34 @@ export const includesExcludesFormLayout = (updated, move, text, language) =>
       </Grid.Column>
     </Grid>
   </Message>
+
+export const renderFetchedPathOptionsItems = (paths, language) => paths.map(({ id, state, valuation }) => {
+  const pathDate = new Date(id.timestamp)
+  const dateLocalized = pathDate.toLocaleDateString()
+
+  return ({
+    key: id.path,
+    text: id.path,
+    value: id.path,
+    state: state,
+    valuation: valuation,
+    incatalog: 'true',
+    date: dateLocalized,
+    content: (
+      <Item.Group>
+        <Item>
+          <Item.Content>
+            <Item.Header as={Header} size="tiny">{id.path}</Item.Header>
+            <Item.Extra>
+              {`
+                    ${ROLES.STATE[language]}: ${DATASET_STATE[state][language]},
+                    ${ROLES.MAX_VALUATION[language]}: ${VALUATION[valuation][language]},
+                    ${ROLES.DATASET_DATE[language]}: ${dateLocalized}
+                    `}
+            </Item.Extra>
+          </Item.Content>
+        </Item>
+      </Item.Group>
+    )
+  })
+})

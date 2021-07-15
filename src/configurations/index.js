@@ -5,7 +5,8 @@ export {
   renderLabelDropdownSelection,
   renderTooltipLabelDropdownSelection,
   includesExcludesTableLayout,
-  includesExcludesFormLayout
+  includesExcludesFormLayout,
+  renderFetchedPathOptionsItems
 } from './LAYOUT'
 export {
   checkIncludesExcludes,

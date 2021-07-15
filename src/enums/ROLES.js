@@ -69,6 +69,10 @@ export const ROLES = {
     en: 'Path not found in dapla-catalog',
     nb: 'Sti ikke funnet i dapla-catalog'
   },
+  DATASET_DATE: {
+    en: 'Date',
+    nb: 'Dato'
+  },
   INVALID: (property, language) => {
     switch (property) {
       case AUTH_API.ROLE_OBJECT.STRING[0]:

@@ -1,6 +1,6 @@
 import useAxios from 'axios-hooks'
 import { useLocation } from 'react-router-dom'
-import { useContext, useReducer } from 'react'
+import { useContext, useReducer, useState } from 'react'
 import { Divider, Form, Grid, Header, Icon, Segment } from 'semantic-ui-react'
 
 import { ResponseColumn, SaveUpdateButton } from '../common'
@@ -8,10 +8,7 @@ import { ApiContext, LanguageContext } from '../../context/AppContext'
 import { AUTH_API, populatedDropdown, renderLabelDropdownSelection, validateGroup } from '../../configurations'
 import { GROUPS, UI } from '../../enums'
 
-const VALIDATED = 'validated'
-
 const initialState = state => ({
-  [VALIDATED]: false,
   [AUTH_API.GROUP_OBJECT.ARRAY]: state.isNew ? [] : state.group[AUTH_API.GROUP_OBJECT.ARRAY],
   [AUTH_API.GROUP_OBJECT.STRING[0]]: state.isNew ? '' : state.group[AUTH_API.GROUP_OBJECT.STRING[0]],
   [AUTH_API.GROUP_OBJECT.STRING[1]]: state.isNew ? '' : state.group[AUTH_API.GROUP_OBJECT.STRING[1]]
@@ -19,9 +16,6 @@ const initialState = state => ({
 
 const stateReducer = (state, action) => {
   switch (action.type) {
-    case VALIDATED:
-      return { ...state, [VALIDATED]: action.payload }
-
     case AUTH_API.GROUP_OBJECT.ARRAY:
       return { ...state, [AUTH_API.GROUP_OBJECT.ARRAY]: action.payload }
 
@@ -42,6 +36,7 @@ function UpdateGroup () {
 
   let { state } = useLocation()
 
+  const [isValidated, setIsValidated] = useState(false)
   const [currentState, dispatchState] = useReducer(stateReducer, state, initialState)
 
   const [{ data: getRolesData, loading: getRolesLoading, error: getRolesError }, refetchRolesGet] =
@@ -50,20 +45,15 @@ function UpdateGroup () {
     useAxios({ method: 'PUT' }, { manual: true })
 
   const handleUpdateGroup = () => {
-    const putGroup = {
-      [AUTH_API.GROUP_OBJECT.ARRAY]: currentState[AUTH_API.GROUP_OBJECT.ARRAY],
-      [AUTH_API.GROUP_OBJECT.STRING[0]]: currentState[AUTH_API.GROUP_OBJECT.STRING[0]],
-      [AUTH_API.GROUP_OBJECT.STRING[1]]: currentState[AUTH_API.GROUP_OBJECT.STRING[1]]
-    }
-    const isValid = validateGroup(putGroup, language)
+    const isValid = validateGroup(currentState, language)
 
     if (isValid.isValid) {
       executePut({
-        data: putGroup,
+        data: currentState,
         url: `${authApi}${AUTH_API.PUT_GROUP(currentState[AUTH_API.GROUP_OBJECT.STRING[0]])}`
       })
     } else {
-      dispatchState({ type: VALIDATED, payload: isValid })
+      setIsValidated(isValid)
     }
   }
 
@@ -76,9 +66,7 @@ function UpdateGroup () {
         </Icon.Group>
         <Header.Content>
           {state.isNew ? GROUPS.CREATE_GROUP[language] : currentState[AUTH_API.GROUP_OBJECT.STRING[0]]}
-          {!state.isNew &&
-          <Header.Subheader>{GROUPS.UPDATE_GROUP[language]}</Header.Subheader>
-          }
+          {!state.isNew && <Header.Subheader>{GROUPS.UPDATE_GROUP[language]}</Header.Subheader>}
         </Header.Content>
       </Header>
       <Divider hidden />
@@ -93,11 +81,11 @@ function UpdateGroup () {
               placeholder={GROUPS.GROUP_ID[language]}
               value={currentState[AUTH_API.GROUP_OBJECT.STRING[0]]}
               error={
-                currentState[VALIDATED] && currentState[VALIDATED].reason[AUTH_API.GROUP_OBJECT.STRING[0]] !== undefined &&
-                { content: currentState[VALIDATED].reason[AUTH_API.GROUP_OBJECT.STRING[0]], pointing: 'below' }
+                isValidated && isValidated.reason[AUTH_API.GROUP_OBJECT.STRING[0]] !== undefined &&
+                { content: isValidated.reason[AUTH_API.GROUP_OBJECT.STRING[0]], pointing: 'below' }
               }
               onChange={(e, { value }) => {
-                dispatchState({ type: VALIDATED, payload: false })
+                setIsValidated(false)
                 dispatchState({ type: AUTH_API.GROUP_OBJECT.STRING[0], payload: value })
               }}
             />
@@ -108,11 +96,11 @@ function UpdateGroup () {
               placeholder={GROUPS.DESCRIPTION[language]}
               value={currentState[AUTH_API.GROUP_OBJECT.STRING[1]]}
               error={
-                currentState[VALIDATED] && currentState[VALIDATED].reason[AUTH_API.GROUP_OBJECT.STRING[1]] !== undefined &&
-                { content: currentState[VALIDATED].reason[AUTH_API.GROUP_OBJECT.STRING[1]], pointing: 'below' }
+                isValidated && isValidated.reason[AUTH_API.GROUP_OBJECT.STRING[1]] !== undefined &&
+                { content: isValidated.reason[AUTH_API.GROUP_OBJECT.STRING[1]], pointing: 'below' }
               }
               onChange={(e, { value }) => {
-                dispatchState({ type: VALIDATED, payload: false })
+                setIsValidated(false)
                 dispatchState({ type: AUTH_API.GROUP_OBJECT.STRING[1], payload: value })
               }}
             />
@@ -128,11 +116,11 @@ function UpdateGroup () {
               noResultsMessage={UI.SEARCH_NO_RESULTS[language]}
               value={currentState[AUTH_API.GROUP_OBJECT.ARRAY]}
               error={
-                currentState[VALIDATED] && currentState[VALIDATED].reason[AUTH_API.GROUP_OBJECT.ARRAY] !== undefined &&
-                { content: currentState[VALIDATED].reason[AUTH_API.GROUP_OBJECT.ARRAY], pointing: 'below' }
+                isValidated && isValidated.reason[AUTH_API.GROUP_OBJECT.ARRAY] !== undefined &&
+                { content: isValidated.reason[AUTH_API.GROUP_OBJECT.ARRAY], pointing: 'below' }
               }
               onChange={(e, { value }) => {
-                dispatchState({ type: VALIDATED, payload: false })
+                setIsValidated(false)
                 dispatchState({ type: AUTH_API.GROUP_OBJECT.ARRAY, payload: value })
               }}
               label={populatedDropdown(

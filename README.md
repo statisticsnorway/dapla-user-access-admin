@@ -34,4 +34,3 @@ running to function locally.
 ### TODO:
 
 * Add ability to delete users/groups/roles (maybe in bulk?)
-* Fix useReducer state in AppRoles

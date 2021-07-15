@@ -84,7 +84,8 @@ export const setupPathOptions = (role, fetchedPaths) => {
         value: path,
         state: '—',
         valuation: '—',
-        incatalog: 'false'
+        incatalog: 'false',
+        date: '—'
       }))
     }
 
@@ -95,7 +96,8 @@ export const setupPathOptions = (role, fetchedPaths) => {
         value: path,
         state: '—',
         valuation: '—',
-        incatalog: 'false'
+        incatalog: 'false',
+        date: '—'
       }))
     }
 
