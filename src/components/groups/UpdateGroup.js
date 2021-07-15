@@ -1,9 +1,9 @@
 import useAxios from 'axios-hooks'
 import { useLocation } from 'react-router-dom'
 import { useContext, useReducer, useState } from 'react'
-import { Divider, Form, Grid, Header, Icon, Segment } from 'semantic-ui-react'
+import { Divider, Form, Grid, Segment } from 'semantic-ui-react'
 
-import { ResponseColumn, SaveUpdateButton } from '../common'
+import { ResponseColumn, SaveUpdateButton, UpdateHeader } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
 import { AUTH_API, populatedDropdown, renderLabelDropdownSelection, validateGroup } from '../../configurations'
 import { GROUPS, UI } from '../../enums'
@@ -59,16 +59,13 @@ function UpdateGroup () {
 
   return (
     <Segment basic>
-      <Header size="large">
-        <Icon.Group size="large" style={{ marginRight: '0.5rem', marginTop: '0.8rem' }}>
-          <Icon name="users" color={state.isNew ? 'green' : 'blue'} />
-          <Icon corner="top right" name={state.isNew ? 'plus' : 'pencil'} color={state.isNew ? 'green' : 'blue'} />
-        </Icon.Group>
-        <Header.Content>
-          {state.isNew ? GROUPS.CREATE_GROUP[language] : currentState[AUTH_API.GROUP_OBJECT.STRING[0]]}
-          {!state.isNew && <Header.Subheader>{GROUPS.UPDATE_GROUP[language]}</Header.Subheader>}
-        </Header.Content>
-      </Header>
+      <UpdateHeader
+        logo="users"
+        isNew={state.isNew}
+        create={GROUPS.CREATE_GROUP}
+        update={GROUPS.UPDATE_GROUP}
+        id={currentState[AUTH_API.GROUP_OBJECT.STRING[0]]}
+      />
       <Divider hidden />
       <Grid columns="equal">
         <Grid.Column>
@@ -128,7 +125,8 @@ function UpdateGroup () {
                 getRolesLoading,
                 refetchRolesGet,
                 getRolesError,
-                GROUPS.ROLES_FETCH_ERROR[language]
+                GROUPS.ROLES_FETCH_ERROR[language],
+                !getRolesLoading && !getRolesError && getRolesData !== undefined ? getRolesData[AUTH_API.ROLES].length : 0
               )}
               options={!getRolesLoading && !getRolesError && getRolesData !== undefined ?
                 getRolesData[AUTH_API.ROLES].map(({ roleId }) => ({

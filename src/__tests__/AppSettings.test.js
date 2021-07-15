@@ -37,14 +37,14 @@ describe('Common mock', () => {
     expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(apiContext.authApi)
   })
 
-  test('Clicking button and pressing enter in input fires api call', () => {
+  test('Pressing enter in input fires api call', () => {
     const { getByPlaceholderText } = setup()
 
     userEvent.type(getByPlaceholderText(SETTINGS.AUTH_API[language]), '{enter}')
     userEvent.type(getByPlaceholderText(SETTINGS.CATALOG_API[language]), '{enter}')
 
-    expect(apiContext.setAuthApi).toHaveBeenCalled()
-    expect(apiContext.setCatalogApi).toHaveBeenCalled()
+    expect(apiContext.setAuthApi).toHaveBeenCalledTimes(2)
+    expect(apiContext.setCatalogApi).toHaveBeenCalledTimes(2)
   })
 
   test('Editing values works correctly', () => {
@@ -67,6 +67,12 @@ describe('Common mock', () => {
     userEvent.click(getByTestId(TEST_IDS.DEFAULT_SETTINGS_VALUES_BUTTON))
 
     expect(getByPlaceholderText(SETTINGS.AUTH_API[language])).toHaveValue(apiContext.authApi)
+  })
+
+  test('Toggles modal', () => {
+    setup()
+
+    userEvent.keyboard('{esc}')
   })
 })
 

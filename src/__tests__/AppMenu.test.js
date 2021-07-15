@@ -44,9 +44,8 @@ test('Toggle advanced user mode', () => {
   const { getByTestId } = setup()
 
   userEvent.click(getByTestId(TEST_IDS.ADVANCED_USER_TOGGLE))
-
   userEvent.click(getByTestId(TEST_IDS.SETTINGS_BUTTON))
-  expect(setSettingsOpen).toHaveBeenCalled()
-
   userEvent.click(getByTestId(TEST_IDS.ADVANCED_USER_TOGGLE))
+
+  expect(setSettingsOpen).toHaveBeenCalled()
 })

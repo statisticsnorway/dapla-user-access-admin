@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { UpdateGroup } from '../components'
 import { AppContextProvider } from '../context/AppContext'
-import { APP, AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
+import { APP, AUTH_API, TEST_CONFIGURATIONS, UPDATE } from '../configurations'
 import { GROUPS, TEST_IDS } from '../enums'
 
 import Roles from './test-data/Roles.json'
@@ -17,7 +17,7 @@ const executePutOrRefreshDropdown = jest.fn()
 const setup = (isNew, group = undefined) => {
   const { getAllByText, getByTestId, getByText, getByPlaceholderText, queryByText } = render(
     <AppContextProvider>
-      <MemoryRouter initialEntries={[{ pathname: `${APP[1].route}/update`, state: { isNew: isNew, group: group } }]}>
+      <MemoryRouter initialEntries={[{ pathname: `${APP[1].route}${UPDATE}`, state: { isNew: isNew, group: group } }]}>
         <UpdateGroup />
       </MemoryRouter>
     </AppContextProvider>
@@ -48,18 +48,18 @@ describe('Common mock', () => {
   test('Handles creating new user correctly', () => {
     const { getAllByText, getByText, getByPlaceholderText } = setup(true)
 
-    userEvent.type(getByPlaceholderText(GROUPS.GROUP_ID[language]), 'testGroup2')
-    userEvent.type(getByPlaceholderText(GROUPS.DESCRIPTION[language]), 'testGroup2Description')
+    userEvent.type(getByPlaceholderText(GROUPS.GROUP_ID[language]), 'testGroup')
+    userEvent.type(getByPlaceholderText(GROUPS.DESCRIPTION[language]), 'testGroupDescription')
     userEvent.click(getByText(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]))
     userEvent.click(getAllByText(GROUPS.CREATE_GROUP[language])[1])
 
     expect(executePutOrRefreshDropdown).toHaveBeenCalledWith({
       data: {
-        groupId: 'testGroup2',
-        description: 'testGroup2Description',
-        roles: ['roleId1']
+        groupId: 'testGroup',
+        description: 'testGroupDescription',
+        roles: [Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]]]
       },
-      url: `${window.__ENV.REACT_APP_API_AUTH}${AUTH_API.PUT_GROUP('testGroup2')}`
+      url: `${window.__ENV.REACT_APP_API_AUTH}${AUTH_API.PUT_GROUP('testGroup')}`
     })
   })
 

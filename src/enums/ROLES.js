@@ -1,5 +1,9 @@
 import { AUTH_API } from '../configurations'
 
+export const TOO_LOW_VALUATION = 'tooLowValuationScore'
+
+export const TOO_LOW_STATES = 'tooLowStatesScore'
+
 export const ROLES = {
   CREATE_ROLE: {
     en: 'Create role',
@@ -111,13 +115,13 @@ export const ROLES = {
           nb: 'Må velge en verdivurdering'
         }[language]
 
-      case 'tooLowValuationScore':
+      case TOO_LOW_VALUATION:
         return {
           en: 'Must choose a higher valuation for current included paths',
           nb: 'Må velge en høyere verdivurdering for valgte inkluderte stier'
         }[language]
 
-      case 'tooLowStatesScore':
+      case TOO_LOW_STATES:
         return {
           en: 'Missing state for current included paths',
           nb: 'Mangler tilstand for valgte inkluderte stier'

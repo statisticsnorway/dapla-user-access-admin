@@ -1,7 +1,10 @@
 export const API = {
-  AUTH: 'auth',
-  CATALOG: 'catalog',
   GET_HEALTH: '/health'
+}
+
+export const CATALOG_API = {
+  CATALOGS: 'catalogs',
+  GET_PATHS: '/catalog?limit=2000'
 }
 
 export const AUTH_API = {
@@ -21,19 +24,14 @@ export const AUTH_API = {
     ARRAY: 'roles',
     STRING: ['groupId', 'description']
   },
+  ROLES: 'roles',
   ROLE_OBJECT: {
     ARRAY: ['paths', 'privileges', 'states'],
     ENUM: 'maxValuation',
     STRING: ['roleId', 'description']
   },
-  ROLES: 'roles',
   NO_GROUP: 'NO_GROUP',
   NO_ROLE: 'NO_ROLE',
   INCLUDES: 'includes',
   EXCLUDES: 'excludes'
-}
-
-export const CATALOG_API = {
-  CATALOGS: 'catalogs',
-  GET_PATHS: '/catalog'
 }

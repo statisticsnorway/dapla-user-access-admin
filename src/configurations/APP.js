@@ -1,3 +1,11 @@
+export const ASC = 'ascending'
+
+export const DESC = 'descending'
+
+export const LIST = '/list'
+
+export const UPDATE = '/update'
+
 export const APP = [
   {
     id: 'user',

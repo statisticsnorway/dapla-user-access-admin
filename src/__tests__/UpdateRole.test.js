@@ -5,8 +5,8 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { UpdateRole } from '../components'
 import { AppContextProvider } from '../context/AppContext'
-import { APP, AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
-import { DATASET_STATE, PRIVILEGE, ROLES, TEST_IDS, UI, VALUATION } from '../enums'
+import { APP, AUTH_API, TEST_CONFIGURATIONS, UPDATE } from '../configurations'
+import { DATASET_STATE, PRIVILEGE, ROLES, TEST_IDS, TOO_LOW_STATES, TOO_LOW_VALUATION, UI, VALUATION } from '../enums'
 
 import Catalogs from './test-data/Catalogs.json'
 import TestRoles from './test-data/TestRoles.json'
@@ -17,7 +17,7 @@ const executePut = jest.fn()
 const setup = (isNew, role = undefined) => {
   const { getAllByText, getByTestId, getByText, getByPlaceholderText, queryByText, getAllByTestId } = render(
     <AppContextProvider>
-      <MemoryRouter initialEntries={[{ pathname: `${APP[1].route}/update`, state: { isNew: isNew, role: role } }]}>
+      <MemoryRouter initialEntries={[{ pathname: `${APP[1].route}${UPDATE}`, state: { isNew: isNew, role: role } }]}>
         <UpdateRole />
       </MemoryRouter>
     </AppContextProvider>
@@ -129,8 +129,8 @@ test('Handles complex errors when creating/updating a role', () => {
   userEvent.click(getAllByText(ROLES.CREATE_ROLE[language])[1])
 
   expect(executePut).not.toHaveBeenCalled()
-  expect(getByText(ROLES.INVALID('tooLowValuationScore', language))).toBeInTheDocument()
-  expect(getByText(ROLES.INVALID('tooLowStatesScore', language))).toBeInTheDocument()
+  expect(getByText(ROLES.INVALID(TOO_LOW_VALUATION, language))).toBeInTheDocument()
+  expect(getByText(ROLES.INVALID(TOO_LOW_STATES, language))).toBeInTheDocument()
 })
 
 test('Handles unable to fetch catalogs', () => {

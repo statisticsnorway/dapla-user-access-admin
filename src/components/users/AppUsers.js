@@ -9,7 +9,7 @@ import UsersMetadata from './UsersMetadata'
 import { FilterRefreshRow } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
 import { arrayReduceBy, sortArrayOfObjects } from '../../utilities'
-import { APP, AUTH_API } from '../../configurations'
+import { APP, ASC, AUTH_API, DESC, UPDATE } from '../../configurations'
 import { USERS } from '../../enums'
 
 function AppUsers () {
@@ -20,12 +20,12 @@ function AppUsers () {
   const [roles, setRoles] = useState({})
   const [groups, setGroups] = useState({})
   const [filteredUsers, setFilteredUsers] = useState([])
-  const [direction, setDirection] = useState('ascending')
+  const [direction, setDirection] = useState(ASC)
 
   const [{ data, loading, error }, refetch] = useAxios(`${authApi}${AUTH_API.GET_USERS}`, { useCache: false })
 
   const handleSort = () => {
-    const newDirection = direction === 'ascending' ? 'descending' : 'ascending'
+    const newDirection = direction === ASC ? DESC : ASC
 
     setDirection(newDirection)
     setUsers(sortArrayOfObjects(users, [AUTH_API.USER_OBJECT.STRING], newDirection))
@@ -73,7 +73,7 @@ function AppUsers () {
               animated
               as={Link}
               size="large"
-              to={{ pathname: `${APP[0].route}/update`, state: { isNew: true } }}
+              to={{ pathname: `${APP[0].route}${UPDATE}`, state: { isNew: true } }}
             >
               <Button.Content visible>
                 {USERS.CREATE_USER[language]}

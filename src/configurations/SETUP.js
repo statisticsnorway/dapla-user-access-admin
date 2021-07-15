@@ -1,5 +1,15 @@
 import { AUTH_API } from './API'
 
+const addOption = path => ({
+  key: path,
+  text: path,
+  value: path,
+  state: '—',
+  valuation: '—',
+  incatalog: 'false',
+  date: '—'
+})
+
 export const checkIncludesExcludes = (list, property) => {
   const returnList = { favors: AUTH_API.INCLUDES, only: '', list: {} }
 
@@ -78,27 +88,11 @@ export const setupPathOptions = (role, fetchedPaths) => {
 
   if (role.hasOwnProperty(AUTH_API.ROLE_OBJECT.ARRAY[0])) {
     if (role[AUTH_API.ROLE_OBJECT.ARRAY[0]].hasOwnProperty(AUTH_API.INCLUDES)) {
-      includes = role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.INCLUDES].map(path => ({
-        key: path,
-        text: path,
-        value: path,
-        state: '—',
-        valuation: '—',
-        incatalog: 'false',
-        date: '—'
-      }))
+      includes = role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.INCLUDES].map(path => addOption(path))
     }
 
     if (role[AUTH_API.ROLE_OBJECT.ARRAY[0]].hasOwnProperty(AUTH_API.EXCLUDES)) {
-      excludes = role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.EXCLUDES].map(path => ({
-        key: path,
-        text: path,
-        value: path,
-        state: '—',
-        valuation: '—',
-        incatalog: 'false',
-        date: '—'
-      }))
+      excludes = role[AUTH_API.ROLE_OBJECT.ARRAY[0]][AUTH_API.EXCLUDES].map(path => addOption(path))
     }
 
     let rolePaths = includes.concat(excludes)

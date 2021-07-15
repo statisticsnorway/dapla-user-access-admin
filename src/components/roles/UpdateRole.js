@@ -1,9 +1,9 @@
 import useAxios from 'axios-hooks'
 import { useContext, useEffect, useReducer, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Divider, Form, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react'
+import { Divider, Form, Grid, Label, Segment } from 'semantic-ui-react'
 
-import { ResponseColumn, SaveUpdateButton } from '../common'
+import { ResponseColumn, SaveUpdateButton, UpdateHeader } from '../common'
 import { ApiContext, LanguageContext } from '../../context/AppContext'
 import {
   AUTH_API,
@@ -19,7 +19,17 @@ import {
   setupPathValues,
   validateRole
 } from '../../configurations'
-import { DATASET_STATE, PRIVILEGE, ROLES, TEST_IDS, UI, VALUATION } from '../../enums'
+import { DATASET_STATE, PRIVILEGE, ROLES, TEST_IDS, UI, UNRECOGNIZED, VALUATION } from '../../enums'
+
+const addItem = value => ({
+  key: value,
+  text: value,
+  value: value,
+  state: '—',
+  valuation: '—',
+  incatalog: 'false',
+  date: '—'
+})
 
 const initialState = state => ({
   [AUTH_API.ROLE_OBJECT.ENUM]: state.isNew ? '' : state.role[AUTH_API.ROLE_OBJECT.ENUM],
@@ -73,7 +83,7 @@ function UpdateRole () {
   const [currentState, dispatchState] = useReducer(stateReducer, state, initialState)
 
   const [{ data: getPathsData, loading: getPathsLoading, error: getPathsError }, refetchPathsGet] =
-    useAxios(`${catalogApi}${CATALOG_API.GET_PATHS}`)
+    useAxios(`${catalogApi}${CATALOG_API.GET_PATHS}`, { cache: true })
   const [{ loading: putLoading, error: putError, response: putResponse }, executePut] =
     useAxios({ method: 'PUT' }, { manual: true })
 
@@ -139,16 +149,13 @@ function UpdateRole () {
 
   return (
     <Segment basic>
-      <Header size="large">
-        <Icon.Group size="large" style={{ marginRight: '0.5rem', marginTop: '0.65rem' }}>
-          <Icon name="user" color={state.isNew ? 'green' : 'blue'} />
-          <Icon corner="top right" name={state.isNew ? 'plus' : 'pencil'} color={state.isNew ? 'green' : 'blue'} />
-        </Icon.Group>
-        <Header.Content>
-          {state.isNew ? ROLES.CREATE_ROLE[language] : currentState[AUTH_API.ROLE_OBJECT.STRING[0]]}
-          {!state.isNew && <Header.Subheader>{ROLES.UPDATE_ROLE[language]}</Header.Subheader>}
-        </Header.Content>
-      </Header>
+      <UpdateHeader
+        logo="vcard"
+        isNew={state.isNew}
+        create={ROLES.CREATE_ROLE}
+        update={ROLES.UPDATE_ROLE}
+        id={currentState[AUTH_API.ROLE_OBJECT.STRING[0]]}
+      />
       <Divider hidden />
       <Grid columns="equal">
         <Grid.Column>
@@ -220,7 +227,7 @@ function UpdateRole () {
               }
               <label>{ROLES.MAX_VALUATION[language]}</label>
               <Form.Group inline>
-                {Object.keys(VALUATION).filter(element => element !== 'UNRECOGNIZED').map(valuation =>
+                {Object.keys(VALUATION).filter(element => element !== UNRECOGNIZED).map(valuation =>
                   <Form.Radio
                     key={valuation}
                     value={valuation}
@@ -248,6 +255,7 @@ function UpdateRole () {
               placeholder={ROLES.PATHS_INCLUDE[language]}
               options={[...fetchedPathOptions, ...pathOptions]}
               noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
+              onAddItem={(e, { value }) => setPathOptions([addItem(value), ...pathOptions])}
               renderLabel={(label) => renderTooltipLabelDropdownSelection(label, fetchedPathOptions, language)}
               error={isValidated && isValidated.reason[AUTH_API.ROLE_OBJECT.ARRAY[0]] !== undefined && {
                 content: isValidated.reason[AUTH_API.ROLE_OBJECT.ARRAY[0]], pointing: 'below'
@@ -256,21 +264,13 @@ function UpdateRole () {
                 setIsValidated(false)
                 dispatchState({ type: AUTH_API.INCLUDES, payload: value })
               }}
-              onAddItem={(e, { value }) => setPathOptions([{
-                key: value,
-                text: value,
-                value: value,
-                state: '—',
-                valuation: '—',
-                incatalog: 'false',
-                date: '—'
-              }, ...pathOptions])}
               label={populatedDropdown(
                 ROLES.PATHS_INCLUDE[language],
                 getPathsLoading,
                 refetchPathsGet,
                 getPathsError,
-                ROLES.PATHS_FETCH_ERROR[language]
+                ROLES.PATHS_FETCH_ERROR[language],
+                fetchedPathOptions.length
               )}
             />
             <Form.Dropdown
@@ -286,26 +286,19 @@ function UpdateRole () {
               placeholder={ROLES.PATHS_EXCLUDE[language]}
               options={[...fetchedPathOptions, ...pathOptions]}
               noResultsMessage={UI.SEARCH_NO_RESULTS_CAN_ADD[language]}
+              onAddItem={(e, { value }) => setPathOptions([addItem(value), ...pathOptions])}
               renderLabel={(label) => renderTooltipLabelDropdownSelection(label, fetchedPathOptions, language)}
               onChange={(e, { value }) => {
                 setIsValidated(false)
                 dispatchState({ type: AUTH_API.EXCLUDES, payload: value })
               }}
-              onAddItem={(e, { value }) => setPathOptions([{
-                key: value,
-                text: value,
-                value: value,
-                state: '—',
-                valuation: '—',
-                incatalog: 'false',
-                date: '—'
-              }, ...pathOptions])}
               label={populatedDropdown(
                 ROLES.PATHS_EXCLUDE[language],
                 getPathsLoading,
                 refetchPathsGet,
                 getPathsError,
-                ROLES.PATHS_FETCH_ERROR[language]
+                ROLES.PATHS_FETCH_ERROR[language],
+                fetchedPathOptions.length
               )}
             />
           </Form>

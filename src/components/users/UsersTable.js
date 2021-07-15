@@ -4,7 +4,7 @@ import { Icon, Table } from 'semantic-ui-react'
 
 import { ListArrayTableCell } from '../common'
 import { LanguageContext } from '../../context/AppContext'
-import { APP, AUTH_API } from '../../configurations'
+import { APP, AUTH_API, UPDATE } from '../../configurations'
 import { TEST_IDS, USERS } from '../../enums'
 
 function UsersTable ({ direction, handleSort, filteredUsers }) {
@@ -37,7 +37,7 @@ function UsersTable ({ direction, handleSort, filteredUsers }) {
           return (
             <Table.Row key={userId}>
               <Table.Cell style={{ fontWeight: 'bold' }} selectable>
-                <Link to={{ pathname: `${APP[0].route}/update`, state: { isNew: false, user: user } }}>
+                <Link to={{ pathname: `${APP[0].route}${UPDATE}`, state: { isNew: false, user: user } }}>
                   {userId}
                 </Link>
               </Table.Cell>

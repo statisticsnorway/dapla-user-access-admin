@@ -4,7 +4,7 @@ import { Icon, Table } from 'semantic-ui-react'
 
 import { ListArrayTableCell } from '../common'
 import { LanguageContext } from '../../context/AppContext'
-import { APP, AUTH_API } from '../../configurations'
+import { APP, AUTH_API, UPDATE } from '../../configurations'
 import { GROUPS, TEST_IDS } from '../../enums'
 
 function GroupsTable ({ direction, handleSort, filteredGroups }) {
@@ -37,7 +37,7 @@ function GroupsTable ({ direction, handleSort, filteredGroups }) {
           return (
             <Table.Row key={groupId}>
               <Table.Cell style={{ fontWeight: 'bold' }} selectable>
-                <Link to={{ pathname: `${APP[1].route}/update`, state: { isNew: false, group: group } }}>
+                <Link to={{ pathname: `${APP[1].route}${UPDATE}`, state: { isNew: false, group: group } }}>
                   {groupId}
                 </Link>
               </Table.Cell>

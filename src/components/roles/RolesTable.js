@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Icon, List, Table } from 'semantic-ui-react'
 
 import { LanguageContext } from '../../context/AppContext'
-import { APP, AUTH_API, checkIncludesExcludes, includesExcludesTableLayout } from '../../configurations'
+import { APP, AUTH_API, checkIncludesExcludes, includesExcludesTableLayout, UPDATE } from '../../configurations'
 import { DATASET_STATE, PRIVILEGE, ROLES, TEST_IDS, VALUATION } from '../../enums'
 
 function RolesTable ({ direction, simpleView, handleSort, filteredRoles }) {
@@ -53,7 +53,7 @@ function RolesTable ({ direction, simpleView, handleSort, filteredRoles }) {
           return (
             <Table.Row key={roleId}>
               <Table.Cell style={{ fontWeight: 'bold', fontSize: 'small' }} selectable>
-                <Link to={{ pathname: `${APP[2].route}/update`, state: { isNew: false, role: role } }}>
+                <Link to={{ pathname: `${APP[2].route}${UPDATE}e`, state: { isNew: false, role: role } }}>
                   {roleId}
                 </Link>
               </Table.Cell>

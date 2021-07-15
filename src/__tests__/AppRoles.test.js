@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { AppRoles } from '../components'
 import { AppContextProvider } from '../context/AppContext'
-import { TEST_CONFIGURATIONS } from '../configurations'
+import { AUTH_API, TEST_CONFIGURATIONS } from '../configurations'
 import { PRIVILEGE, ROLES, TEST_IDS, UI } from '../enums'
 
 import Roles from './test-data/Roles.json'
@@ -47,39 +47,43 @@ describe('Common mock', () => {
   test('Filter function works correctly', () => {
     const { getByText, getByPlaceholderText, queryByText } = setup()
 
-    expect(getByText(Roles.roles[0].roleId)).toBeInTheDocument()
+    expect(getByText(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]])).toBeInTheDocument()
 
-    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), Roles.roles[1].roleId)
+    userEvent.type(getByPlaceholderText(UI.FILTER_TABLE[language]), Roles[AUTH_API.ROLES][1][AUTH_API.ROLE_OBJECT.STRING[0]])
 
-    expect(queryByText(Roles.roles[0].roleId)).toBeNull()
+    expect(queryByText(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]])).toBeNull()
   })
 
   test('Filter pure user roles works correctly', () => {
     const { getByText, getByTestId, queryByText } = setup()
 
-    expect(getByText(Roles.roles[3].roleId)).toBeInTheDocument()
+    expect(getByText(Roles[AUTH_API.ROLES][3][AUTH_API.ROLE_OBJECT.STRING[0]])).toBeInTheDocument()
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_FILTER_USER_ROLES_TOGGLE))
 
-    expect(queryByText(Roles.roles[3].roleId)).toBeNull()
+    expect(queryByText(Roles[AUTH_API.ROLES][3][AUTH_API.ROLE_OBJECT.STRING[0]])).toBeNull()
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_FILTER_USER_ROLES_TOGGLE))
 
-    expect(getByText(Roles.roles[3].roleId)).toBeInTheDocument()
+    expect(getByText(Roles[AUTH_API.ROLES][3][AUTH_API.ROLE_OBJECT.STRING[0]])).toBeInTheDocument()
   })
 
   test('Sort function works correctly', () => {
     const { getAllByText, getByTestId } = setup()
+    const searchText = 'role'
 
-    expect(getAllByText('role', { exact: false })[2]).toHaveTextContent(Roles.roles[0].roleId)
-
-    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
-
-    expect(getAllByText('role', { exact: false })[2]).toHaveTextContent(Roles.roles[3].roleId)
+    expect(getAllByText(searchText, { exact: false })[2])
+      .toHaveTextContent(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]])
 
     userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
 
-    expect(getAllByText('role', { exact: false })[2]).toHaveTextContent(Roles.roles[0].roleId)
+    expect(getAllByText(searchText, { exact: false })[2])
+      .toHaveTextContent(Roles[AUTH_API.ROLES][3][AUTH_API.ROLE_OBJECT.STRING[0]])
+
+    userEvent.click(getByTestId(TEST_IDS.TABLE_SORT))
+
+    expect(getAllByText(searchText, { exact: false })[2])
+      .toHaveTextContent(Roles[AUTH_API.ROLES][0][AUTH_API.ROLE_OBJECT.STRING[0]])
   })
 
   test('Toggle simple roles view works correctly', () => {
