@@ -83,7 +83,7 @@ function UpdateRole () {
   const [currentState, dispatchState] = useReducer(stateReducer, state, initialState)
 
   const [{ data: getPathsData, loading: getPathsLoading, error: getPathsError }, refetchPathsGet] =
-    useAxios(`${catalogApi}${CATALOG_API.GET_PATHS}`, { cache: true })
+    useAxios(`${catalogApi}${CATALOG_API.GET_PATHS}`)
   const [{ loading: putLoading, error: putError, response: putResponse }, executePut] =
     useAxios({ method: 'PUT' }, { manual: true })
 

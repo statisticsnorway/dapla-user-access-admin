@@ -14,7 +14,7 @@ Functionality includes:
 
 The first time you clone the repository, remember to run `yarn` or `yarn install`.
 
-Run `yarn start` and navigate to `http://localhost:3000/`.
+Run `yarn start` and navigate to `http://localhost:3000`.
 
 `yarn test` runs all tests and `yarn coverage` calculates (rather unreliably) test coverage.
 
@@ -29,8 +29,9 @@ Run `yarn start` and navigate to `http://localhost:3000/`.
 
 **Note** that this application
 requires [dapla-project localstack](https://github.com/statisticsnorway/dapla-project/blob/master/localstack/README.md)
-running to function locally.
+(or at least *dapla-user-access* and *dapla-catalog*) running to function locally.
 
 ### TODO:
 
 * Add ability to delete users/groups/roles (maybe in bulk?)
+* Handle catalog dropdown in a more user-friendly way since there can be over a lot (2500+) elements in there
